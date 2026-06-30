@@ -1,0 +1,66 @@
+.root {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* pas d'overflow: hidden — le halo doit pouvoir s'étendre au-delà du container */
+}
+
+.halo {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-status-success);
+  opacity: 0.6;
+}
+
+.dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-status-success);
+  z-index: 1;
+}
+
+/* expanded : halo pulse en continu */
+.expanded .halo {
+  animation: halo-pulse 2s ease-out infinite;
+}
+
+@keyframes halo-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Status wrapper (dot + label) */
+.status {
+  display: flex;
+  align-items: center;
+  padding-block: var(--space-2xs);
+}
+
+.statusLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs);
+  font-family: var(--font-family-label);
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.55;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-status-success);
+  white-space: nowrap;
+}

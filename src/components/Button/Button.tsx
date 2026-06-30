@@ -1,0 +1,63 @@
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import styles from "./Button.module.css";
+
+type ButtonType = "primary" | "secondary" | "text";
+
+type ButtonProps = {
+  label: string;
+  type?: ButtonType;
+  showArrowLeft?: boolean;
+  showArrowRight?: boolean;
+  forceHover?: boolean;
+  onClick?: () => void;
+  className?: string;
+  as?: "button" | "a";
+  href?: string;
+};
+
+export default function Button({
+  label,
+  type = "primary",
+  showArrowLeft = false,
+  showArrowRight = false,
+  forceHover = false,
+  onClick,
+  className,
+  as: Tag = "button",
+  href,
+}: ButtonProps) {
+  const isText = type === "text";
+  const iconSize = isText ? 16 : 20;
+  const iconClass = isText ? styles.iconText : styles.iconPrimary;
+
+  const cls = [
+    styles.button,
+    styles[type],
+    forceHover ? styles.forceHover : "",
+    className ?? "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <Tag className={cls} onClick={onClick} href={href}>
+      {showArrowLeft && (
+        <span className={iconClass}>
+          <ArrowLeft size={iconSize} strokeWidth={1.5} />
+        </span>
+      )}
+      {isText ? (
+        <span className={styles.label}>{label}</span>
+      ) : (
+        <span className={styles.labelContainer}>
+          <span className={styles.label}>{label}</span>
+        </span>
+      )}
+      {showArrowRight && (
+        <span className={iconClass}>
+          <ArrowRight size={iconSize} strokeWidth={1.5} />
+        </span>
+      )}
+    </Tag>
+  );
+}

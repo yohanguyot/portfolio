@@ -1,0 +1,124 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-family-label);
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.55;
+  text-box: trim-both cap alphabetic;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
+  user-select: none;
+}
+
+/* ── Primary ── */
+.primary {
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  color: var(--color-btn-primary-text);
+  background-image: var(--color-btn-primary-bg);
+  box-shadow: var(--color-btn-primary-shadow);
+}
+
+.primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+  pointer-events: none;
+}
+
+.primary:hover::before {
+  opacity: 1;
+}
+
+/* ── Secondary ── */
+.secondary {
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  color: var(--color-btn-secondary-text);
+  background-image: var(--color-btn-secondary-bg);
+  box-shadow: var(--color-btn-secondary-shadow);
+}
+
+.secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+  pointer-events: none;
+}
+
+.secondary:hover::before {
+  opacity: 1;
+}
+
+/* ── Text ── */
+.text {
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text-primary);
+}
+
+.text:hover {
+  color: var(--color-text-accent);
+}
+
+/* ── Label ── */
+.labelContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.label {
+  flex-shrink: 0;
+}
+
+/* ── Icon sizes ── */
+.iconPrimary {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconText {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Forced hover (playground) ── */
+.forceHover.primary::before,
+.forceHover.secondary::before {
+  opacity: 1;
+}
+
+.forceHover.text {
+  color: var(--color-text-accent);
+}

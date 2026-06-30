@@ -1,17 +1,159 @@
+/* ─────────────────────────────────────────────
+   LAYER 1 — Primitives
+   Usage : uniquement pour définir les sémantiques
+   ci-dessous. Ne jamais les référencer dans les
+   composants.
+───────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Neutrals */
+  --color-neutral-50:  #fafafa;
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-200: #e4e4e7;
+  --color-neutral-300: #d4d4d8;
+  --color-neutral-400: #a1a1aa;
+  --color-neutral-500: #71717a;
+  --color-neutral-600: #52525b;
+  --color-neutral-700: #3f3f46;
+  --color-neutral-800: #27272a;
+  --color-neutral-900: #121214;
+  --color-neutral-950: #09090b;
+
+  /* Brand */
+  --color-brand-50:  #fcf5f0;
+  --color-brand-100: #f8e9dc;
+  --color-brand-200: #f1d0b7;
+  --color-brand-300: #e8b089;
+  --color-brand-400: #dd885a;
+  --color-brand-500: #d66a39;
+  --color-brand-600: #c6532e;
+  --color-brand-700: #a64028;
+  --color-brand-800: #853527;
+  --color-brand-900: #6c2e22;
+  --color-brand-950: #3a1510;
+
+  /* Status */
+  --color-success-500: #34d399;
+  --color-error-500:   #f87171;
+
+  /* Spacing */
+  --space-4:   4px;
+  --space-8:   8px;
+  --space-12:  12px;
+  --space-16:  16px;
+  --space-24:  24px;
+  --space-32:  32px;
+  --space-48:  48px;
+  --space-64:  64px;
+  --space-120: 120px;
+
+  /* Radius */
+  --radius-4:    4px;
+  --radius-6:    6px;
+  --radius-12:   12px;
+  --radius-24:   24px;
+  --radius-120:  120px;
+  --radius-9999: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─────────────────────────────────────────────
+   LAYER 2 — Semantic tokens
+   Usage : seule couche à utiliser dans les
+   composants.
+───────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --color-bg-canvas:    var(--color-neutral-950);
+  --color-bg-surface:   rgba(244, 244, 245, 0.02); /* neutral/100 @2% */
+  --color-bg-surface-2: rgba(244, 244, 245, 0.04); /* neutral/100 @4% */
+  --color-bg-surface-3: rgba(244, 244, 245, 0.06); /* neutral/100 @6% */
+  --color-bg-overlay:   rgba(18, 18, 20, 0.80);    /* neutral/900 @80% */
+  --color-bg-active:    rgba(198, 83, 46, 0.06);   /* brand/600  @6% */
+
+  /* Text */
+  --color-text-primary:   var(--color-neutral-200);
+  --color-text-secondary: var(--color-neutral-400);
+  --color-text-muted:     var(--color-neutral-500);
+  --color-text-accent:    var(--color-brand-500);
+
+  /* Borders */
+  --color-border-subtle: rgba(244, 244, 245, 0.02); /* neutral/100 @2% */
+  --color-border-strong: rgba(244, 244, 245, 0.06); /* neutral/100 @6% */
+  --color-border-active: rgba(198, 83, 46, 0.60);  /* brand/600  @60% */
+
+  /* Buttons */
+  --color-btn-primary-text:   var(--color-neutral-50);
+  --color-btn-secondary-text: var(--color-neutral-50);
+  --color-btn-primary-bg: linear-gradient(
+    180deg,
+    var(--color-brand-600) 0%,
+    var(--color-brand-800) 100%
+  );
+  --color-btn-secondary-bg: linear-gradient(
+    180deg,
+    var(--color-neutral-700) 0%,
+    var(--color-neutral-900) 100%
+  );
+  --color-btn-primary-shadow:
+    inset 0px 1px 0px 0px rgba(255, 255, 255, 0.30),
+    0 0 0 1px var(--color-brand-900),
+    0 3px 4px -1px var(--color-brand-950);
+  --color-btn-secondary-shadow:
+    inset 0px 1px 0px 0px rgba(255, 255, 255, 0.30),
+    0 0 0 1px var(--color-neutral-950),
+    0 3px 4px -1px var(--color-neutral-950);
+
+  /* Status */
+  --color-status-success: var(--color-success-500);
+  --color-status-error:   var(--color-error-500);
+
+  /* Spacing */
+  --space-2xs:   var(--space-4);
+  --space-xs:    var(--space-8);
+  --space-sm:    var(--space-12);
+  --space-md:    var(--space-16);
+  --space-lg:    var(--space-24);
+  --space-xl:    var(--space-32);
+  --space-2xl:   var(--space-48);
+  --space-3xl:   var(--space-64);
+  --space-layout: var(--space-120);
+
+  /* Radius */
+  --radius-sm:   var(--radius-4);
+  --radius-md:   var(--radius-6);
+  --radius-lg:   var(--radius-12);
+  --radius-xl:   var(--radius-24);
+  --radius-2xl:  var(--radius-120);
+  --radius-full: var(--radius-9999);
+
+  /* Typography */
+  --font-family-display: 'Cabinet Grotesk Variable', 'Cabinet Grotesk', sans-serif;
+  --font-family-body:    var(--font-geist-sans), 'Geist', sans-serif;
+  --font-family-label:   var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-bold:    700;
+
+  /* Effects */
+  --overlay-blur: blur(24px);
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 200ms;
+  --duration-slow: 300ms;
+}
+
+/* ─────────────────────────────────────────────
+   Base reset
+───────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 html {
   height: 100%;
+  color-scheme: dark;
 }
 
 html,
@@ -22,19 +164,11 @@ body {
 
 body {
   min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 a {
@@ -42,8 +176,10 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
 }
