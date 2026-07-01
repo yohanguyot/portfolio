@@ -123,14 +123,11 @@ export default function Playground() {
         {/* LanguageDropdown */}
         <Section title="Navigation · Language Dropdown">
           <div className={styles.row}>
-            <Cell label="step=default">
-              <LanguageDropdown step="default" />
+            <Cell label="default">
+              <LanguageDropdown />
             </Cell>
-            <Cell label="step=hover">
-              <LanguageDropdown step="hover" />
-            </Cell>
-            <Cell label="step=active">
-              <LanguageDropdown step="active" />
+            <Cell label="inline">
+              <LanguageDropdown inline />
             </Cell>
           </div>
         </Section>
