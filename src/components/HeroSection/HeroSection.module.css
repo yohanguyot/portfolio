@@ -11,14 +11,19 @@
   overflow: hidden;
 }
 
-/* Radial brand-color glow behind the content */
+/* Radial brand-color glow — matches Figma: 3200×1200px at top -374px, screen blend */
 .gradient {
   position: absolute;
-  inset: 0;
+  width: 3200px;
+  height: 1200px;
+  top: -320px;
+  left: 50%;
+  transform: translateX(-50%);
   pointer-events: none;
+  mix-blend-mode: screen;
   background: radial-gradient(
-    ellipse 100% 100% at 50% 50%,
-    rgba(198, 83, 46, 0.06) 0%,
+    ellipse 50% 50% at 50% 50%,
+    var(--color-bg-active) 0%,
     transparent 100%
   );
 }

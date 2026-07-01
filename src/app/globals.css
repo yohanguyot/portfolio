@@ -134,7 +134,7 @@
   --font-weight-bold:    700;
 
   /* Effects */
-  --overlay-blur: blur(24px);
+  --overlay-blur: blur(32px);
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --duration-fast: 200ms;
   --duration-slow: 300ms;
@@ -185,6 +185,6 @@ button {
 }
 
 ::selection {
-  background: rgba(198, 83, 46, 0.40); /* brand/600 @40% */
+  background: color-mix(in srgb, var(--color-brand-600) 40%, transparent);
   color: var(--color-neutral-50);
 }

@@ -13,9 +13,10 @@ type NavLinkProps = {
   state?: NavLinkState;
   href?: string;
   className?: string;
+  onClickAction?: () => void;
 };
 
-export function NavLink({ label, state = "default", href = "#", className }: NavLinkProps) {
+export function NavLink({ label, state = "default", href = "#", className, onClickAction }: NavLinkProps) {
   const stateClass =
     state === "active"
       ? styles.navLinkActive
@@ -26,6 +27,7 @@ export function NavLink({ label, state = "default", href = "#", className }: Nav
   return (
     <a
       href={href}
+      onClick={onClickAction}
       className={[styles.navLink, stateClass, className ?? ""].filter(Boolean).join(" ")}
     >
       <span className={styles.navLinkLabel}>{label}</span>
@@ -41,9 +43,10 @@ const LANGUAGES = [
 
 type LanguageDropdownProps = {
   className?: string;
+  inline?: boolean;
 };
 
-export function LanguageDropdown({ className }: LanguageDropdownProps) {
+export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState("FR");
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({});
@@ -69,8 +72,6 @@ export function LanguageDropdown({ className }: LanguageDropdownProps) {
   useLayoutEffect(() => {
     if (!isOpen) return;
     recompute();
-    // Re-mesure après chargement des polices (JetBrains Mono peut ne pas être
-    // disponible au premier rendu, ce qui fausse offsetWidth)
     let cancelled = false;
     document.fonts.ready.then(() => {
       if (!cancelled) recompute();
@@ -98,6 +99,22 @@ export function LanguageDropdown({ className }: LanguageDropdownProps) {
     if (isOpen) document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
+
+  if (inline) {
+    return (
+      <div className={[styles.langInline, className ?? ""].filter(Boolean).join(" ")}>
+        {LANGUAGES.map(({ code }) => (
+          <button
+            key={code}
+            className={[styles.langInlineOption, code === current ? styles.langInlineOptionActive : ""].filter(Boolean).join(" ")}
+            onClick={() => setCurrent(code)}
+          >
+            {code}
+          </button>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div ref={wrapperRef} className={[styles.langWrapper, className ?? ""].filter(Boolean).join(" ")}>
@@ -149,24 +166,179 @@ export function LanguageDropdown({ className }: LanguageDropdownProps) {
   );
 }
 
+const NAV_LINKS = [
+  { label: "Projets", href: "#projets" },
+  { label: "Process", href: "#process" },
+  { label: "À propos", href: "#a-propos" },
+  { label: "Contact", href: "#contact" },
+];
+
 export default function Navigation() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const thresholdRef = useRef(0);
+  const isMobileRef = useRef(false);
+
+  const close = () => setMobileOpen(false);
+
+  function recomputeDropdown() {
+    if (!navRef.current) return;
+    const rect = navRef.current.getBoundingClientRect();
+    setDropdownStyle({
+      top: rect.bottom + 8,
+      left: rect.left,
+      width: rect.width,
+    });
+  }
+
+  // Dynamic mobile breakpoint: switch when nav touches viewport edges
+  useLayoutEffect(() => {
+    if (!navRef.current) return;
+
+    function measureThreshold() {
+      if (!navRef.current || isMobileRef.current) return;
+      thresholdRef.current = navRef.current.scrollWidth + 48;
+    }
+
+    function check() {
+      const mobile = thresholdRef.current > 0 && window.innerWidth < thresholdRef.current;
+      if (mobile !== isMobileRef.current) {
+        isMobileRef.current = mobile;
+        setIsMobile(mobile);
+        if (!mobile) setMobileOpen(false);
+      }
+    }
+
+    measureThreshold();
+    check();
+    document.fonts.ready.then(() => { measureThreshold(); check(); });
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!mobileOpen) return;
+    recomputeDropdown();
+    let cancelled = false;
+    document.fonts.ready.then(() => {
+      if (!cancelled) recomputeDropdown();
+    });
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function onResize() {
+      if (window.innerWidth >= thresholdRef.current) {
+        close();
+      } else {
+        recomputeDropdown();
+      }
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (mobileOpen) firstLinkRef.current?.focus();
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") close();
+    }
+    if (mobileOpen) document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (
+        navRef.current && !navRef.current.contains(e.target as Node) &&
+        dropdownRef.current && !dropdownRef.current.contains(e.target as Node)
+      ) {
+        close();
+      }
+    }
+    if (mobileOpen) document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, [mobileOpen]);
+
   return (
-    <nav className={styles.nav}>
-      <div className={styles.container}>
-        <div className={styles.logoContainer}>
-          <a href="/" className={styles.logo}>Yohan Guyot</a>
-        </div>
-        <div className={styles.right}>
-          <div className={styles.links}>
-            <NavLink label="Projets" href="#projets" />
-            <NavLink label="Process" href="#process" />
-            <NavLink label="À propos" href="#a-propos" />
-            <NavLink label="Contact" href="#contact" />
+    <>
+      <nav ref={navRef} className={`${styles.nav} ${isMobile ? styles.navMobile : ""}`}>
+        <div className={styles.container}>
+          <div className={styles.logoContainer}>
+            <a href="/" className={styles.logo}>Yohan Guyot</a>
           </div>
-          <LanguageDropdown />
-          <Status />
+
+          {/* Desktop */}
+          <div className={styles.right}>
+            <div className={styles.links}>
+              {NAV_LINKS.map((l) => (
+                <NavLink key={l.href} label={l.label} href={l.href} />
+              ))}
+            </div>
+            <LanguageDropdown />
+            <Status />
+          </div>
+
+          {/* Mobile */}
+          <button
+            className={styles.hamburger}
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <line x1="3" y1="5" x2="17" y2="5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLine1Open : ""}`} />
+              <line x1="3" y1="10" x2="17" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLine2Open : ""}`} />
+              <line x1="3" y1="15" x2="17" y2="15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                className={`${styles.burgerLine} ${mobileOpen ? styles.burgerLine3Open : ""}`} />
+            </svg>
+          </button>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      {mobileOpen && createPortal(
+        <>
+          <div className={styles.mobileBackdrop} onClick={close} aria-hidden="true" />
+          <div
+            ref={dropdownRef}
+            className={styles.mobileDropdown}
+            style={dropdownStyle}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
+          >
+            {NAV_LINKS.map((l, i) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className={styles.mobileLink}
+                onClick={close}
+                ref={i === 0 ? firstLinkRef : undefined}
+              >
+                {l.label}
+              </a>
+            ))}
+            <div className={styles.mobileDivider} />
+            <div className={styles.mobileFooter}>
+              <LanguageDropdown inline />
+              <Status />
+            </div>
+          </div>
+        </>,
+        document.body
+      )}
+    </>
   );
 }

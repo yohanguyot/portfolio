@@ -323,3 +323,119 @@ Same rules as `input`, field height: `96px` instead of `48px`.
 - Portfolio projects (used by `project-image`): `bloom`, `keepro`, `lecoffre`, `wenimmo`
 - Naming: `client=<client-name>` on the `bloom-card` component (instance renamed `card`, used on the « Bloom » screen only)
 - Bloom project clients (used by `bloom-card`): `versity`, `the-elements-nation`, `lqr-house`, `repetto`, `erable` (+ `bloom` itself as a variant, likely a placeholder/example in the component)
+
+---
+
+## Implementation
+
+### CSS custom properties
+
+Figma token separator `/` → CSS separator `-`, prefixed with `--`.
+
+```
+color/bg/canvas  →  --color-bg-canvas
+space/lg         →  --space-lg
+radius/md        →  --radius-md
+```
+
+All tokens are defined in `src/app/globals.css` (Layer 1: primitives, Layer 2: semantic). **Only use semantic tokens in components** — never reference primitive variables directly.
+
+### Typography
+
+All Figma text styles are available as CSS Modules classes in `src/styles/typography.module.css`.
+Use `composes` to apply them — never repeat font properties manually:
+
+```css
+.myClass {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+```
+
+Available classes: `display`, `headingLg`, `headingMd`, `headingSm`, `headingXs`, `bodyLead`, `bodyMd`, `bodySm`, `bodyXs`, `labelMd`, `labelSm`.
+
+All font sizes are in `rem`. `labelMd` and `labelSm` include `text-transform: uppercase` — do not add it again.
+
+### Transitions
+
+```css
+transition: color var(--duration-fast) var(--ease);
+transition: opacity var(--duration-slow) var(--ease);
+```
+
+Use `--duration-fast` (200ms) for micro-interactions (hover, color change).
+Use `--duration-slow` (300ms) for larger layout changes.
+Never animate `background-image` (not animatable) — use a `::before` overlay with `opacity` transition instead.
+
+### Dropdowns / floating UI
+
+The `<nav>` has `transform: translateX(-50%)` for centering, which creates a new containing block and breaks `position: fixed` for descendants. Any floating panel that needs true viewport-relative positioning must use `ReactDOM.createPortal(panel, document.body)`.
+
+Position pattern:
+1. Render the panel via `createPortal` into `document.body`
+2. Use `useLayoutEffect` to measure `panelRef.current.offsetWidth` and `triggerRef.current.getBoundingClientRect()` after the panel is in the DOM (before paint — no flash)
+3. Re-measure after `document.fonts.ready` to handle the case where webfonts weren't loaded yet on first open
+4. Re-measure on `window resize` for responsive correctness
+
+### Opacity on CSS variables
+
+Use `color-mix()` to apply opacity to a CSS custom property — never hardcode the raw hex + rgba:
+
+```css
+/* ✓ */
+background: color-mix(in srgb, var(--color-brand-600) 40%, transparent);
+
+/* ✗ — hardcodes the primitive, breaks if the token changes */
+background: rgba(198, 83, 46, 0.40);
+```
+
+### Text selection
+
+Global brand selection color defined in `globals.css`:
+```css
+::selection {
+  background: color-mix(in srgb, var(--color-brand-600) 40%, transparent);
+  color: var(--color-neutral-50);
+}
+```
+
+### Responsive navigation — dynamic breakpoint
+
+**Never use a fixed `@media` width for the nav breakpoint.** The nav switches to mobile layout exactly when its natural content width would touch the viewport edges, measured via JS:
+
+```tsx
+// On mount (useLayoutEffect), measure the desktop nav's scrollWidth.
+// Cache it as the threshold. On every resize, compare window.innerWidth < threshold.
+// Apply a .navMobile CSS class to the <nav> element when mobile.
+```
+
+Key points:
+- `scrollWidth` is measured **only when `isMobile === false`** (desktop mode); re-measuring in mobile mode gives wrong results because `.right` is hidden.
+- Re-measure after `document.fonts.ready` to account for JetBrains Mono not yet loaded on first render.
+- Close the mobile menu when switching back to desktop (`if (!mobile) setMobileOpen(false)`).
+
+CSS uses descendant selectors inside the same CSS Module — both class names get the same hash scope:
+
+```css
+.navMobile { width: calc(100% - 48px); ... }
+.navMobile .container { justify-content: space-between; ... }
+.navMobile .right { display: none; }
+.navMobile .hamburger { display: flex; }
+```
+
+### SVG icon morphing
+
+For animated icon transitions (e.g. hamburger → X), use a custom inline SVG with CSS transforms — do **not** swap two separate Lucide icon components:
+
+```css
+.burgerLine {
+  transition: transform var(--duration-fast) var(--ease), opacity var(--duration-fast) var(--ease);
+  transform-box: fill-box;   /* required: origin relative to the element, not the SVG viewport */
+  transform-origin: center;
+}
+.burgerLine1Open { transform: translateY(5px) rotate(45deg); }
+.burgerLine2Open { opacity: 0; transform: scaleX(0.2); }
+.burgerLine3Open { transform: translateY(-5px) rotate(-45deg); }
+```
+
+`transform-box: fill-box` is critical for SVG — without it `transform-origin: center` refers to the SVG viewport center, not the element's own bounding box.

@@ -3,23 +3,21 @@
   top: 16px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 210;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xs) var(--space-xl);
+  padding: var(--space-sm) var(--space-xl);
   background: var(--color-bg-overlay);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-full);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
 .container {
   display: flex;
   align-items: center;
   gap: var(--space-2xl);
-  padding: var(--space-2xs);
   max-width: 1200px;
 }
 
@@ -47,6 +45,45 @@
   display: flex;
   align-items: center;
   gap: var(--space-lg);
+}
+
+/* ── Burger icon morph ── */
+.burgerLine {
+  transition:
+    transform var(--duration-fast) var(--ease),
+    opacity var(--duration-fast) var(--ease);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.burgerLine1Open {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.burgerLine2Open {
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+
+.burgerLine3Open {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+/* ── Hamburger (mobile only) ── */
+.hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.hamburger:hover {
+  color: var(--color-text-primary);
 }
 
 /* ── NavLink ── */
@@ -143,12 +180,10 @@
   border-right: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-lg);
   backdrop-filter: var(--overlay-blur);
-  -webkit-backdrop-filter: var(--overlay-blur);
   z-index: 200;
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  overflow: hidden;
   animation: dropdown-in var(--duration-fast) var(--ease) both;
 }
 
@@ -184,4 +219,110 @@
 
 .langOptionActive {
   color: var(--color-text-primary);
+}
+
+/* ── Language inline (mobile) ── */
+.langInline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.langInlineOption {
+  composes: labelMd from '@/styles/typography.module.css';
+  min-height: 44px;
+  padding-inline: var(--space-sm);
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.langInlineOption:hover {
+  color: var(--color-text-primary);
+}
+
+.langInlineOptionActive {
+  color: var(--color-text-primary);
+}
+
+/* ── Mobile dropdown ── */
+.mobileBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: transparent;
+}
+
+.mobileDropdown {
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-bg-overlay);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--overlay-blur);
+  animation: mobile-dropdown-in var(--duration-fast) var(--ease) both;
+}
+
+@keyframes mobile-dropdown-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mobileDivider {
+  width: 100%;
+  height: 1px;
+  background: var(--color-border-strong);
+}
+
+.mobileFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-xs);
+}
+
+.mobileLink {
+  composes: headingXs from '@/styles/typography.module.css';
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-block: var(--space-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.mobileLink:hover,
+.mobileLink:focus-visible {
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+/* ── Mobile (dynamic breakpoint via JS) ── */
+.navMobile {
+  width: calc(100% - 48px);
+  padding-left: var(--space-lg);
+  padding-right: var(--space-sm);
+  padding-block: var(--space-sm);
+}
+
+.navMobile .container {
+  flex: 1;
+  gap: 0;
+  justify-content: space-between;
+  min-width: 1px;
+}
+
+.navMobile .right {
+  display: none;
+}
+
+.navMobile .hamburger {
+  display: flex;
 }
