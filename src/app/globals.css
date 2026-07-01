@@ -183,3 +183,8 @@ button {
   font: inherit;
   color: inherit;
 }
+
+::selection {
+  background: rgba(198, 83, 46, 0.40); /* brand/600 @40% */
+  color: var(--color-neutral-50);
+}

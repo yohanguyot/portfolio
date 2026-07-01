@@ -54,13 +54,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xs);
-  font-family: var(--font-family-label);
-  font-size: 13px;
-  font-weight: var(--font-weight-medium);
-  line-height: 1.55;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  padding: var(--space-2xs);
+  composes: labelMd from '@/styles/typography.module.css';
   color: var(--color-status-success);
   white-space: nowrap;
 }

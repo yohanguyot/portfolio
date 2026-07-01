@@ -13,7 +13,6 @@
   border-radius: var(--radius-full);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  overflow: hidden;
 }
 
 .container {
@@ -32,13 +31,10 @@
 }
 
 .logo {
-  font-family: var(--font-family-display);
-  font-size: 18px;
-  font-weight: var(--font-weight-bold);
-  line-height: 1.35;
-  letter-spacing: -0.01em;
+  composes: headingXs from '@/styles/typography.module.css';
   color: var(--color-text-primary);
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .links {
@@ -67,16 +63,11 @@
 }
 
 .navLinkLabel {
+  composes: labelMd from '@/styles/typography.module.css';
   display: flex;
   align-items: center;
   justify-content: center;
   padding-inline: var(--space-xs);
-  font-family: var(--font-family-label);
-  font-size: 13px;
-  font-weight: var(--font-weight-medium);
-  line-height: 1.55;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -87,6 +78,10 @@
 }
 
 /* ── LanguageDropdown ── */
+.langWrapper {
+  position: relative;
+}
+
 .langDropdown {
   display: flex;
   align-items: center;
@@ -103,16 +98,11 @@
 }
 
 .langLabel {
+  composes: labelMd from '@/styles/typography.module.css';
   display: flex;
   align-items: center;
   justify-content: center;
   padding-inline: var(--space-xs);
-  font-family: var(--font-family-label);
-  font-size: 13px;
-  font-weight: var(--font-weight-medium);
-  line-height: 1.55;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   color: var(--color-text-secondary);
   white-space: nowrap;
   transition: color var(--duration-fast) var(--ease);
@@ -140,5 +130,58 @@
 .langDropdown:hover .langIcon,
 .langDropdownHover .langIcon,
 .langDropdownActive .langIcon {
+  color: var(--color-text-primary);
+}
+
+/* ── Dropdown panel ── */
+.langPanel {
+  list-style: none;
+  padding: var(--space-xs);
+  background: var(--color-bg-overlay);
+  border-bottom: 1px solid var(--color-border-subtle);
+  border-left: 1px solid var(--color-border-subtle);
+  border-right: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  backdrop-filter: var(--overlay-blur);
+  -webkit-backdrop-filter: var(--overlay-blur);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  overflow: hidden;
+  animation: dropdown-in var(--duration-fast) var(--ease) both;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.langOption {
+  composes: labelMd from '@/styles/typography.module.css';
+  display: block;
+  width: 100%;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  text-align: left;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.langOption:hover {
+  color: var(--color-text-primary);
+}
+
+.langOptionActive {
   color: var(--color-text-primary);
 }
