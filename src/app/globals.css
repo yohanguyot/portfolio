@@ -184,6 +184,14 @@ button {
   color: inherit;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 ::selection {
   background: color-mix(in srgb, var(--color-brand-600) 40%, transparent);
   color: var(--color-neutral-50);

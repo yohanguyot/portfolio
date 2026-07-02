@@ -9,6 +9,7 @@
   font-weight: var(--font-weight-bold);
   line-height: 0.92;
   letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .headingLg {
@@ -17,6 +18,7 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.08;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .headingMd {
@@ -25,6 +27,7 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.25;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .headingSm {
@@ -33,6 +36,7 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.35;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .headingXs {
@@ -41,6 +45,7 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.35;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .bodyLead {
@@ -49,6 +54,7 @@
   font-weight: var(--font-weight-regular);
   line-height: 1.35;
   letter-spacing: 0.01em;
+  text-wrap: pretty;
 }
 
 .bodyMd {
@@ -57,6 +63,7 @@
   font-weight: var(--font-weight-regular);
   line-height: 1.5;
   letter-spacing: 0;
+  text-wrap: pretty;
 }
 
 .bodySm {
@@ -65,6 +72,7 @@
   font-weight: var(--font-weight-regular);
   line-height: 1.6;
   letter-spacing: 0;
+  text-wrap: pretty;
 }
 
 .bodyXs {
@@ -73,6 +81,7 @@
   font-weight: var(--font-weight-regular);
   line-height: 1.5;
   letter-spacing: 0;
+  text-wrap: pretty;
 }
 
 .labelMd {

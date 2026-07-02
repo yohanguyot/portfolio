@@ -1,7 +1,7 @@
 .section {
   position: relative;
   width: 100%;
-  min-height: 900px;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,7 +16,7 @@
   position: absolute;
   width: 3200px;
   height: 1200px;
-  top: -320px;
+  top: -256px;
   left: 50%;
   transform: translateX(-50%);
   pointer-events: none;
@@ -39,6 +39,7 @@
   padding-block: var(--space-2xl);
   position: relative;
   z-index: 1;
+  margin-bottom: 8vh;
 }
 
 .textContainer {
@@ -67,6 +68,7 @@
 /* display title — gradient text */
 .displayTitle {
   composes: display from '@/styles/typography.module.css';
+  font-size: clamp(2.75rem, 12vw, 7rem); /* override token: fluid 40px → 112px */
   text-align: center;
   background: linear-gradient(
     180deg,
@@ -156,6 +158,30 @@
 @media (prefers-reduced-motion: reduce) {
   .scrollLabel { animation: none; opacity: 0.6; }
   .scrollLine::after { animation: none; transform: translateY(-50%); }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding-inline: var(--space-md);
+    padding-block: var(--space-2xl);
+  }
+
+  .eyebrow {
+    white-space: normal;
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 3.5vw, 1.125rem);
+  }
+
+  .eyebrow {
+    font-size: clamp(0.625rem, 2.2vw, 0.8125rem);
+  }
+
+  .buttons {
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
 /* Arc vectors */
