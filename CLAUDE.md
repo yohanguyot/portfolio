@@ -439,3 +439,40 @@ For animated icon transitions (e.g. hamburger → X), use a custom inline SVG wi
 ```
 
 `transform-box: fill-box` is critical for SVG — without it `transform-origin: center` refers to the SVG viewport center, not the element's own bounding box.
+
+
+### Responsive typography
+
+Never modify `src/styles/typography.module.css` token sizes for responsive. Override `font-size` with `clamp()` in the component's own CSS Module:
+
+```css
+/* local override, token untouched */
+.displayTitle {
+  composes: display from '@/styles/typography.module.css';
+  font-size: clamp(2.75rem, 12vw, 7rem);
+}
+```
+
+Formula: `clamp(<min>, <fluid-vw>, <max>)`. Fluid value reaches max at ~1200px, min at ~320px.
+
+### Text wrapping
+
+All heading classes (`display`, `headingLg` to `headingXs`) include `text-wrap: balance`.
+All body classes (`bodyLead`, `bodyMd`, `bodySm`, `bodyXs`) include `text-wrap: pretty`.
+Global fallback in `globals.css` covers semantic `h1-h6` and `p` elements.
+Do not add `text-wrap` again in component CSS.
+
+### Font smoothing
+
+Applied globally on `*` in `globals.css` — do not repeat per-component:
+
+```css
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+```
+
+### Full-screen sections
+
+Use `min-height: 100dvh` for viewport-filling sections. `dvh` handles mobile browser chrome correctly. Never use `100vh` (ignores mobile UI chrome).
