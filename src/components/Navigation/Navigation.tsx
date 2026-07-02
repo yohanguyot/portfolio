@@ -50,6 +50,7 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState("FR");
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({});
+  const [stride, setStride] = useState(0);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLUListElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -100,9 +101,24 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  useLayoutEffect(() => {
+    if (!inline || !wrapperRef.current) return;
+    const btns = wrapperRef.current.querySelectorAll("button");
+    if (btns.length >= 2) {
+      setStride((btns[1] as HTMLElement).offsetLeft - (btns[0] as HTMLElement).offsetLeft);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inline]);
+
   if (inline) {
+    const currentIndex = LANGUAGES.findIndex(({ code }) => code === current);
     return (
-      <div className={[styles.langInline, className ?? ""].filter(Boolean).join(" ")}>
+      <div ref={wrapperRef} className={[styles.langInline, className ?? ""].filter(Boolean).join(" ")}>
+        <span
+          className={styles.langInlineIndicator}
+          style={{ transform: `translateX(${currentIndex * stride}px)` }}
+          aria-hidden="true"
+        />
         {LANGUAGES.map(({ code }) => (
           <button
             key={code}
@@ -176,6 +192,7 @@ const NAV_LINKS = [
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
@@ -215,6 +232,7 @@ export default function Navigation() {
 
     measureThreshold();
     check();
+    setMounted(true);
     document.fonts.ready.then(() => { measureThreshold(); check(); });
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
@@ -272,7 +290,7 @@ export default function Navigation() {
 
   return (
     <>
-      <nav ref={navRef} className={`${styles.nav} ${isMobile ? styles.navMobile : ""}`}>
+      <nav ref={navRef} className={`${styles.nav} ${isMobile ? styles.navMobile : ""} ${!mounted ? styles.navHidden : ""}`}>
         <div className={styles.container}>
           <div className={styles.logoContainer}>
             <a href="/" className={styles.logo}>Yohan Guyot</a>

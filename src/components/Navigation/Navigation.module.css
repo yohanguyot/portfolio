@@ -1,3 +1,8 @@
+.navHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .nav {
   position: fixed;
   top: 16px;
@@ -221,31 +226,47 @@
   color: var(--color-text-primary);
 }
 
-/* ── Language inline (mobile) ── */
+/* ── Language inline (mobile) — segmented pill ── */
 .langInline {
+  --lang-btn-w: 48px;
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-2xs);
+  padding: var(--space-2xs);
+  background: var(--color-bg-surface-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+}
+
+/* sliding indicator — JS reads offsetLeft diff to compute stride, no hardcoded value */
+.langInlineIndicator {
+  position: absolute;
+  inset: var(--space-2xs);
+  width: var(--lang-btn-w);
+  left: var(--space-2xs);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface-3);
+  pointer-events: none;
+  transition: transform var(--duration-fast) var(--ease);
 }
 
 .langInlineOption {
   composes: labelMd from '@/styles/typography.module.css';
-  min-height: 44px;
-  padding-inline: var(--space-sm);
+  position: relative;
+  z-index: 1;
+  width: var(--lang-btn-w);
+  height: 44px;
   display: flex;
   align-items: center;
+  justify-content: center;
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
   transition: color var(--duration-fast) var(--ease);
 }
 
-.langInlineOption:hover {
-  color: var(--color-text-primary);
-}
-
-.langInlineOptionActive {
-  color: var(--color-text-primary);
-}
+.langInlineOption:hover { color: var(--color-text-primary); }
+.langInlineOptionActive { color: var(--color-text-primary); }
 
 /* ── Mobile dropdown ── */
 .mobileBackdrop {
