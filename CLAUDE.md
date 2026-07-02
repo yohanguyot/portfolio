@@ -462,17 +462,6 @@ All body classes (`bodyLead`, `bodyMd`, `bodySm`, `bodyXs`) include `text-wrap: 
 Global fallback in `globals.css` covers semantic `h1-h6` and `p` elements.
 Do not add `text-wrap` again in component CSS.
 
-### Font smoothing
-
-Applied globally on `*` in `globals.css` — do not repeat per-component:
-
-```css
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-```
-
 ### Full-screen sections
 
 Use `min-height: 100dvh` for viewport-filling sections. `dvh` handles mobile browser chrome correctly. Never use `100vh` (ignores mobile UI chrome).
