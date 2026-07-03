@@ -235,10 +235,10 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className={styles.scrollIndicator} aria-hidden>
+        <a href="#projets" className={styles.scrollIndicator} aria-label="Voir les projets">
           <span className={styles.scrollLabel}>Scroll</span>
           <div className={styles.scrollLine} />
-        </div>
+        </a>
       </section>
       <HeroArcCanvas />
     </>

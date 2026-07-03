@@ -116,9 +116,11 @@
   align-items: center;
   gap: var(--space-xs);
   z-index: 1;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-@media (pointer: fine) {
+@media (pointer: fine) and (min-height: 1050px) {
   .scrollIndicator {
     display: flex;
   }
