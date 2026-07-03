@@ -1,0 +1,150 @@
+.button {
+  composes: labelMd from '@/styles/typography.module.css';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  text-box: trim-both cap alphabetic;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
+  user-select: none;
+}
+
+/* ── Primary ── */
+.primary {
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  color: var(--color-btn-primary-text);
+  background-image: var(--color-btn-primary-bg);
+  box-shadow: var(--color-btn-primary-shadow);
+}
+
+.primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .primary:hover::before {
+    opacity: 1;
+  }
+}
+
+/* ── Secondary ── */
+.secondary {
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  color: var(--color-btn-secondary-text);
+  background-image: var(--color-btn-secondary-bg);
+  box-shadow: var(--color-btn-secondary-shadow);
+}
+
+.secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .secondary:hover::before {
+    opacity: 1;
+  }
+}
+
+/* ── Text ── */
+.text {
+  gap: var(--space-xs);
+  padding: var(--space-xs) 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) {
+  .text:hover {
+    color: var(--color-text-accent);
+  }
+}
+
+/* ── Label ── */
+.labelContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.label {
+  flex-shrink: 0;
+}
+
+/* ── Icon sizes ── */
+.iconPrimary {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.iconText {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+/* Arrow animation — right arrow translates right, left arrow translates left */
+@media (hover: hover) {
+  .button:hover .iconText:last-child,
+  .button:hover .iconPrimary:last-child {
+    transform: translateX(3px);
+  }
+
+  .button:hover .iconText:first-child,
+  .button:hover .iconPrimary:first-child {
+    transform: translateX(-3px);
+  }
+}
+
+.forceHover .iconText:last-child,
+.forceHover .iconPrimary:last-child {
+  transform: translateX(3px);
+}
+
+.forceHover .iconText:first-child,
+.forceHover .iconPrimary:first-child {
+  transform: translateX(-3px);
+}
+
+/* ── Forced hover (playground) ── */
+.forceHover.primary::before,
+.forceHover.secondary::before {
+  opacity: 1;
+}
+
+.forceHover.text {
+  color: var(--color-text-accent);
+}

@@ -1,0 +1,374 @@
+.navHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-xl);
+  background: var(--color-bg-overlay);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(12px);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xl);
+  max-width: 1200px;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 101px;
+}
+
+.logo {
+  composes: headingXs from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xl);
+}
+
+/* ── Burger icon morph ── */
+.burgerLine {
+  transition:
+    transform var(--duration-fast) var(--ease),
+    opacity var(--duration-fast) var(--ease);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.burgerLine1Open {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.burgerLine2Open {
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+
+.burgerLine3Open {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+/* ── Hamburger (mobile only) ── */
+.hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .hamburger:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+/* ── NavLink ── */
+.navLink {
+  display: flex;
+  align-items: center;
+  padding-block: var(--space-xs);
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+  text-decoration: none;
+}
+
+.navLinkLabel {
+  composes: labelMd from '@/styles/typography.module.css';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--space-xs);
+  white-space: nowrap;
+}
+
+.navLinkHover,
+.navLinkActive {
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) {
+  .navLink:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+/* ── LanguageDropdown ── */
+.langWrapper {
+  position: relative;
+}
+
+.langDropdown {
+  display: flex;
+  align-items: center;
+  padding: var(--space-xs);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  gap: 0;
+  transition:
+    background var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.langLabel {
+  composes: labelMd from '@/styles/typography.module.css';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--space-xs);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.langIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.langDropdownHover,
+.langDropdownActive {
+  background: var(--color-bg-surface-2);
+}
+
+.langDropdownHover .langLabel,
+.langDropdownActive .langLabel,
+.langDropdownHover .langIcon,
+.langDropdownActive .langIcon {
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) {
+  .langDropdown:hover {
+    background: var(--color-bg-surface-2);
+  }
+
+  .langDropdown:hover .langLabel,
+  .langDropdown:hover .langIcon {
+    color: var(--color-text-primary);
+  }
+}
+
+/* ── Dropdown panel ── */
+.langPanel {
+  list-style: none;
+  padding: var(--space-xs);
+  background: var(--color-bg-overlay);
+  border-bottom: 1px solid var(--color-border-subtle);
+  border-left: 1px solid var(--color-border-subtle);
+  border-right: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--overlay-blur);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  animation: dropdown-in var(--duration-fast) var(--ease) both;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.langOption {
+  composes: labelMd from '@/styles/typography.module.css';
+  display: block;
+  width: 100%;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  text-align: left;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .langOption:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+.langOptionActive {
+  color: var(--color-text-primary);
+}
+
+/* ── Language inline (mobile) — segmented pill ── */
+.langInline {
+  --lang-btn-w: 48px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs);
+  background: var(--color-bg-surface-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+}
+
+/* sliding indicator — JS reads offsetLeft diff to compute stride, no hardcoded value */
+.langInlineIndicator {
+  position: absolute;
+  inset: var(--space-2xs);
+  width: var(--lang-btn-w);
+  left: var(--space-2xs);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface-3);
+  pointer-events: none;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.langInlineOption {
+  composes: labelMd from '@/styles/typography.module.css';
+  position: relative;
+  z-index: 1;
+  width: var(--lang-btn-w);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .langInlineOption:hover { color: var(--color-text-primary); }
+}
+.langInlineOptionActive { color: var(--color-text-primary); }
+
+/* ── Mobile dropdown ── */
+.mobileBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: transparent;
+}
+
+.mobileDropdown {
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-bg-overlay);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--overlay-blur);
+  animation: mobile-dropdown-in var(--duration-fast) var(--ease) both;
+}
+
+@keyframes mobile-dropdown-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mobileDivider {
+  width: 100%;
+  height: 1px;
+  background: var(--color-border-strong);
+}
+
+.mobileFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--space-xs);
+}
+
+.mobileLink {
+  composes: headingXs from '@/styles/typography.module.css';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-block: var(--space-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.mobileLink:focus-visible {
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+@media (hover: hover) {
+  .mobileLink:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+/* ── Mobile (dynamic breakpoint via JS) ── */
+.navMobile {
+  width: calc(100% - 48px);
+  padding-left: var(--space-lg);
+  padding-right: var(--space-sm);
+  padding-block: var(--space-sm);
+}
+
+.navMobile .container {
+  flex: 1;
+  gap: 0;
+  justify-content: space-between;
+  min-width: 1px;
+}
+
+.navMobile .right {
+  display: none;
+}
+
+.navMobile .hamburger {
+  display: flex;
+}

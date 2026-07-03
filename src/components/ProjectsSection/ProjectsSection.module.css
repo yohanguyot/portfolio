@@ -1,0 +1,238 @@
+.section {
+  width: 100%;
+  padding-block: var(--space-layout);
+  padding-inline: var(--space-xl);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* ── Title ── */
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.sectionLabel {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+.sectionHeading {
+  composes: headingLg from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+/* ── Project items layout ── */
+.projectItems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ── Tags ── */
+.tags {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.tag {
+  composes: labelSm from '@/styles/typography.module.css';
+  display: inline-flex;
+  align-items: center;
+  padding-block: var(--space-2xs);
+  padding-inline: var(--space-sm);
+  background: var(--color-bg-surface-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+}
+
+
+/* ── Large card (Bloom) ── */
+.cardLarge {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+.cardLargeImageWrap {
+  width: 640px;
+  aspect-ratio: 640 / 400;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+
+.cardLargeContent {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
+  min-width: 0;
+}
+
+.cardLargeContent::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg-surface-2);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .cardLarge:hover .cardLargeContent::before {
+    opacity: 1;
+  }
+}
+
+.cardLargeBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Card text ── */
+.cardText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.cardTitleLg {
+  composes: headingMd from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+.cardDesc {
+  composes: bodyMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+/* ── Small cards grid ── */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.card + .card {
+  border-left: 1px solid var(--color-border-strong);
+}
+
+
+
+.cardImageWrap {
+  width: 100%;
+  aspect-ratio: 680 / 425;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+
+.cardContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
+  flex: 1;
+}
+
+.cardContent::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg-surface-2);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .card:hover .cardContent::before {
+    opacity: 1;
+  }
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.cardTitleSm {
+  composes: headingSm from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+.cardDescSm {
+  composes: bodySm from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+/* ── Card CTA ── */
+.cardCta {
+  align-self: flex-start;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .cardLarge {
+    flex-direction: column;
+  }
+
+  .cardLargeImageWrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-inline: var(--space-md);
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    border-radius: var(--radius-lg);
+  }
+
+  .card + .card {
+    border-left: none;
+    border-top: 1px solid var(--color-border-strong);
+  }
+}
