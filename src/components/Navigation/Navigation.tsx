@@ -191,8 +191,8 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
 
 const NAV_LINKS = [
   { label: "Projets", href: "#projets" },
-  { label: "Process", href: "#process" },
   { label: "À propos", href: "#a-propos" },
+  { label: "Process", href: "#process" },
   { label: "Contact", href: "#contact" },
 ];
 

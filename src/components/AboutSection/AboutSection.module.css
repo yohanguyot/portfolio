@@ -6,18 +6,20 @@
 
 .container {
   display: flex;
-  flex-direction: column;
   gap: var(--space-2xl);
+  align-items: center;
   max-width: 1200px;
   margin-inline: auto;
 }
 
-/* ── Intro ── */
-.intro {
+/* ── Left — info ── */
+.info {
+  flex: 1 0 0;
+  max-width: 600px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
-  max-width: 600px;
 }
 
 .titleBlock {
@@ -36,43 +38,57 @@
   color: var(--color-text-primary);
 }
 
-.description {
+.headingBreak {
+  display: block;
+}
+
+.accent {
+  color: var(--color-text-accent);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.bodyText {
   composes: bodyMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
 }
 
-/* ── Steps grid ── */
-.stepsGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.highlight {
+  color: var(--color-text-primary);
+}
+
+/* ── Right — skill card ── */
+.card {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
-.step {
+.skillBlock {
   display: flex;
-  flex-direction: column;
   gap: var(--space-lg);
-  padding: var(--space-xl);
+  align-items: flex-start;
+  padding: var(--space-xl) var(--space-xl) var(--space-xl) var(--space-lg);
   overflow: hidden;
 }
 
-.step + .step {
-  border-left: 1px solid var(--color-border-strong);
+.skillBlockBorder {
+  border-bottom: 1px solid var(--color-border-strong);
 }
 
-.stepContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-/* ── Icon ── */
 .iconWrap {
   width: 40px;
   height: 40px;
+  flex-shrink: 0;
   border-radius: var(--radius-full);
   background: linear-gradient(
     180deg,
@@ -82,72 +98,55 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
 .icon {
   color: var(--color-text-accent);
 }
 
-/* ── Step text ── */
-.body {
+.skillContent {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
+  flex: 1 0 0;
+  min-width: 0;
 }
 
-.stepTitle {
-  composes: headingSm from '@/styles/typography.module.css';
+.skillTitle {
+  composes: headingXs from '@/styles/typography.module.css';
   color: var(--color-text-primary);
 }
 
-.stepDesc {
+.skillDesc {
   composes: bodySm from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
 }
 
-.stepLabel {
-  composes: labelMd from '@/styles/typography.module.css';
-  color: var(--color-text-muted);
-}
-
 /* ── Responsive ── */
 @media (max-width: 1024px) {
-  .stepsGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .container {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .step:nth-child(2) {
-    border-left: 1px solid var(--color-border-strong);
+  .info {
+    flex: none;
+    width: 100%;
+    max-width: none;
   }
 
-  .step:nth-child(3) {
-    border-left: none;
-    border-top: 1px solid var(--color-border-strong);
+  .card {
+    flex: none;
+    width: 100%;
   }
 
-  .step:nth-child(4) {
-    border-left: 1px solid var(--color-border-strong);
-    border-top: 1px solid var(--color-border-strong);
+  .headingBreak {
+    display: none;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .section {
     padding-inline: var(--space-md);
-  }
-
-  .stepsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .step + .step {
-    border-left: none;
-    border-top: 1px solid var(--color-border-strong);
-  }
-
-  .step:nth-child(3),
-  .step:nth-child(4) {
-    border-left: none;
   }
 }
