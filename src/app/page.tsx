@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation/Navigation";
 import HeroSection from "@/components/HeroSection/HeroSection";
 import ProjectsSection from "@/components/ProjectsSection/ProjectsSection";
+import ProcessSection from "@/components/ProcessSection/ProcessSection";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <ProjectsSection />
+      <ProcessSection />
     </>
   );
 }
