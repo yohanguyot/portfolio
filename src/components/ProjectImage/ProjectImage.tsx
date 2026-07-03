@@ -8,22 +8,22 @@ const ASSETS: Record<ProjectSlug, {
   screen: string;
 }> = {
   bloom: {
-    bg: "/images/projects/cards/bloom-bg.png",
+    bg: "/images/projects/cards/bloom-bg.svg",
     logo: "/images/projects/cards/bloom-logo.svg",
     screen: "/images/projects/cards/bloom-screen.png",
   },
   keepro: {
-    bg: "/images/projects/cards/keepro-bg.png",
+    bg: "/images/projects/cards/keepro-bg.svg",
     logo: "/images/projects/cards/keepro-logo.svg",
     screen: "/images/projects/cards/keepro-screen.png",
   },
   lecoffre: {
-    bg: "/images/projects/cards/lecoffre-bg.png",
+    bg: "/images/projects/cards/lecoffre-bg.svg",
     logo: "/images/projects/cards/lecoffre-logo.svg",
     screen: "/images/projects/cards/lecoffre-screen.png",
   },
   wenimmo: {
-    bg: "/images/projects/cards/wenimmo-bg.png",
+    bg: "/images/projects/cards/wenimmo-bg.svg",
     logo: "/images/projects/cards/wenimmo-logo.svg",
     screen: "/images/projects/cards/wenimmo-screen.png",
   },
