@@ -1,0 +1,319 @@
+.section {
+  width: 100%;
+  padding-block: var(--space-layout);
+  padding-inline: var(--space-xl);
+  background: var(--color-bg-surface);
+  border-radius: clamp(calc(var(--radius-xl) * 2), 8vw, var(--radius-2xl)) clamp(calc(var(--radius-xl) * 2), 8vw, var(--radius-2xl)) 0 0;
+  margin-top: var(--space-layout);
+}
+
+.container {
+  display: flex;
+  gap: var(--space-2xl);
+  align-items: center;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* ── Left column ── */
+.leftCol {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+/* ── Left — info ── */
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.description {
+  composes: bodyMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  max-width: 600px;
+}
+
+/* ── Contact links ── */
+.links {
+  display: flex;
+  flex-direction: column;
+  max-width: 486px;
+}
+
+.contactLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-lg) var(--space-2xs);
+  border-top: 1px solid var(--color-border-strong);
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.contactLink:hover {
+  color: var(--color-text-accent);
+}
+
+.contactLinkLast {
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.contactLinkIcon {
+  display: flex;
+  flex-shrink: 0;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.contactLink:hover .contactLinkIcon {
+  transform: translate(4px, -4px);
+}
+
+.contactLinkLabel {
+  composes: headingXs from '@/styles/typography.module.css';
+  flex: 1;
+}
+
+/* ── Right — Form ── */
+.form {
+  flex: 1 0 0;
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  background: var(--color-bg-surface-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  overflow: hidden;
+}
+
+.formRow {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+  min-width: 0;
+}
+
+.fieldLabel {
+  composes: bodyXs from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Inputs ── */
+.input,
+.textarea {
+  width: 100%;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xs) var(--space-md);
+  font-family: var(--font-family-body);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  transition:
+    background var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:hover,
+.textarea:hover {
+  background: var(--color-bg-surface-2);
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  background: var(--color-bg-surface-2);
+  border-color: var(--color-border-active);
+}
+
+.inputError {
+  border-color: var(--color-status-error);
+}
+
+.sendError {
+  composes: labelSm from '@/styles/typography.module.css';
+  color: var(--color-status-error);
+}
+
+.sendError a {
+  color: var(--color-status-error);
+  text-decoration: underline;
+}
+
+.fieldError {
+  composes: labelSm from '@/styles/typography.module.css';
+  color: var(--color-status-error);
+}
+
+.textarea {
+  resize: none;
+  min-height: 160px;
+  text-wrap: pretty;
+}
+
+/* ── Chips ── */
+.needsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-family-body);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.chip:hover {
+  background: var(--color-bg-surface-2);
+  color: var(--color-text-primary);
+}
+
+.chipSelected {
+  background: var(--color-bg-active);
+  border-color: var(--color-border-active);
+  color: var(--color-text-primary);
+}
+
+/* ── Submit button ── */
+.submitBtn {
+  width: 100%;
+}
+
+/* ── Success ── */
+.successMessage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding-block: var(--space-lg);
+}
+
+.successIconWrap {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-status-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-bg-canvas);
+}
+
+.successIconWrap::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-status-success) 15%, transparent);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.successTextGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.successTitle {
+  composes: headingSm from '@/styles/typography.module.css';
+  color: var(--color-status-success);
+}
+
+.successSubtitle {
+  composes: labelSm from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .leftCol {
+    /* dissolve the wrapper — children become direct flex children of container */
+    display: contents;
+  }
+
+  .infoContent { order: 1; }
+  .form {
+    order: 2;
+    flex: none;
+    width: 100%;
+  }
+  .links {
+    order: 3;
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding-inline: var(--space-md);
+  }
+
+  .formRow {
+    flex-direction: column;
+  }
+
+  .chips {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

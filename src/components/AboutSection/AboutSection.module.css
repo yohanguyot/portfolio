@@ -22,22 +22,6 @@
   gap: var(--space-lg);
 }
 
-.titleBlock {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-.sectionLabel {
-  composes: labelMd from '@/styles/typography.module.css';
-  color: var(--color-text-secondary);
-}
-
-.sectionHeading {
-  composes: headingLg from '@/styles/typography.module.css';
-  color: var(--color-text-primary);
-}
-
 .headingBreak {
   display: block;
 }
@@ -85,25 +69,6 @@
   border-bottom: 1px solid var(--color-border-strong);
 }
 
-.iconWrap {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: var(--radius-full);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-brand-600) 12%, transparent) 0%,
-    color-mix(in srgb, var(--color-brand-800) 12%, transparent) 100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon {
-  color: var(--color-text-accent);
-}
-
 .skillContent {
   display: flex;
   flex-direction: column;
@@ -120,6 +85,7 @@
 .skillDesc {
   composes: bodySm from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
+  max-width: 600px;
 }
 
 /* ── Responsive ── */
@@ -132,7 +98,6 @@
   .info {
     flex: none;
     width: 100%;
-    max-width: none;
   }
 
   .card {

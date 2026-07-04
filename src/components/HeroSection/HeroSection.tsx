@@ -231,7 +231,7 @@ export default function HeroSection() {
 
           <div className={styles.buttons}>
             <Button label="Voir les projets" type="primary" href="#projets" />
-            <Button label="Me contacter" type="secondary" />
+            <Button label="Me contacter" type="secondary" href="#contact" />
           </div>
         </div>
 

@@ -1,4 +1,6 @@
 import { Component, Route, CodeXml } from "lucide-react";
+import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SquareIcon from "@/components/SquareIcon/SquareIcon";
 import styles from "./AboutSection.module.css";
 
 const SKILLS = [
@@ -28,14 +30,16 @@ export default function AboutSection() {
       <div className={styles.container}>
         {/* Left — text */}
         <div className={styles.info}>
-          <div className={styles.titleBlock}>
-            <p className={styles.sectionLabel}>À propos</p>
-            <h2 className={styles.sectionHeading}>
-              Designer avec une{" "}
-              <br className={styles.headingBreak} />
-              <span className={styles.accent}>culture technique</span>.
-            </h2>
-          </div>
+          <SectionHeader
+            label="À propos"
+            heading={
+              <>
+                Designer avec une{" "}
+                <br className={styles.headingBreak} />
+                <span className={styles.accent}>culture technique</span>.
+              </>
+            }
+          />
 
           <div className={styles.body}>
             <p className={styles.bodyText}>
@@ -61,14 +65,12 @@ export default function AboutSection() {
 
         {/* Right — skill card */}
         <div className={styles.card}>
-          {SKILLS.map(({ icon: Icon, title, description }, i) => (
+          {SKILLS.map(({ icon, title, description }, i) => (
             <div
               key={title}
               className={`${styles.skillBlock} ${i < SKILLS.length - 1 ? styles.skillBlockBorder : ""}`}
             >
-              <div className={styles.iconWrap}>
-                <Icon size={20} strokeWidth={1.5} className={styles.icon} />
-              </div>
+              <SquareIcon icon={icon} />
               <div className={styles.skillContent}>
                 <h3 className={styles.skillTitle}>{title}</h3>
                 <p className={styles.skillDesc}>{description}</p>

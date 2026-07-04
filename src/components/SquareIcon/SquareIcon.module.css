@@ -1,0 +1,18 @@
+.wrap {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-brand-600) 12%, transparent) 0%,
+    color-mix(in srgb, var(--color-brand-800) 12%, transparent) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  color: var(--color-text-accent);
+}

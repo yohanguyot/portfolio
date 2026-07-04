@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Button from "@/components/Button/Button";
 import ProjectImage from "@/components/ProjectImage/ProjectImage";
+import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import styles from "./ProjectsSection.module.css";
 
 type Project = {
@@ -39,7 +40,7 @@ const PROJECTS: Project[] = [
     slug: "wenimmo",
     title: "Wenimmo",
     description:
-      "Gestion patrimoniale pour CGPs et Middle Office, taillée pour deux profils aux logiques métier radicalement différentes.",
+      "Gestion patrimoniale pour CGPs et Middle Office, taillée pour deux profils aux logiques métier complètement différentes.",
     tags: ["Fintech", "Patrimoine"],
   },
 ];
@@ -62,10 +63,7 @@ export default function ProjectsSection() {
   return (
     <section className={styles.section} id="projets">
       <div className={styles.container}>
-        <div className={styles.titleSection}>
-          <span className={styles.sectionLabel}>Projets sélectionnés</span>
-          <h2 className={styles.sectionHeading}>Ce que j&apos;ai construit.</h2>
-        </div>
+        <SectionHeader label="Projets sélectionnés" heading="Ce que j'ai construit." />
 
         <div className={styles.projectItems}>
           {/* Large featured card */}

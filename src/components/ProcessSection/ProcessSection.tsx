@@ -1,4 +1,6 @@
 import { Search, Layers, RefreshCw, PackageCheck } from "lucide-react";
+import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SquareIcon from "@/components/SquareIcon/SquareIcon";
 import styles from "./ProcessSection.module.css";
 
 const STEPS = [
@@ -37,22 +39,17 @@ export default function ProcessSection() {
     <section className={styles.section} id="process">
       <div className={styles.container}>
         <div className={styles.intro}>
-          <div className={styles.titleBlock}>
-            <p className={styles.sectionLabel}>Process</p>
-            <h2 className={styles.sectionHeading}>Comment je travaille.</h2>
-          </div>
+          <SectionHeader label="Process" heading="Comment je travaille." />
           <p className={styles.description}>
             Chaque projet commence par les mêmes questions : qu'est-ce qui doit vraiment tenir, et qu'est-ce qui peut attendre ?
           </p>
         </div>
 
         <div className={styles.stepsGrid}>
-          {STEPS.map(({ icon: Icon, title, description, label }) => (
+          {STEPS.map(({ icon, title, description, label }) => (
             <div key={label} className={styles.step}>
               <div className={styles.stepContent}>
-                <div className={styles.iconWrap}>
-                  <Icon size={20} strokeWidth={1.5} className={styles.icon} />
-                </div>
+                <SquareIcon icon={icon} />
                 <div className={styles.body}>
                   <h3 className={styles.stepTitle}>{title}</h3>
                   <p className={styles.stepDesc}>{description}</p>

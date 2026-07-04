@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import styles from "./Navigation.module.css";
@@ -197,6 +198,8 @@ const NAV_LINKS = [
 ];
 
 export default function Navigation() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -300,7 +303,11 @@ export default function Navigation() {
       <nav ref={navRef} className={`${styles.nav} ${isMobile ? styles.navMobile : ""} ${!mounted ? styles.navHidden : ""}`}>
         <div className={styles.container}>
           <div className={styles.logoContainer}>
-            <a href="/" className={styles.logo}>Yohan Guyot</a>
+            <a
+              href={isHome ? "#" : "/"}
+              className={styles.logo}
+              onClick={isHome ? (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } : undefined}
+            >Yohan Guyot</a>
           </div>
 
           {/* Desktop */}

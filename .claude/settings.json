@@ -3,7 +3,11 @@
     "allow": [
       "Bash(curl -s -o public/images/projects/cards/bloom-bg.png \"https://www.figma.com/api/mcp/asset/45fe6643-2d6f-4cbc-ab88-82d779a02040\")",
       "mcp__claude_ai_Figma__get_screenshot",
-      "mcp__claude_ai_Figma__get_design_context"
+      "mcp__claude_ai_Figma__get_design_context",
+      "Skill(artifact-design)",
+      "Skill(artifact-design:*)",
+      "Bash(npm install *)",
+      "Bash(Test-Path \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\.env.local\")"
     ]
   }
 }

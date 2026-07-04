@@ -328,6 +328,21 @@ Same rules as `input`, field height: `96px` instead of `48px`.
 
 ## Implementation
 
+### Reuse existing components
+
+Before implementing any UI element, check `src/components/` for an existing component. **Always use it** — never recreate a button, input, or other component inline. If an existing component doesn't cover a need, extend it rather than duplicating its styles.
+
+### Extract repeated patterns into components
+
+When the same structure (JSX + CSS) appears in **2 or more places**, extract it into a shared component in `src/components/`. The threshold is duplication of both markup and styles — a single repeated class doesn't count.
+
+Good candidates: a wrapper + label + heading block, an icon container, a card shell, a link row with icon. Bad candidates: a single utility class, a layout-specific wrapper that only makes sense in context.
+
+When extracting:
+1. Create the component in its own folder (`src/components/MyComponent/MyComponent.tsx` + `.module.css`).
+2. Remove the duplicated CSS from every consuming module — don't leave dead styles behind.
+3. Use `ReactNode` for content props that may contain JSX (not just strings).
+
 ### CSS custom properties
 
 Figma token separator `/` → CSS separator `-`, prefixed with `--`.
@@ -355,6 +370,10 @@ Use `composes` to apply them — never repeat font properties manually:
 Available classes: `display`, `headingLg`, `headingMd`, `headingSm`, `headingXs`, `bodyLead`, `bodyMd`, `bodySm`, `bodyXs`, `labelMd`, `labelSm`.
 
 All font sizes are in `rem`. `labelMd` and `labelSm` include `text-transform: uppercase` — do not add it again.
+
+### Paragraph max-width
+
+Any body text element (`bodyLead`, `bodyMd`, `bodySm`, `bodyXs`) must have `max-width: 600px` whenever its container can exceed that width (full-width sections, wide columns, desktop layout). No effect needed when the container is already narrower. Apply it on the component class that composes the body style, not on the typography token itself.
 
 ### Transitions
 
