@@ -212,7 +212,7 @@ export default function HeroSection() {
           <div className={styles.textContainer}>
             <div className={styles.titleContainer}>
               <p className={styles.eyebrow}>
-                Yohan Guyot · Product Builder // Paris
+                Yohan Guyot · Product Builder
               </p>
               <h1 className={styles.displayTitle} style={{ whiteSpace: "nowrap" }}>
                 Design to prod.

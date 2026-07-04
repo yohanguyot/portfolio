@@ -55,8 +55,10 @@
   transition: color var(--duration-fast) var(--ease);
 }
 
-.contactLink:hover {
-  color: var(--color-text-accent);
+@media (hover: hover) {
+  .contactLink:hover {
+    color: var(--color-text-accent);
+  }
 }
 
 .contactLinkLast {
@@ -69,8 +71,10 @@
   transition: transform var(--duration-fast) var(--ease);
 }
 
-.contactLink:hover .contactLinkIcon {
-  transform: translate(4px, -4px);
+@media (hover: hover) {
+  .contactLink:hover .contactLinkIcon {
+    transform: translate(4px, -4px);
+  }
 }
 
 .contactLinkLabel {
@@ -136,9 +140,11 @@
   color: var(--color-text-muted);
 }
 
-.input:hover,
-.textarea:hover {
-  background: var(--color-bg-surface-2);
+@media (hover: hover) {
+  .input:hover,
+  .textarea:hover {
+    background: var(--color-bg-surface-2);
+  }
 }
 
 .input:focus,
@@ -205,9 +211,11 @@
     color var(--duration-fast) var(--ease);
 }
 
-.chip:hover {
-  background: var(--color-bg-surface-2);
-  color: var(--color-text-primary);
+@media (hover: hover) {
+  .chip:hover {
+    background: var(--color-bg-surface-2);
+    color: var(--color-text-primary);
+  }
 }
 
 .chipSelected {

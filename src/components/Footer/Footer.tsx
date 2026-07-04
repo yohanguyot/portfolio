@@ -7,7 +7,7 @@ export default function Footer() {
         <div className={styles.logoWrap}>
           <p className={styles.logo}>Yohan Guyot</p>
         </div>
-        <p className={styles.copyright}>© 2026 Yohan Guyot · Product Builder // Paris</p>
+        <p className={styles.copyright}>© 2026 Yohan Guyot · Product Builder</p>
       </div>
     </footer>
   );

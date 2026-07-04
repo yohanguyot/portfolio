@@ -386,6 +386,26 @@ Use `--duration-fast` (200ms) for micro-interactions (hover, color change).
 Use `--duration-slow` (300ms) for larger layout changes.
 Never animate `background-image` (not animatable) — use a `::before` overlay with `opacity` transition instead.
 
+### Hover states — touchscreen guard
+
+**Every `:hover` rule must be wrapped in `@media (hover: hover)`** — without it, hover styles fire on tap on touchscreens and stay stuck until the user taps elsewhere.
+
+```css
+/* ✓ */
+@media (hover: hover) {
+  .link:hover {
+    color: var(--color-text-accent);
+  }
+}
+
+/* ✗ — activates on tap on mobile */
+.link:hover {
+  color: var(--color-text-accent);
+}
+```
+
+This applies to every element: links, buttons, cards, chips, inputs, icons. No exception.
+
 ### Dropdowns / floating UI
 
 The `<nav>` has `transform: translateX(-50%)` for centering, which creates a new containing block and breaks `position: fixed` for descendants. Any floating panel that needs true viewport-relative positioning must use `ReactDOM.createPortal(panel, document.body)`.
