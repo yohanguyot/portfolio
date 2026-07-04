@@ -1,5 +1,8 @@
 import Button from "@/components/Button/Button";
 import { NavLink, LanguageDropdown } from "@/components/Navigation/Navigation";
+import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SquareIcon from "@/components/SquareIcon/SquareIcon";
+import { Layers, Shield, ArrowLeftRight } from "lucide-react";
 import styles from "./page.module.css";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -75,6 +78,36 @@ export default function Playground() {
             </Cell>
             <Cell label="text · arrow-left">
               <Button label="Retour" type="text" showArrowLeft />
+            </Cell>
+          </div>
+        </Section>
+
+        {/* SectionHeader */}
+        <Section title="SectionHeader">
+          <div className={styles.row}>
+            <Cell label="string heading">
+              <SectionHeader label="Process" heading="Comment je travaille." />
+            </Cell>
+            <Cell label="ReactNode heading">
+              <SectionHeader
+                label="À propos"
+                heading={<>Designer avec une <span style={{ color: "var(--color-text-accent)" }}>culture technique</span>.</>}
+              />
+            </Cell>
+          </div>
+        </Section>
+
+        {/* SquareIcon */}
+        <Section title="SquareIcon">
+          <div className={styles.row}>
+            <Cell label="Layers">
+              <SquareIcon icon={Layers} />
+            </Cell>
+            <Cell label="Shield">
+              <SquareIcon icon={Shield} />
+            </Cell>
+            <Cell label="ArrowLeftRight">
+              <SquareIcon icon={ArrowLeftRight} />
             </Cell>
           </div>
         </Section>
