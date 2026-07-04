@@ -10,13 +10,15 @@ export async function POST(req: Request) {
     from: "Portfolio <contact@yohanguyot.com>",
     to: "yohanguyot.contact@gmail.com",
     replyTo: email,
-    subject: besoin ? `Nouveau message · ${besoin}` : "Nouveau message",
+    subject: `[Portfolio]${besoin ? ` ${besoin}` : ""}${nom ? ` · ${nom}` : ""}`,
     html: `
-      <p><strong>Nom</strong><br>${nom || "—"}</p>
-      <p><strong>Email</strong><br><a href="mailto:${email}">${email}</a></p>
-      <p><strong>Besoin</strong><br>${besoin || "—"}</p>
-      <hr>
-      <p><strong>Brief</strong><br>${(brief || "—").replace(/\n/g, "<br>")}</p>
+      <p style="margin:0;color:#71717a;font-size:14px;">
+        De : <strong style="color:#e4e4e7;">${nom || email}</strong>
+        ${nom ? `(${email})` : ""}
+        ${besoin ? `· ${besoin}` : ""}
+      </p>
+      <hr style="border:none;border-top:1px solid #27272a;margin:16px 0;">
+      <p style="margin:0;white-space:pre-wrap;font-size:15px;line-height:1.6;color:#e4e4e7;">${(brief || "—").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
     `,
   });
 
