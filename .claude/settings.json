@@ -15,7 +15,10 @@
       "PowerShell(Rename-Item \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\src\\\\components\\\\bloom\" \"_bloom_tmp\")",
       "PowerShell(Rename-Item \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\src\\\\components\\\\_bloom_tmp\" \"Bloom\")",
       "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/spotlight.png\" \"https://www.figma.com/api/mcp/asset/1479ca8c-4d71-4563-8b63-17bb0fb8cd01\")",
-      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/theme-comparison.png\" \"https://www.figma.com/api/mcp/asset/44ab78b6-cb66-4637-bc2b-54cff078249d\")"
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/theme-comparison.png\" \"https://www.figma.com/api/mcp/asset/44ab78b6-cb66-4637-bc2b-54cff078249d\")",
+      "mcp__figma-desktop__get_design_context",
+      "mcp__figma-desktop__get_screenshot",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3845/assets/9f30e82174a4be13f415e8726026c8378ad83330.png\" -OutFile \"public\\\\images\\\\projects\\\\bloom\\\\tokens.png\")"
     ]
   }
 }
