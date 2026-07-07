@@ -335,6 +335,7 @@
 @media (max-width: 640px) {
   .section {
     padding-inline: var(--space-md);
+    padding-block-start: var(--space-3xl);
     margin-top: 0;
   }
 
