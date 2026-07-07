@@ -8,6 +8,7 @@ import ProjectMethod from "@/components/Bloom/ProjectMethod/ProjectMethod";
 import ProjectDecision from "@/components/Bloom/ProjectDecision/ProjectDecision";
 import ProjectArchitecture from "@/components/Bloom/ProjectArchitecture/ProjectArchitecture";
 import ProjectAlignment from "@/components/Bloom/ProjectAlignment/ProjectAlignment";
+import ProjectIdentities from "@/components/Bloom/ProjectIdentities/ProjectIdentities";
 import ContactSection from "@/components/ContactSection/ContactSection";
 import Footer from "@/components/Footer/Footer";
 
@@ -24,6 +25,7 @@ export default function BloomPage() {
       <ProjectDecision />
       <ProjectArchitecture />
       <ProjectAlignment />
+      <ProjectIdentities />
       <ContactSection />
       <Footer />
     </>
