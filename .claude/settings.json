@@ -21,7 +21,9 @@
       "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3845/assets/9f30e82174a4be13f415e8726026c8378ad83330.png\" -OutFile \"public\\\\images\\\\projects\\\\bloom\\\\tokens.png\")",
       "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3845/assets/b60cfe7991dea04b7e206ea90763de9075ac3523.png\" -OutFile \"public\\\\images\\\\projects\\\\bloom\\\\file-reading.png\")",
       "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3845/assets/4da248565e10b6972430054ff53f31d9f2fd7d36.png\" -OutFile \"public\\\\images\\\\projects\\\\bloom\\\\erable-theme.png\")",
-      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3845/assets/84b51102e3840f747a060523431bc1eb9be8c085.png\" -OutFile \"public\\\\images\\\\projects\\\\bloom\\\\lqr-house-theme.png\")"
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3845/assets/84b51102e3840f747a060523431bc1eb9be8c085.png\" -OutFile \"public\\\\images\\\\projects\\\\bloom\\\\lqr-house-theme.png\")",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3845/assets/a620feeefa30a387a588081525d09defd68e26dd.png\" -OutFile \"public\\\\images\\\\projects\\\\bloom\\\\create-asset.png\")",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3845/assets/461d43c1e3fff3da719ae288d012a4940891d21f.png\" -OutFile \"public\\\\images\\\\projects\\\\bloom\\\\buy-asset.png\")"
     ]
   }
 }
