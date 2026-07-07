@@ -5,47 +5,37 @@
 }
 
 .container {
+  max-width: 1200px;
+  margin-inline: auto;
   display: flex;
   gap: var(--space-2xl);
   align-items: center;
-  max-width: 1200px;
-  margin-inline: auto;
 }
 
-/* ── Left — info ── */
-.info {
+/* ── Left ── */
+
+.left {
   flex: 1 0 0;
-  max-width: 600px;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
 }
 
-.headingBreak {
-  display: block;
-}
-
-.accent {
-  color: var(--color-text-accent);
-}
-
 .body {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  max-width: 600px;
 }
 
-.bodyText {
+.paragraph {
   composes: bodyMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
 }
 
-.highlight {
-  color: var(--color-text-primary);
-}
+/* ── Card ── */
 
-/* ── Right — skill card ── */
 .card {
   flex: 1 0 0;
   min-width: 0;
@@ -57,7 +47,7 @@
   overflow: hidden;
 }
 
-.skillBlock {
+.feature {
   display: flex;
   gap: var(--space-lg);
   align-items: flex-start;
@@ -65,48 +55,39 @@
   overflow: hidden;
 }
 
-.skillBlockBorder {
+.featureDivider {
   border-bottom: 1px solid var(--color-border-strong);
 }
 
-.skillContent {
+.featureText {
+  flex: 1 0 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  flex: 1 0 0;
-  min-width: 0;
 }
 
-.skillTitle {
+.featureTitle {
   composes: headingXs from '@/styles/typography.module.css';
   color: var(--color-text-primary);
 }
 
-.skillDesc {
+.featureDesc {
   composes: bodySm from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
-  max-width: 600px;
 }
 
 /* ── Responsive ── */
+
 @media (max-width: 1024px) {
   .container {
     flex-direction: column;
-    align-items: stretch;
   }
 
-  .info {
-    flex: none;
-    width: 100%;
-  }
-
+  .left,
   .card {
     flex: none;
     width: 100%;
-  }
-
-  .headingBreak {
-    display: none;
   }
 }
 

@@ -1,6 +1,6 @@
 .section {
   width: 100%;
-  padding-block: var(--space-layout);
+  padding-block: var(--space-4xl);
   padding-inline: var(--space-xl);
 }
 
@@ -96,8 +96,9 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .section {
+    padding-block: var(--space-3xl);
     padding-inline: var(--space-md);
   }
 

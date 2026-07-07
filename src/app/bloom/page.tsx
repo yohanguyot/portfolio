@@ -4,6 +4,7 @@ import ProjectIntro from "@/components/Bloom/ProjectIntro/ProjectIntro";
 import ProjectContext from "@/components/Bloom/ProjectContext/ProjectContext";
 import ProjectProblem from "@/components/Bloom/ProjectProblem/ProjectProblem";
 import ProjectSolution from "@/components/Bloom/ProjectSolution/ProjectSolution";
+import ProjectMethod from "@/components/Bloom/ProjectMethod/ProjectMethod";
 import ContactSection from "@/components/ContactSection/ContactSection";
 import Footer from "@/components/Footer/Footer";
 
@@ -16,6 +17,7 @@ export default function BloomPage() {
       <ProjectContext />
       <ProjectProblem />
       <ProjectSolution />
+      <ProjectMethod />
       <ContactSection />
       <Footer />
     </>

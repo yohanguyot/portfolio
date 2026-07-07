@@ -116,7 +116,7 @@
   --space-xl:    var(--space-32);
   --space-2xl:   var(--space-48);
   --space-3xl:   var(--space-64);
-  --space-layout: var(--space-120);
+  --space-4xl: var(--space-120);
 
   /* Radius */
   --radius-sm:   var(--radius-4);

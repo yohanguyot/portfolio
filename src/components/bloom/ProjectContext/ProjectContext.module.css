@@ -1,6 +1,7 @@
 .section {
   width: 100%;
-  padding: var(--space-layout);
+  padding-block: var(--space-4xl);
+  padding-inline: var(--space-xl);
 }
 
 .container {
@@ -54,25 +55,20 @@
 /* ── Responsive ── */
 
 @media (max-width: 1024px) {
-  .section {
-    padding: var(--space-2xl);
-  }
-}
-
-@media (max-width: 1024px) {
   .container {
     flex-direction: column;
-    align-items: flex-start;
   }
 
+  .left,
   .imageWrap {
     flex: none;
     width: 100%;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .section {
-    padding: var(--space-layout) var(--space-md);
+    padding-block: var(--space-3xl);
+    padding-inline: var(--space-md);
   }
 }

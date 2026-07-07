@@ -1,6 +1,7 @@
 .section {
   width: 100%;
-  padding: var(--space-layout);
+  padding-block: var(--space-4xl);
+  padding-inline: var(--space-xl);
 }
 
 .container {
@@ -36,15 +37,10 @@
 
 /* ── Responsive ── */
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .section {
-    padding: var(--space-2xl);
-  }
-}
-
-@media (max-width: 640px) {
-  .section {
-    padding: var(--space-layout) var(--space-md);
+    padding-block: var(--space-3xl);
+    padding-inline: var(--space-md);
   }
 
   .card {

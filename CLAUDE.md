@@ -155,13 +155,33 @@ All `letter-spacing` values are in `em` (Figma % divided by 100).
 | `space/xl` | `space/32` | `32px` |
 | `space/2xl` | `space/48` | `48px` |
 | `space/3xl` | `space/64` | `64px` |
-| `space/layout` | `space/120` | `120px` |
+| `space/4xl` | `space/120` | `120px` |
 
 ### Layout grid
 
 - Full-width sections: `width: 100%`
 - Centered content: `max-width: 1200px; margin-inline: auto;`
-- Section vertical padding: `padding-block: 120px` (`space/layout`)
+- Section vertical padding: `padding-block: 120px` (`space/4xl`)
+
+### Section padding — pattern à respecter partout
+
+Toutes les sections (homepage et pages projet) suivent le même pattern de padding :
+
+```css
+.section {
+  padding-block: var(--space-4xl); /* 120px */
+  padding-inline: var(--space-xl);    /* 32px — le centrage est géré par le container max-width */
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-3xl); /* 64px */
+    padding-inline: var(--space-md); /* 16px */
+  }
+}
+```
+
+Ne jamais utiliser `padding-inline: var(--space-4xl)` sur une section — c'est le container interne (`max-width: 1200px; margin-inline: auto`) qui centre le contenu, pas le padding de la section.
 
 ---
 

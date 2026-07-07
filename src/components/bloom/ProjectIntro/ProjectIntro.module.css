@@ -1,7 +1,7 @@
 .section {
   width: 100%;
-  padding-block: var(--space-2xl) var(--space-layout);
-  padding-inline: var(--space-layout);
+  padding-block: var(--space-2xl) var(--space-4xl);
+  padding-inline: var(--space-xl);
 }
 
 .container {
@@ -46,7 +46,7 @@
 
 .title {
   composes: display from '@/styles/typography.module.css';
-  font-size: clamp(3rem, calc((100vw - 2 * var(--space-layout)) / 6.5), 7rem);
+  font-size: clamp(3rem, calc((100vw - 2 * var(--space-4xl)) / 6.5), 7rem);
   color: var(--color-text-primary);
 }
 
@@ -122,12 +122,6 @@
 
 /* ── Responsive ── */
 
-@media (max-width: 1024px) {
-  .section {
-    padding-inline: var(--space-2xl);
-  }
-}
-
 @media (max-width: 768px) {
   .meta {
     flex-direction: row;
@@ -158,10 +152,10 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .section {
+    padding-block: var(--space-3xl);
     padding-inline: var(--space-md);
-    padding-block-start: var(--space-xl);
   }
 
   .title {
