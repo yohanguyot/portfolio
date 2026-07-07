@@ -11,5 +11,6 @@
 
 .heading {
   composes: headingLg from '@/styles/typography.module.css';
+  font-size: clamp(2.25rem, 5vw, 3rem);
   color: var(--color-text-primary);
 }

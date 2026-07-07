@@ -69,7 +69,7 @@
 /* display title — gradient text */
 .displayTitle {
   composes: display from '@/styles/typography.module.css';
-  font-size: clamp(2.75rem, calc((100vw - 2 * var(--space-xl)) / 7), 7rem);
+  font-size: clamp(2.75rem, calc((100vw - 2 * var(--space-xl)) / 6.5), 7rem);
   background: linear-gradient(
     180deg,
     var(--color-neutral-50) 0%,
@@ -186,13 +186,9 @@
     line-height: 1.65;
   }
 
-  .subtitle {
-    width: calc(100vw - 80px);
-  }
-
   .displayTitle {
     width: 100%;
-    font-size: clamp(1rem, calc((100vw - 2 * var(--space-md)) / 7), 7rem);
+    font-size: clamp(1rem, calc((100vw - 2 * var(--space-md)) / 6.5), 7rem);
   }
 
 
@@ -204,8 +200,9 @@
 }
 
 @media (max-width: 460px) {
-  .buttons > * {
-    width: 100%;
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 

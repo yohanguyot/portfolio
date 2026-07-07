@@ -3,7 +3,7 @@
   padding-block: var(--space-layout);
   padding-inline: var(--space-xl);
   background: var(--color-bg-surface);
-  border-radius: clamp(calc(var(--radius-xl) * 2), 8vw, var(--radius-2xl)) clamp(calc(var(--radius-xl) * 2), 8vw, var(--radius-2xl)) 0 0;
+  border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
   margin-top: var(--space-layout);
 }
 
@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-lg) var(--space-2xs);
+  padding: var(--space-lg) var(--space-sm);
   border-top: 1px solid var(--color-border-strong);
   text-decoration: none;
   color: var(--color-text-primary);
@@ -124,8 +124,7 @@
   width: 100%;
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xs) var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   font-family: var(--font-family-body);
   font-size: 0.9375rem;
   line-height: 1.6;
@@ -173,10 +172,16 @@
   color: var(--color-status-error);
 }
 
+.input {
+  max-height: 48px;
+  border-radius: var(--radius-full);
+}
+
 .textarea {
   resize: none;
   min-height: 160px;
   text-wrap: pretty;
+  border-radius: var(--radius-lg);
 }
 
 /* ── Chips ── */
@@ -199,7 +204,7 @@
   padding: var(--space-xs) var(--space-md);
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-full);
   font-family: var(--font-family-body);
   font-size: 0.9375rem;
   line-height: 1.6;
@@ -287,6 +292,12 @@
 }
 
 /* ── Responsive ── */
+@media (max-width: 1440px) {
+  .section {
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  }
+}
+
 @media (max-width: 1024px) {
   .container {
     flex-direction: column;
@@ -296,6 +307,15 @@
   .leftCol {
     /* dissolve the wrapper — children become direct flex children of container */
     display: contents;
+  }
+
+  .section {
+    padding-block-end: var(--space-3xl);
+  }
+
+  .contactLink,
+  .contactLinkLast {
+    border: none;
   }
 
   .infoContent { order: 1; }
@@ -308,12 +328,14 @@
     order: 3;
     width: 100%;
     max-width: none;
+    margin-top: calc(var(--space-xl) - var(--space-2xl));
   }
 }
 
 @media (max-width: 640px) {
   .section {
     padding-inline: var(--space-md);
+    margin-top: 0;
   }
 
   .formRow {

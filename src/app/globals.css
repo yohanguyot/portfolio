@@ -51,6 +51,7 @@
   --radius-6:    6px;
   --radius-12:   12px;
   --radius-24:   24px;
+  --radius-64:   64px;
   --radius-120:  120px;
   --radius-9999: 9999px;
 }
@@ -122,7 +123,8 @@
   --radius-md:   var(--radius-6);
   --radius-lg:   var(--radius-12);
   --radius-xl:   var(--radius-24);
-  --radius-2xl:  var(--radius-120);
+  --radius-2xl:  var(--radius-64);
+  --radius-3xl:  var(--radius-120);
   --radius-full: var(--radius-9999);
 
   /* Typography */

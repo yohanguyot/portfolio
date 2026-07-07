@@ -173,7 +173,8 @@ All `letter-spacing` values are in `em` (Figma % divided by 100).
 | `radius/md` | `radius/6` | `6px` |
 | `radius/lg` | `radius/12` | `12px` |
 | `radius/xl` | `radius/24` | `24px` |
-| `radius/2xl` | `radius/120` | `120px` |
+| `radius/2xl` | `radius/64`  | `64px`  |
+| `radius/3xl` | `radius/120` | `120px` |
 | `radius/full` | `radius/full` | `9999px` |
 
 ---

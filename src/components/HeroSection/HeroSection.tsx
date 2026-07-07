@@ -44,7 +44,7 @@ function HeroArcCanvas() {
     document.addEventListener("mousemove", onMouseMove);
 
     function onScroll() {
-      scrollProgress = Math.min(1, window.scrollY / (window.innerHeight * 1.2 || 1));
+      scrollProgress = Math.min(1, window.scrollY / (window.innerHeight * 0.9 || 1));
     }
     window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -82,8 +82,8 @@ function HeroArcCanvas() {
 
       // sf : spread part de 0.15 (compact) et s'étend à ~2.5x au scroll
       // gi : intensité part de 0.35 et monte à 1.0 — contraste visible
-      const sf = isMobile ? (0.5 + scrollProgress * 2.35) : 1.0;
-      const gi = isMobile ? (0.35 + scrollProgress * 0.65) : 1.0;
+      const sf = isMobile ? (0.3 + scrollProgress * 2.55) : 1.0;
+      const gi = isMobile ? (0.22 + scrollProgress * 0.78) : 1.0;
       // Math.max évite l'artefact "point" quand sf est petit
       const dL = isMobile ? Math.max(0.12, sf * 0.38) : 0.15;
       const dR = isMobile ? Math.max(0.12, sf * 0.38) : 0.25;
