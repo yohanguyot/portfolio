@@ -14,7 +14,8 @@
       "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/logo-asset.svg\" \"https://www.figma.com/api/mcp/asset/26ee9ffe-6d9e-4c89-8ffd-c824921df384\")",
       "PowerShell(Rename-Item \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\src\\\\components\\\\bloom\" \"_bloom_tmp\")",
       "PowerShell(Rename-Item \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\src\\\\components\\\\_bloom_tmp\" \"Bloom\")",
-      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/spotlight.png\" \"https://www.figma.com/api/mcp/asset/1479ca8c-4d71-4563-8b63-17bb0fb8cd01\")"
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/spotlight.png\" \"https://www.figma.com/api/mcp/asset/1479ca8c-4d71-4563-8b63-17bb0fb8cd01\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/theme-comparison.png\" \"https://www.figma.com/api/mcp/asset/44ab78b6-cb66-4637-bc2b-54cff078249d\")"
     ]
   }
 }
