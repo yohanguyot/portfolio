@@ -8,7 +8,10 @@
       "Skill(artifact-design:*)",
       "Bash(npm install *)",
       "Bash(Test-Path \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\.env.local\")",
-      "mcp__figma-desktop__get_variable_defs"
+      "mcp__figma-desktop__get_variable_defs",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/gradient.png\" \"https://www.figma.com/api/mcp/asset/0230630b-ed68-460e-8672-1eb67930b919\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/logo.png\" \"https://www.figma.com/api/mcp/asset/26ee9ffe-6d9e-4c89-8ffd-c824921df384\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/logo-asset.svg\" \"https://www.figma.com/api/mcp/asset/26ee9ffe-6d9e-4c89-8ffd-c824921df384\")"
     ]
   }
 }

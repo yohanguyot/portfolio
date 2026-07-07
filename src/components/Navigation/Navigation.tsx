@@ -194,7 +194,7 @@ const NAV_LINKS = [
   { label: "Projets", href: "#projets" },
   { label: "À propos", href: "#a-propos" },
   { label: "Process", href: "#process" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "#contact", alwaysLocal: true },
 ];
 
 export default function Navigation() {
@@ -314,7 +314,7 @@ export default function Navigation() {
           <div className={styles.right}>
             <div className={styles.links}>
               {NAV_LINKS.map((l) => (
-                <NavLink key={l.href} label={l.label} href={l.href} />
+                <NavLink key={l.href} label={l.label} href={isHome || l.alwaysLocal ? l.href : `/${l.href}`} />
               ))}
             </div>
             <LanguageDropdown />
@@ -353,7 +353,7 @@ export default function Navigation() {
             {NAV_LINKS.map((l, i) => (
               <a
                 key={l.href}
-                href={l.href}
+                href={isHome || l.alwaysLocal ? l.href : `/${l.href}`}
                 className={styles.mobileLink}
                 onClick={close}
                 ref={i === 0 ? firstLinkRef : undefined}
