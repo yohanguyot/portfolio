@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${geistSans.variable} ${jetbrainsMono.variable} ${inter.variable} ${poppins.variable} ${josefinSans.variable} ${archivo.variable}`} suppressHydrationWarning>
+    <html lang="fr" className={`${geistSans.variable} ${jetbrainsMono.variable} ${inter.variable} ${poppins.variable} ${josefinSans.variable} ${archivo.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link

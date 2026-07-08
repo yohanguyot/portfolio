@@ -1,0 +1,35 @@
+.section {
+  width: 100%;
+  padding-block: var(--space-4xl);
+  padding-inline: var(--space-xl);
+}
+
+.container {
+  display: flex;
+  gap: var(--space-lg) var(--space-2xl);
+  align-items: flex-start;
+  max-width: 1200px;
+  margin-inline: auto;
+  flex-wrap: wrap;
+}
+
+.container > :first-child {
+  flex: 1 0 0;
+  min-width: min(260px, 100%);
+}
+
+.body {
+  flex: 1 0 0;
+  min-width: min(300px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 600px;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-3xl);
+    padding-inline: var(--space-md);
+  }
+}

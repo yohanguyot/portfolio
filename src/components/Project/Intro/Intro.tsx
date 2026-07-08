@@ -10,7 +10,7 @@ type Props = {
   title: string;
   description: ReactNode;
   meta: IntroMetaItem[];
-  stats: IntroStatItem[];
+  stats?: IntroStatItem[];
   backHref?: string;
 };
 
@@ -55,20 +55,22 @@ export default function ProjectIntro({
           ))}
         </div>
 
-        <div className={styles.stats}>
-          {stats.map((stat, i) => (
-            <div
-              key={stat.label}
-              className={`${styles.statItem} ${i < stats.length - 1 ? styles.statDivider : ""}`}
-            >
-              <p className={styles.statNumber}>
-                {stat.value}
-                {stat.suffix && <span className={styles.statSuffix}>{stat.suffix}</span>}
-              </p>
-              <p className={styles.statLabel}>{stat.label}</p>
-            </div>
-          ))}
-        </div>
+        {stats && stats.length > 0 && (
+          <div className={styles.stats}>
+            {stats.map((stat, i) => (
+              <div
+                key={stat.label}
+                className={`${styles.statItem} ${i < stats.length - 1 ? styles.statDivider : ""}`}
+              >
+                <p className={styles.statNumber}>
+                  {stat.value}
+                  {stat.suffix && <span className={styles.statSuffix}>{stat.suffix}</span>}
+                </p>
+                <p className={styles.statLabel}>{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

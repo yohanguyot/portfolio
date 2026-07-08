@@ -34,7 +34,12 @@
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
       "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/8ffd5173-f8d6-42b8-9d6b-1a0dddc408a8\" -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/gradient.png\")",
-      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/04033d54-24ac-41be-842f-84aaa9392610\" -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/logo.png\")"
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/04033d54-24ac-41be-842f-84aaa9392610\" -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/logo.png\")",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/a5b08919-fe26-476c-8cfc-8fb4b4d13bb5\" -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/context.png\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/dashboard.png\" \"https://www.figma.com/api/mcp/asset/d4f4f42a-93da-4fe5-bac1-de02b4fac440\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/deposits.png\" \"https://www.figma.com/api/mcp/asset/fd5f78c2-f606-4359-85ed-d8ade96cac79\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/deposit-flow.png\" \"https://www.figma.com/api/mcp/asset/87076428-ba3d-4855-bf20-eb6f7f397f5c\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/verify-flow.png\" \"https://www.figma.com/api/mcp/asset/1ad2bc91-eeb0-4955-81fc-794e1ab6ed22\")"
     ]
   }
 }

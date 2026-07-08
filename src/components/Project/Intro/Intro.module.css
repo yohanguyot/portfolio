@@ -152,8 +152,12 @@
   }
 
   .section {
-    padding-block: var(--space-3xl);
+    padding-block: var(--space-xl) var(--space-3xl);
     padding-inline: var(--space-md);
+  }
+
+  .container {
+    gap: var(--space-2xl);
   }
 
   .title {

@@ -322,7 +322,7 @@
     border: none;
   }
 
-  .infoContent { order: 1; padding-inline: var(--space-lg); }
+  .infoContent { order: 1; padding-inline: var(--space-xs); }
   .form {
     order: 2;
     flex: none;
@@ -333,7 +333,6 @@
     width: 100%;
     max-width: none;
     margin-top: calc(var(--space-xl) - var(--space-2xl));
-    padding-inline: var(--space-lg);
   }
 }
 

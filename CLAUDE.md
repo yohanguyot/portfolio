@@ -360,25 +360,33 @@ All project pages (Bloom, Keepro, Wenimmo, Le Coffre…) share these shells. Use
 | Component | Props | Purpose |
 |---|---|---|
 | `Project/HeroBanner` | `gradientSrc`, `logoSrc`, `logoAlt`, `logoWidth?`, `logoHeight?` | Full-width banner with gradient background and project logo |
-| `Project/Intro` | `tags[]`, `title`, `description`, `meta[]`, `stats[]`, `backHref?` | Page intro: tags, display title, description, meta row, stats grid |
+| `Project/Intro` | `tags[]`, `title`, `description`, `meta[]`, `stats[]?`, `backHref?` | Page intro: tags, display title, description, meta row, optional stats grid |
 | `Project/Nav` | `prev?: { href, label }`, `next?: { href, label }` | Previous / next project links, drop inside the last section's container |
 | `Project/SplitSection` | `imageSrc`, `imageAlt?`, `imagePosition?: 'left'\|'right'`, `children` | Two-column image + text section. Pass text content as `children`. |
 | `Project/FeatureCard` | `direction?: 'vertical'\|'horizontal'`, `className?`, `children` | Card surface that holds `FeatureItem` children. Handles dividers automatically via `> *:not(:last-child)`. |
 | `Project/FeatureItem` | `icon`, `title`, `description`, `label?` | Single feature row (icon beside text). Pass `label` to switch to column layout (icon above text, label below) — used for architecture layers. |
+| `Project/CardSection` | `label`, `heading`, `children` | Section with a card surface (border + bg): label + heading above, content below. Use for problem/context blocks. |
+| `Project/TextSection` | `label`, `heading`, `children` | Two-column section: label + heading on the left, `children` on the right. Use for solution/approach blocks. |
+| `Project/ShowcaseSection` | `label`, `heading`, `description`, `imageSrc`, `imageAlt?` | Full-width section: header + description paragraph above, full-width image (aspect 1440/900) below. |
+| `Project/ParcoursSection` | `label`, `heading`, `items: ParcoursItem[]` | Two-column grid of screenshots with title + description below each. `ParcoursItem = { imageSrc, imageAlt, title, description }`. |
 
 **Usage pattern for a new project page:**
 
 ```tsx
-// app/keepro/page.tsx
-import ProjectHeroBanner from "@/components/Project/HeroBanner/HeroBanner";
-import ProjectIntro    from "@/components/Project/Intro/Intro";
-import SplitSection   from "@/components/Project/SplitSection/SplitSection";
-import FeatureCard    from "@/components/Project/FeatureCard/FeatureCard";
-import FeatureItem    from "@/components/Project/FeatureItem/FeatureItem";
-import ProjectNav     from "@/components/Project/Nav/Nav";
+// app/myproject/page.tsx
+import ProjectHeroBanner  from "@/components/Project/HeroBanner/HeroBanner";
+import ProjectIntro       from "@/components/Project/Intro/Intro";
+import SplitSection       from "@/components/Project/SplitSection/SplitSection";
+import CardSection        from "@/components/Project/CardSection/CardSection";
+import TextSection        from "@/components/Project/TextSection/TextSection";
+import FeatureCard        from "@/components/Project/FeatureCard/FeatureCard";
+import FeatureItem        from "@/components/Project/FeatureItem/FeatureItem";
+import ShowcaseSection    from "@/components/Project/ShowcaseSection/ShowcaseSection";
+import ParcoursSection    from "@/components/Project/ParcoursSection/ParcoursSection";
+import ProjectNav         from "@/components/Project/Nav/Nav";
 ```
 
-Each Bloom-specific section (`Bloom/ProjectContext`, etc.) is a thin wrapper that passes content to these shared shells — use the same pattern for new projects.
+Each project-specific section (`Keepro/ProjectContext`, etc.) is a thin wrapper that passes content to these shared shells — use the same pattern for new projects.
 
 ### Extract repeated patterns into components
 
