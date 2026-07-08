@@ -33,10 +33,18 @@
 
 /* ── Tab bar ── */
 
+.tabsRow {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+}
+
 .tabsWrapper {
   position: relative;
-  max-width: 100%;
-  width: fit-content;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .tabsWrapper::before,
@@ -66,6 +74,51 @@
 
 .fadeLeft::before { opacity: 1; }
 .fadeRight::after { opacity: 1; }
+
+.scrollBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface-2);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  opacity: 1;
+  transition:
+    width var(--duration-fast) var(--ease),
+    opacity var(--duration-fast) var(--ease),
+    margin var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease),
+    background var(--duration-fast) var(--ease);
+}
+
+.scrollBtnLeft { margin-right: var(--space-xs); }
+.scrollBtnRight { margin-left: var(--space-xs); }
+
+.scrollBtnHidden {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+}
+
+@media (hover: hover) {
+  .scrollBtn:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-surface-3);
+  }
+}
+
+@media (hover: none) {
+  .scrollBtn {
+    display: none;
+  }
+}
 
 .tabs {
   position: relative;

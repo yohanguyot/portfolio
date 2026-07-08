@@ -27,7 +27,10 @@
 }
 
 .accent {
-  color: var(--color-text-accent);
+  background: var(--color-text-accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .body {

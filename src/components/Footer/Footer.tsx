@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./Footer.module.css";
 
 export default function Footer() {
@@ -7,7 +9,7 @@ export default function Footer() {
         <div className={styles.logoWrap}>
           <p className={styles.logo}>Yohan Guyot</p>
         </div>
-        <p className={styles.copyright}>© 2026 Yohan Guyot · Product Builder</p>
+        <p className={styles.copyright}>© {new Date().getFullYear()} Yohan Guyot · Product Builder</p>
       </div>
     </footer>
   );

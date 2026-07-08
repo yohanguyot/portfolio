@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import ProjectNav from "@/components/Project/Nav/Nav";
 import styles from "./ProjectPlayground.module.css";
@@ -294,6 +295,12 @@ export default function ProjectPlayground() {
     setFadeRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
   }
 
+  function scrollTabs(dir: "left" | "right") {
+    const el = tabsRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir === "right" ? 160 : -160, behavior: "smooth" });
+  }
+
   useEffect(() => {
     checkFades();
     const el = tabsRef.current;
@@ -321,22 +328,30 @@ export default function ProjectPlayground() {
           </div>
 
           {/* Tab bar */}
-          <div className={[styles.tabsWrapper, fadeLeft ? styles.fadeLeft : "", fadeRight ? styles.fadeRight : ""].filter(Boolean).join(" ")}>
-          <div className={styles.tabs} role="tablist" ref={tabsRef}>
-            <div className={styles.tabIndicator} style={indicatorStyle} aria-hidden="true" />
-            {CLIENTS.map((c, i) => (
-              <button
-                key={c.id}
-                ref={(el) => { tabRefs.current[i] = el; }}
-                role="tab"
-                aria-selected={c.id === activeId}
-                className={`${styles.tab} ${c.id === activeId ? styles.tabActive : ""}`}
-                onClick={() => setActiveId(c.id)}
-              >
-                {c.tabLabel}
-              </button>
-            ))}
-          </div>
+          <div className={styles.tabsRow}>
+            <button className={`${styles.scrollBtn} ${styles.scrollBtnLeft} ${!fadeLeft ? styles.scrollBtnHidden : ""}`} onClick={() => scrollTabs("left")} aria-label="Défiler à gauche" tabIndex={fadeLeft ? 0 : -1}>
+              <ChevronLeft size={16} />
+            </button>
+            <div className={[styles.tabsWrapper, fadeLeft ? styles.fadeLeft : "", fadeRight ? styles.fadeRight : ""].filter(Boolean).join(" ")}>
+              <div className={styles.tabs} role="tablist" ref={tabsRef}>
+                <div className={styles.tabIndicator} style={indicatorStyle} aria-hidden="true" />
+                {CLIENTS.map((c, i) => (
+                  <button
+                    key={c.id}
+                    ref={(el) => { tabRefs.current[i] = el; }}
+                    role="tab"
+                    aria-selected={c.id === activeId}
+                    className={`${styles.tab} ${c.id === activeId ? styles.tabActive : ""}`}
+                    onClick={() => setActiveId(c.id)}
+                  >
+                    {c.tabLabel}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button className={`${styles.scrollBtn} ${styles.scrollBtnRight} ${!fadeRight ? styles.scrollBtnHidden : ""}`} onClick={() => scrollTabs("right")} aria-label="Défiler à droite" tabIndex={fadeRight ? 0 : -1}>
+              <ChevronRight size={16} />
+            </button>
           </div>
 
           {/* Viewer */}

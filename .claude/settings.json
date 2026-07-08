@@ -32,7 +32,9 @@
       "Bash(git rm *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/8ffd5173-f8d6-42b8-9d6b-1a0dddc408a8\" -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/gradient.png\")",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/04033d54-24ac-41be-842f-84aaa9392610\" -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/logo.png\")"
     ]
   }
 }
