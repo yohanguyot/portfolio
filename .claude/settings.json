@@ -39,7 +39,16 @@
       "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/dashboard.png\" \"https://www.figma.com/api/mcp/asset/d4f4f42a-93da-4fe5-bac1-de02b4fac440\")",
       "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/deposits.png\" \"https://www.figma.com/api/mcp/asset/fd5f78c2-f606-4359-85ed-d8ade96cac79\")",
       "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/deposit-flow.png\" \"https://www.figma.com/api/mcp/asset/87076428-ba3d-4855-bf20-eb6f7f397f5c\")",
-      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/verify-flow.png\" \"https://www.figma.com/api/mcp/asset/1ad2bc91-eeb0-4955-81fc-794e1ab6ed22\")"
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/verify-flow.png\" \"https://www.figma.com/api/mcp/asset/1ad2bc91-eeb0-4955-81fc-794e1ab6ed22\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/gradient.png\" \"https://www.figma.com/api/mcp/asset/fc123de7-ff6d-4ccc-b416-e30f860f3571\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/logo.svg\" \"https://www.figma.com/api/mcp/asset/501c7bd8-eb65-4d0c-9bc3-5514e59c5c22\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/logo.png\" \"https://www.figma.com/api/mcp/asset/98bdd667-6772-4468-8923-183d863cc814\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/gradient.svg\" \"https://www.figma.com/api/mcp/asset/a1973489-96db-4761-a6d1-3815594097d7\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/context.png\" \"https://www.figma.com/api/mcp/asset/b57b13ad-7787-419b-9b49-444b3cb9c6d8\")",
+      "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/context.png\" \"https://www.figma.com/api/mcp/asset/bd3fbb5d-dea8-49f9-a2a3-8ca5f9ca39bf\")",
+      "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/notaire.png\" \"https://www.figma.com/api/mcp/asset/9e357fc1-535b-4eb1-b5dc-46fe626ee127\")",
+      "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/client.png\" \"https://www.figma.com/api/mcp/asset/4268ab7f-a1e0-4ba8-9912-6d8da07477cf\")",
+      "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/admin.png\" \"https://www.figma.com/api/mcp/asset/51774b53-f040-4662-8977-c79deeb2d6d5\")"
     ]
   }
 }

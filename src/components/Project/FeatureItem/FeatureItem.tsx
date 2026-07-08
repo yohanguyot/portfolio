@@ -7,10 +7,11 @@ type Props = {
   title: string;
   description: string;
   label?: string;
+  direction?: "row" | "column";
 };
 
-export default function FeatureItem({ icon, title, description, label }: Props) {
-  if (label) {
+export default function FeatureItem({ icon, title, description, label, direction }: Props) {
+  if (label || direction === "column") {
     return (
       <div className={styles.column}>
         <div className={styles.columnTop}>
@@ -20,7 +21,7 @@ export default function FeatureItem({ icon, title, description, label }: Props) 
             <p className={styles.desc}>{description}</p>
           </div>
         </div>
-        <p className={styles.label}>{label}</p>
+        {label && <p className={styles.label}>{label}</p>}
       </div>
     );
   }

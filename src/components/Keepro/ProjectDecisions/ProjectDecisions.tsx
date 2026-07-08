@@ -22,16 +22,19 @@ export default function ProjectDecisions() {
         </div>
         <FeatureCard direction="horizontal">
           <FeatureItem
+            direction="column"
             icon={EyeOff}
             title="Masquer la complexité"
             description="Les données cryptographiques brutes sont retirées de la vue principale. L'interface se concentre sur l'intention première de l'utilisateur : savoir si le dépôt a bien abouti."
           />
           <FeatureItem
+            direction="column"
             icon={Group}
             title="Grouper par lot et par espace"
             description="Plusieurs fichiers déposés ensemble ne forment qu'une seule entrée dans l'historique. Les espaces prennent le relais pour segmenter ces dépôts par contexte métier."
           />
           <FeatureItem
+            direction="column"
             icon={Layers2}
             title="Deux niveaux de lecture"
             description="Les équipes opérationnelles suivent le flux principal en plein écran. Les profils techniques accèdent aux données brutes via un drawer, préservant la clarté de la vue générale."

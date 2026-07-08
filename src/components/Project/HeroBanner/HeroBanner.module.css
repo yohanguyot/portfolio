@@ -36,8 +36,8 @@
 .logo {
   position: relative;
   z-index: 1;
-  width: 374px;
-  height: 120px;
+  max-width: 80%;
+  height: auto;
   object-fit: contain;
 }
 
@@ -52,7 +52,6 @@
   }
 
   .logo {
-    width: 240px;
-    height: auto;
+    max-width: 65%;
   }
 }

@@ -28,6 +28,7 @@ export default function ProjectHeroBanner({
         className={styles.logo}
         width={logoWidth}
         height={logoHeight}
+        style={{ width: logoWidth, height: logoHeight }}
       />
     </section>
   );

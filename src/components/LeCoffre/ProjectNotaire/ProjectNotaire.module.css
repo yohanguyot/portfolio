@@ -1,0 +1,4 @@
+.paragraph {
+  composes: bodyMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
