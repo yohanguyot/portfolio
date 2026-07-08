@@ -1,6 +1,7 @@
 import { Component, Route, CodeXml } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
-import SquareIcon from "@/components/SquareIcon/SquareIcon";
+import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
+import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import styles from "./AboutSection.module.css";
 
 const SKILLS = [
@@ -64,20 +65,11 @@ export default function AboutSection() {
         </div>
 
         {/* Right — skill card */}
-        <div className={styles.card}>
-          {SKILLS.map(({ icon, title, description }, i) => (
-            <div
-              key={title}
-              className={`${styles.skillBlock} ${i < SKILLS.length - 1 ? styles.skillBlockBorder : ""}`}
-            >
-              <SquareIcon icon={icon} />
-              <div className={styles.skillContent}>
-                <h3 className={styles.skillTitle}>{title}</h3>
-                <p className={styles.skillDesc}>{description}</p>
-              </div>
-            </div>
+        <FeatureCard className={styles.card}>
+          {SKILLS.map(({ icon, title, description }) => (
+            <FeatureItem key={title} icon={icon} title={title} description={description} />
           ))}
-        </div>
+        </FeatureCard>
       </div>
     </section>
   );
