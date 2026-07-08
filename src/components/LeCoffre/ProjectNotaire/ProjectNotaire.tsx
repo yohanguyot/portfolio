@@ -25,6 +25,7 @@ export default function ProjectNotaire() {
       }
       imageSrc="/images/projects/lecoffre/notaire.png"
       imageAlt="Interface espace notaire LeCoffre"
+      dimImage
     />
   );
 }

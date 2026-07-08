@@ -4,10 +4,10 @@ export default function HeroBanner() {
   return (
     <ProjectHeroBanner
       gradientSrc="/images/projects/lecoffre/gradient.svg"
-      logoSrc="/images/projects/lecoffre/logo.png"
+      logoSrc="/images/projects/lecoffre/logo.svg"
       logoAlt="LeCoffre.io"
-      logoWidth={580}
-      logoHeight={88}
+      logoHeight={72}
+      logoHeightMobile={52}
     />
   );
 }

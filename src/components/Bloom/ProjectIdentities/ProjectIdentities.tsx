@@ -22,7 +22,7 @@ export default function ProjectIdentities() {
             <img
               src="/images/projects/bloom/erable-theme.png"
               alt="Interface Bloom avec le thème Erable"
-              className={styles.image}
+              className={`${styles.image} ${styles.imageDim}`}
             />
           </div>
           <div className={styles.imageWrap}>

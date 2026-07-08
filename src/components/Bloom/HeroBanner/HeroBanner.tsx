@@ -6,8 +6,8 @@ export default function HeroBanner() {
       gradientSrc="/images/projects/bloom/gradient.svg"
       logoSrc="/images/projects/cards/bloom-logo.svg"
       logoAlt="Bloom"
-      logoWidth={374}
-      logoHeight={120}
+      logoHeight={96}
+      logoHeightMobile={64}
     />
   );
 }

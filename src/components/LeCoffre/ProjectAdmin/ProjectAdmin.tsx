@@ -7,6 +7,7 @@ export default function ProjectAdmin() {
     <SplitSection
       imageSrc="/images/projects/lecoffre/admin.png"
       imageAlt="Interface espace admin LeCoffre — gestion des permissions et système de vote"
+      dimImage
     >
       <SectionHeader
         label="Espace admin"

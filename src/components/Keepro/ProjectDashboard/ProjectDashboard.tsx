@@ -8,6 +8,7 @@ export default function ProjectDashboard() {
       imageSrc="/images/projects/keepro/dashboard.png"
       imageAlt="Dashboard Keepro — vue des indicateurs et de l'historique des dépôts"
       imagePosition="left"
+      dimImage
     >
       <SectionHeader
         label="Dashboard"

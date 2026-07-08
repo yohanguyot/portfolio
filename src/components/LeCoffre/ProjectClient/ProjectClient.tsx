@@ -8,6 +8,7 @@ export default function ProjectClient() {
       imageSrc="/images/projects/lecoffre/client.png"
       imageAlt="Interface espace client LeCoffre — parcours de dépôt de documents"
       imagePosition="left"
+      dimImage
     >
       <SectionHeader
         label="Espace client"

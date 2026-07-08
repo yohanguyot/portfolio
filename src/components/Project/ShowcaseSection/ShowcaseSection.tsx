@@ -8,6 +8,7 @@ type Props = {
   description: ReactNode;
   imageSrc: string;
   imageAlt?: string;
+  dimImage?: boolean;
 };
 
 export default function ShowcaseSection({
@@ -16,6 +17,7 @@ export default function ShowcaseSection({
   description,
   imageSrc,
   imageAlt = "",
+  dimImage,
 }: Props) {
   return (
     <section className={styles.section}>
@@ -25,7 +27,7 @@ export default function ShowcaseSection({
           <div className={styles.description}>{description}</div>
         </div>
         <div className={styles.imageWrap}>
-          <img src={imageSrc} alt={imageAlt} className={styles.image} />
+          <img src={imageSrc} alt={imageAlt} className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`} />
         </div>
       </div>
     </section>

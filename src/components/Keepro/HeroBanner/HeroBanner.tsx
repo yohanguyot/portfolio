@@ -6,8 +6,8 @@ export default function HeroBanner() {
       gradientSrc="/images/projects/keepro/gradient.svg"
       logoSrc="/images/projects/keepro/logo.svg"
       logoAlt="Keepro"
-      logoWidth={431}
-      logoHeight={112}
+      logoHeight={88}
+      logoHeightMobile={64}
     />
   );
 }

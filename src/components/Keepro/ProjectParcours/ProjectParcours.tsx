@@ -23,6 +23,7 @@ export default function ProjectParcours() {
       label="Parcours utilisateurs"
       heading="Fluidifier les parcours clés."
       items={ITEMS}
+      dimImage
     />
   );
 }

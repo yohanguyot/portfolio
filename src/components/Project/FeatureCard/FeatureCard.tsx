@@ -3,12 +3,14 @@ import styles from "./FeatureCard.module.css";
 
 type Props = {
   direction?: "vertical" | "horizontal";
+  wrap?: boolean;
   className?: string;
   children: ReactNode;
 };
 
 export default function FeatureCard({
   direction = "vertical",
+  wrap = false,
   className,
   children,
 }: Props) {
@@ -17,6 +19,7 @@ export default function FeatureCard({
       className={[
         styles.card,
         direction === "horizontal" ? styles.horizontal : "",
+        wrap ? styles.wrap : "",
         className,
       ]
         .filter(Boolean)

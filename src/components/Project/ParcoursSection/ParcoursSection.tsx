@@ -12,9 +12,10 @@ type Props = {
   label: string;
   heading: string;
   items: ParcoursItem[];
+  dimImage?: boolean;
 };
 
-export default function ParcoursSection({ label, heading, items }: Props) {
+export default function ParcoursSection({ label, heading, items, dimImage }: Props) {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
@@ -26,7 +27,7 @@ export default function ParcoursSection({ label, heading, items }: Props) {
                 <img
                   src={item.imageSrc}
                   alt={item.imageAlt}
-                  className={styles.image}
+                  className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`}
                 />
               </div>
               <div className={styles.text}>

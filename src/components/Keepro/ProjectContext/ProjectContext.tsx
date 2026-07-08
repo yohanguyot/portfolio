@@ -7,6 +7,7 @@ export default function ProjectContext() {
     <SplitSection
       imageSrc="/images/projects/keepro/context.png"
       imageAlt="Keepro — vue liste des dépôts certifiés"
+      dimImage
     >
       <SectionHeader label="Contexte" heading="Rendre la certification blockchain accessible." />
       <div className={styles.body}>

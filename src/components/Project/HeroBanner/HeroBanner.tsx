@@ -6,14 +6,16 @@ type Props = {
   logoAlt: string;
   logoWidth?: number;
   logoHeight?: number;
+  logoHeightMobile?: number;
 };
 
 export default function ProjectHeroBanner({
   gradientSrc,
   logoSrc,
   logoAlt,
-  logoWidth = 374,
-  logoHeight = 120,
+  logoWidth,
+  logoHeight = 96,
+  logoHeightMobile,
 }: Props) {
   return (
     <section className={styles.banner}>
@@ -28,7 +30,11 @@ export default function ProjectHeroBanner({
         className={styles.logo}
         width={logoWidth}
         height={logoHeight}
-        style={{ width: logoWidth, height: logoHeight }}
+        style={{
+          height: logoHeight,
+          width: "auto",
+          "--logo-height-mobile": `${logoHeightMobile ?? Math.round(logoHeight * 0.7)}px`,
+        } as React.CSSProperties}
       />
     </section>
   );

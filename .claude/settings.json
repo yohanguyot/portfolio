@@ -48,7 +48,21 @@
       "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/context.png\" \"https://www.figma.com/api/mcp/asset/bd3fbb5d-dea8-49f9-a2a3-8ca5f9ca39bf\")",
       "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/notaire.png\" \"https://www.figma.com/api/mcp/asset/9e357fc1-535b-4eb1-b5dc-46fe626ee127\")",
       "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/client.png\" \"https://www.figma.com/api/mcp/asset/4268ab7f-a1e0-4ba8-9912-6d8da07477cf\")",
-      "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/admin.png\" \"https://www.figma.com/api/mcp/asset/51774b53-f040-4662-8977-c79deeb2d6d5\")"
+      "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/admin.png\" \"https://www.figma.com/api/mcp/asset/51774b53-f040-4662-8977-c79deeb2d6d5\")",
+      "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/gradient.svg\" \"https://www.figma.com/api/mcp/asset/845d14e4-3b08-427a-a787-60dfa383513a\")",
+      "Bash(curl -L -o \"C:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/logo.png\" \"https://www.figma.com/api/mcp/asset/91be72db-8e25-477e-af57-42e0bf282a3e\")",
+      "Bash(node -e ' *)",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/logo.svg\" \"https://www.figma.com/api/mcp/asset/5a233658-eea6-41af-b004-3a84c8f821b6\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/logo.svg\" \"https://www.figma.com/api/mcp/asset/b8d00c03-9176-4f40-bbe5-7b18c88a05f4\")",
+      "Bash(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\src\\\\components\\\\Wenimmo\\\\ProjectIntro\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/context.png\" \"https://www.figma.com/api/mcp/asset/6e942d07-6b81-4c4e-a968-b7c535b37648\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/cgp.png\" \"https://www.figma.com/api/mcp/asset/05cf520a-7970-4da1-b09d-818d073ced2f\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/middle-office.png\" \"https://www.figma.com/api/mcp/asset/6734a601-9013-492f-9c82-54e1705ed1fd\")",
+      "Bash(node -e \"const l = require\\('lucide-react'\\); console.log\\(['LayoutDashboard','MousePointerClick','Funnel','Filter','Archive'].map\\(n => n + ':' + \\(!!l[n]\\)\\)\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/context.png\" \"https://www.figma.com/api/mcp/asset/4fe91213-ff09-4bc8-bacf-bd0f6c663b13\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/cgp.png\" \"https://www.figma.com/api/mcp/asset/81ac9f5b-8f71-4794-a7c1-e95a721ce537\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/middle-office.png\" \"https://www.figma.com/api/mcp/asset/c9c8db52-da00-48ff-b409-346e532fc382\")"
     ]
   }
 }

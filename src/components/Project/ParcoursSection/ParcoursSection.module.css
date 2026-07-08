@@ -46,6 +46,10 @@
   pointer-events: none;
 }
 
+.dim {
+  filter: brightness(0.94);
+}
+
 /* ── Text ── */
 
 .text {

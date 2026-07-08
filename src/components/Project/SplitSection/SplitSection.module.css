@@ -36,6 +36,10 @@
   pointer-events: none;
 }
 
+.dim {
+  filter: brightness(0.94);
+}
+
 /* Image on left: visually move before text column */
 .imageLeft .imageWrap {
   order: -1;

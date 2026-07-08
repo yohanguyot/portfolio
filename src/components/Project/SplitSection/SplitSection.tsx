@@ -5,6 +5,7 @@ type Props = {
   imageSrc: string;
   imageAlt?: string;
   imagePosition?: "left" | "right";
+  dimImage?: boolean;
   children: ReactNode;
 };
 
@@ -12,6 +13,7 @@ export default function SplitSection({
   imageSrc,
   imageAlt = "",
   imagePosition = "right",
+  dimImage,
   children,
 }: Props) {
   return (
@@ -21,7 +23,7 @@ export default function SplitSection({
       <div className={styles.container}>
         <div className={styles.textCol}>{children}</div>
         <div className={styles.imageWrap}>
-          <img src={imageSrc} alt={imageAlt} className={styles.image} />
+          <img src={imageSrc} alt={imageAlt} className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`} />
         </div>
       </div>
     </section>

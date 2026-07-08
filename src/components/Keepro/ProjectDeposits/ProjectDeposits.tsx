@@ -12,6 +12,7 @@ export default function ProjectDeposits() {
         demande."
       imageSrc="/images/projects/keepro/deposits.png"
       imageAlt="Vue des dépôts Keepro — liste des certifications avec panneau de détail"
+      dimImage
     />
   );
 }

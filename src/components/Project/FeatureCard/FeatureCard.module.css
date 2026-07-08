@@ -27,9 +27,34 @@
 
 /* ── Responsive ── */
 
+/* 2×2 grid at medium screens (only for .wrap cards) */
+@media (max-width: 1024px) {
+  .horizontal.wrap {
+    flex-wrap: wrap;
+  }
+
+  .horizontal.wrap > * {
+    flex: 0 0 calc(50% - 0.5px);
+    min-width: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  /* Right border on left-column items */
+  .horizontal.wrap > *:nth-child(odd) {
+    border-right: 1px solid var(--color-border-strong);
+  }
+
+  /* No bottom border on last two items (bottom row) */
+  .horizontal.wrap > *:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+}
+
 @media (max-width: 768px) {
   .horizontal {
     flex-direction: column;
+    flex-wrap: nowrap;
   }
 
   .horizontal > * {

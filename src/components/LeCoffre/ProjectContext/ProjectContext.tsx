@@ -7,6 +7,7 @@ export default function ProjectContext() {
     <SplitSection
       imageSrc="/images/projects/lecoffre/context.png"
       imageAlt="Interface LeCoffre.io — collecte et vérification de documents notariaux"
+      dimImage
     >
       <SectionHeader
         label="Contexte"
