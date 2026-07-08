@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowUpRight, Check } from "lucide-react";
 import Button from "@/components/Button/Button";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import { trackEvent } from "@/lib/analytics";
 import styles from "./ContactSection.module.css";
 
 const NEEDS = ["Product Design", "Refonte UX/UI", "Design & Site", "Autre"] as const;
@@ -24,6 +25,7 @@ function ContactLink({
       target={href.startsWith("http") ? "_blank" : undefined}
       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
       className={`${styles.contactLink} ${last ? styles.contactLinkLast : ""}`}
+      onClick={() => trackEvent("contact_link_click", { link: label })}
     >
       <span className={styles.contactLinkLabel}>{label}</span>
       <span className={styles.contactLinkIcon} aria-hidden>
@@ -71,8 +73,10 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
       body: JSON.stringify({ nom, email, besoin: selectedNeed ?? "", brief }),
     });
     setSending(false);
-    if (res.ok) setSubmitted(true);
-    else setSendError(true);
+    if (res.ok) {
+      setSubmitted(true);
+      trackEvent("contact_form_submit");
+    } else setSendError(true);
   }
 
   return (

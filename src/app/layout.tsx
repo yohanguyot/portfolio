@@ -57,6 +57,28 @@ export default function RootLayout({
           href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&display=swap"
           rel="stylesheet"
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WBDEXJZQKV" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-WBDEXJZQKV');
+            `,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "xjgtm64bka");
+            `,
+          }}
+        />
       </head>
       <body>
         {children}

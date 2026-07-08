@@ -4,6 +4,7 @@ import { useState } from "react";
 import Button from "@/components/Button/Button";
 import ProjectImage from "@/components/ProjectImage/ProjectImage";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import { trackEvent } from "@/lib/analytics";
 import styles from "./ProjectsSection.module.css";
 
 type Project = {
@@ -72,6 +73,7 @@ export default function ProjectsSection() {
             className={styles.cardLarge}
             onMouseEnter={() => setHoveredSlug(FEATURED.slug)}
             onMouseLeave={() => setHoveredSlug(null)}
+            onClick={() => trackEvent("project_click", { project: FEATURED.slug })}
           >
             <div className={styles.cardLargeImageWrap}>
               <ProjectImage
@@ -106,6 +108,7 @@ export default function ProjectsSection() {
                 className={styles.card}
                 onMouseEnter={() => setHoveredSlug(p.slug)}
                 onMouseLeave={() => setHoveredSlug(null)}
+                onClick={() => trackEvent("project_click", { project: p.slug })}
               >
                 <div className={styles.cardImageWrap}>
                   <ProjectImage
