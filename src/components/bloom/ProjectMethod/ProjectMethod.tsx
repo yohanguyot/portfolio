@@ -1,6 +1,7 @@
 import { FileCheck, Variable } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
-import SquareIcon from "@/components/SquareIcon/SquareIcon";
+import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
+import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import styles from "./ProjectMethod.module.css";
 
 const FEATURES = [
@@ -9,14 +10,12 @@ const FEATURES = [
     title: "Un livrable autonome",
     description:
       "Le livrable n'a pas besoin d'être expliqué en réunion. Les annotations intégrées pendant la conception capturent l'intention réelle, éliminant les corrections après coup.",
-    divider: true,
   },
   {
     icon: Variable,
     title: "Un nommage calqué sur le code",
     description:
       "Design system et code partagent les mêmes conventions de nommage. Le développeur retrouve immédiatement ses repères, transformant le handoff en une simple synchronisation.",
-    divider: false,
   },
 ];
 
@@ -44,20 +43,16 @@ export default function ProjectMethod() {
           </div>
         </div>
 
-        <div className={styles.card}>
-          {FEATURES.map((feature) => (
-            <div
-              key={feature.title}
-              className={`${styles.feature} ${feature.divider ? styles.featureDivider : ""}`}
-            >
-              <SquareIcon icon={feature.icon} />
-              <div className={styles.featureText}>
-                <p className={styles.featureTitle}>{feature.title}</p>
-                <p className={styles.featureDesc}>{feature.description}</p>
-              </div>
-            </div>
+        <FeatureCard className={styles.featureCard}>
+          {FEATURES.map((f) => (
+            <FeatureItem
+              key={f.title}
+              icon={f.icon}
+              title={f.title}
+              description={f.description}
+            />
           ))}
-        </div>
+        </FeatureCard>
       </div>
     </section>
   );

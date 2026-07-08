@@ -12,8 +12,6 @@
   align-items: center;
 }
 
-/* ── Left ── */
-
 .left {
   flex: 1 0 0;
   min-width: 0;
@@ -34,47 +32,9 @@
   color: var(--color-text-secondary);
 }
 
-/* ── Card ── */
-
-.card {
+.featureCard {
   flex: 1 0 0;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-
-.feature {
-  display: flex;
-  gap: var(--space-lg);
-  align-items: flex-start;
-  padding: var(--space-xl) var(--space-xl) var(--space-xl) var(--space-lg);
-  overflow: hidden;
-}
-
-.featureDivider {
-  border-bottom: 1px solid var(--color-border-strong);
-}
-
-.featureText {
-  flex: 1 0 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.featureTitle {
-  composes: headingXs from '@/styles/typography.module.css';
-  color: var(--color-text-primary);
-}
-
-.featureDesc {
-  composes: bodySm from '@/styles/typography.module.css';
-  color: var(--color-text-secondary);
 }
 
 /* ── Responsive ── */
@@ -85,7 +45,7 @@
   }
 
   .left,
-  .card {
+  .featureCard {
     flex: none;
     width: 100%;
   }

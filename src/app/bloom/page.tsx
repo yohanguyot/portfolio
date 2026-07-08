@@ -10,6 +10,7 @@ import ProjectArchitecture from "@/components/Bloom/ProjectArchitecture/ProjectA
 import ProjectAlignment from "@/components/Bloom/ProjectAlignment/ProjectAlignment";
 import ProjectIdentities from "@/components/Bloom/ProjectIdentities/ProjectIdentities";
 import ProjectParcours from "@/components/Bloom/ProjectParcours/ProjectParcours";
+import ProjectPlayground from "@/components/Bloom/ProjectPlayground/ProjectPlayground";
 import ContactSection from "@/components/ContactSection/ContactSection";
 import Footer from "@/components/Footer/Footer";
 
@@ -28,7 +29,8 @@ export default function BloomPage() {
       <ProjectAlignment />
       <ProjectIdentities />
       <ProjectParcours />
-      <ContactSection />
+      <ProjectPlayground />
+      <ContactSection noMarginTop />
       <Footer />
     </>
   );

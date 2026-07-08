@@ -1,0 +1,47 @@
+/* ── Row layout (icon beside text) ── */
+.row {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: flex-start;
+  padding: var(--space-xl) var(--space-xl) var(--space-xl) var(--space-lg);
+  overflow: hidden;
+}
+
+/* ── Column layout (icon above text, label at bottom) ── */
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  overflow: hidden;
+}
+
+.columnTop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Shared ── */
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.title {
+  composes: headingXs from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+.desc {
+  composes: bodySm from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+.label {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-muted);
+}

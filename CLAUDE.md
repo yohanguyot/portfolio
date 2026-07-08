@@ -353,6 +353,33 @@ Same rules as `input`, field height: `96px` instead of `48px`.
 
 Before implementing any UI element, check `src/components/` for an existing component. **Always use it** — never recreate a button, input, or other component inline. If an existing component doesn't cover a need, extend it rather than duplicating its styles.
 
+#### Project page building blocks — `src/components/Project/`
+
+All project pages (Bloom, Keepro, Wenimmo, Le Coffre…) share these shells. Use them instead of writing one-off section layouts.
+
+| Component | Props | Purpose |
+|---|---|---|
+| `Project/HeroBanner` | `gradientSrc`, `logoSrc`, `logoAlt`, `logoWidth?`, `logoHeight?` | Full-width banner with gradient background and project logo |
+| `Project/Intro` | `tags[]`, `title`, `description`, `meta[]`, `stats[]`, `backHref?` | Page intro: tags, display title, description, meta row, stats grid |
+| `Project/Nav` | `prev?: { href, label }`, `next?: { href, label }` | Previous / next project links, drop inside the last section's container |
+| `Project/SplitSection` | `imageSrc`, `imageAlt?`, `imagePosition?: 'left'\|'right'`, `children` | Two-column image + text section. Pass text content as `children`. |
+| `Project/FeatureCard` | `direction?: 'vertical'\|'horizontal'`, `className?`, `children` | Card surface that holds `FeatureItem` children. Handles dividers automatically via `> *:not(:last-child)`. |
+| `Project/FeatureItem` | `icon`, `title`, `description`, `label?` | Single feature row (icon beside text). Pass `label` to switch to column layout (icon above text, label below) — used for architecture layers. |
+
+**Usage pattern for a new project page:**
+
+```tsx
+// app/keepro/page.tsx
+import ProjectHeroBanner from "@/components/Project/HeroBanner/HeroBanner";
+import ProjectIntro    from "@/components/Project/Intro/Intro";
+import SplitSection   from "@/components/Project/SplitSection/SplitSection";
+import FeatureCard    from "@/components/Project/FeatureCard/FeatureCard";
+import FeatureItem    from "@/components/Project/FeatureItem/FeatureItem";
+import ProjectNav     from "@/components/Project/Nav/Nav";
+```
+
+Each Bloom-specific section (`Bloom/ProjectContext`, etc.) is a thin wrapper that passes content to these shared shells — use the same pattern for new projects.
+
 ### Extract repeated patterns into components
 
 When the same structure (JSX + CSS) appears in **2 or more places**, extract it into a shared component in `src/components/`. The threshold is duplication of both markup and styles — a single repeated class doesn't count.

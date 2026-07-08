@@ -1,0 +1,44 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.horizontal > * {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+/* Dividers between children */
+.card:not(.horizontal) > *:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.horizontal > *:not(:last-child) {
+  border-right: 1px solid var(--color-border-strong);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .horizontal {
+    flex-direction: column;
+  }
+
+  .horizontal > * {
+    flex: none;
+    width: 100%;
+  }
+
+  .horizontal > *:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+}

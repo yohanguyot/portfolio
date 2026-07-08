@@ -35,7 +35,7 @@ function ContactLink({
 
 type Errors = { email?: string; brief?: string };
 
-export default function ContactSection() {
+export default function ContactSection({ noMarginTop = false }: { noMarginTop?: boolean }) {
   const [selectedNeed, setSelectedNeed] = useState<Need | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
@@ -76,7 +76,7 @@ export default function ContactSection() {
   }
 
   return (
-    <section className={styles.section} id="contact">
+    <section className={`${styles.section}${noMarginTop ? ` ${styles.noMarginTop}` : ""}`} id="contact">
       <div className={styles.container}>
         {/* ── Left column wrapper (desktop flex col, mobile display:contents) ── */}
         <div className={styles.leftCol}>

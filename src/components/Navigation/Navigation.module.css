@@ -134,12 +134,12 @@
 .langDropdown {
   display: flex;
   align-items: center;
-  padding: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-full);
   cursor: pointer;
-  gap: 0;
+  gap: var(--space-2xs);
   transition:
     background var(--duration-fast) var(--ease),
     border-color var(--duration-fast) var(--ease),
@@ -151,7 +151,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-inline: var(--space-xs);
+  padding-inline: var(--space-2xs);
   color: var(--color-text-secondary);
   white-space: nowrap;
   transition: color var(--duration-fast) var(--ease);
@@ -193,11 +193,12 @@
 /* ── Dropdown panel ── */
 .langPanel {
   list-style: none;
-  padding: var(--space-xs);
+  padding: var(--space-sm);
+  padding-bottom: var(--space-xs);
   background: var(--color-bg-overlay);
-  border-bottom: 1px solid var(--color-border-subtle);
-  border-left: 1px solid var(--color-border-subtle);
-  border-right: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-strong);
+  border-left: 1px solid var(--color-border-strong);
+  border-right: 1px solid var(--color-border-strong);
   border-radius: var(--radius-xl);
   backdrop-filter: var(--overlay-blur);
   z-index: 200;
@@ -245,7 +246,7 @@
 
 /* ── Language inline (mobile) — segmented pill ── */
 .langInline {
-  --lang-btn-w: 48px;
+  --lang-btn-w: 56px;
   position: relative;
   display: flex;
   align-items: center;

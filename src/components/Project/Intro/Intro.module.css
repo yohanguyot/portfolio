@@ -1,0 +1,162 @@
+.section {
+  width: 100%;
+  padding-block: var(--space-2xl) var(--space-4xl);
+  padding-inline: var(--space-xl);
+}
+
+.container {
+  max-width: 1200px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+
+.backButton {
+  align-self: flex-start;
+}
+
+/* ── Intro ── */
+
+.introBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.introTop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.tag {
+  composes: labelSm from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  background: var(--color-bg-surface-3);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-full);
+}
+
+.title {
+  composes: display from '@/styles/typography.module.css';
+  font-size: clamp(3rem, calc((100vw - 2 * var(--space-4xl)) / 6.5), 7rem);
+  color: var(--color-text-primary);
+}
+
+.description {
+  composes: bodyLead from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  max-width: 600px;
+}
+
+/* ── Meta ── */
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xl);
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metaLabel {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+.metaValue {
+  composes: bodySm from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+/* ── Stats ── */
+
+.stats {
+  display: flex;
+  width: 100%;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.statItem {
+  flex: 1 0 0;
+  min-width: 0;
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.statDivider {
+  border-right: 1px solid var(--color-border-strong);
+}
+
+.statNumber {
+  composes: headingLg from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.statSuffix {
+  color: var(--color-text-accent);
+}
+
+.statLabel {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-lg) var(--space-xl);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .statItem {
+    padding: var(--space-lg);
+  }
+
+  .statDivider {
+    border-right: none;
+  }
+
+  .statItem:nth-child(1),
+  .statItem:nth-child(2) {
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .statItem:nth-child(odd) {
+    border-right: 1px solid var(--color-border-strong);
+  }
+
+  .section {
+    padding-block: var(--space-3xl);
+    padding-inline: var(--space-md);
+  }
+
+  .title {
+    font-size: clamp(3rem, calc((100vw - 2 * var(--space-md)) / 6.5), 7rem);
+  }
+}
