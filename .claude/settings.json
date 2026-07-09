@@ -86,7 +86,10 @@
       "Bash(python3 /tmp/fix_middleoffice_all.py)",
       "Bash(python3 /tmp/fix_middleoffice_es.py)",
       "Bash(python3 /tmp/fix_mo_desc.py)",
-      "Bash(python3 /tmp/fix_mo_desc_en_es.py)"
+      "Bash(python3 /tmp/fix_mo_desc_en_es.py)",
+      "Bash(python3 /tmp/fix_about_es.py)",
+      "Bash(python3 /tmp/fix_about_una.py)",
+      "Bash(python3 /tmp/fix_hero_en.py)"
     ]
   }
 }
