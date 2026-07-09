@@ -12,26 +12,27 @@
   overflow: hidden;
 }
 
-/* Radial brand-color glow — matches Figma: 3200×1200px at top -374px, screen blend */
+/* Radial brand-color glow — matches Figma positioning, in oklch for banding-free interpolation */
 .gradient {
   position: absolute;
   width: 3200px;
   height: 1200px;
-  top: -256px;
+  top: -374px;
   left: 50%;
   transform: translateX(-50%);
+  background: radial-gradient(
+    in oklch
+    ellipse 1600px 600px at 50% 50%,
+    rgba(198, 83, 46, 0.06) 0%,
+    rgba(198, 83, 46, 0) 100%
+  );
   pointer-events: none;
   mix-blend-mode: screen;
-  background: radial-gradient(
-    ellipse 50% 50% at 50% 50%,
-    var(--color-bg-active) 0%,
-    transparent 100%
-  );
 }
 
 @media (max-width: 768px), (max-height: 700px) {
   .gradient {
-    top: -500px;
+    top: -550px;
   }
 }
 

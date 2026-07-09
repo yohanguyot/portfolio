@@ -89,7 +89,12 @@
       "Bash(python3 /tmp/fix_mo_desc_en_es.py)",
       "Bash(python3 /tmp/fix_about_es.py)",
       "Bash(python3 /tmp/fix_about_una.py)",
-      "Bash(python3 /tmp/fix_hero_en.py)"
+      "Bash(python3 /tmp/fix_hero_en.py)",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/bloom/gradient.png\" \"https://www.figma.com/api/mcp/asset/04b2165f-3950-4f12-9556-8dfb648c6c91\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/keepro/gradient.png\" \"https://www.figma.com/api/mcp/asset/97c8551b-e58b-4453-b204-820dfa8a0acf\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/lecoffre/gradient.png\" \"https://www.figma.com/api/mcp/asset/90e70042-97ee-4644-b3b9-b721710bb9bb\")",
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/gradient.png\" \"https://www.figma.com/api/mcp/asset/1b5864d6-a4b8-4bac-9e5a-760d15b1a930\")",
+      "Bash(wait)"
     ]
   }
 }

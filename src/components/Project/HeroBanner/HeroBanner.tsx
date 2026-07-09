@@ -1,8 +1,9 @@
+import React from "react";
 import Image from "next/image";
 import styles from "./HeroBanner.module.css";
 
 type Props = {
-  gradientSrc: string;
+  gradientNode: React.ReactNode;
   logoSrc: string;
   logoAlt: string;
   logoWidth?: number;
@@ -11,7 +12,7 @@ type Props = {
 };
 
 export default function ProjectHeroBanner({
-  gradientSrc,
+  gradientNode,
   logoSrc,
   logoAlt,
   logoWidth,
@@ -22,7 +23,7 @@ export default function ProjectHeroBanner({
     <section className={styles.banner}>
       <div className={styles.gradientContainer}>
         <div className={styles.gradientInner}>
-          <Image src={gradientSrc} alt="" aria-hidden width={1440} height={600} className={styles.gradientImg} />
+          {gradientNode}
         </div>
       </div>
       <Image
