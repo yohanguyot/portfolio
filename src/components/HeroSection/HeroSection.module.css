@@ -29,6 +29,12 @@
   );
 }
 
+@media (max-width: 768px), (max-height: 700px) {
+  .gradient {
+    top: -500px;
+  }
+}
+
 /* Content */
 .content {
   display: flex;
@@ -94,6 +100,16 @@
 
 .subtitleHighlight {
   color: var(--color-text-primary);
+}
+
+.subtitleBreak {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .subtitleBreak {
+    display: inline;
+  }
 }
 
 /* CTA buttons */

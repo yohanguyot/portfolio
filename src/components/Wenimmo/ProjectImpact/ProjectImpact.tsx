@@ -3,36 +3,31 @@ import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import ProjectNav from "@/components/Project/Nav/Nav";
+import type { Dictionary } from "@/lib/getDictionary";
 import styles from "./ProjectImpact.module.css";
 
-export default function ProjectImpact() {
+const ICONS = [BriefcaseBusiness, User];
+
+type Props = { dict: Dictionary["wenimmo"]["impact"] };
+
+export default function ProjectImpact({ dict }: Props) {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.impact}>
           <div className={styles.header}>
-            <SectionHeader
-              label="Impact"
-              heading="Une productivité décuplée."
-            />
-            <p className={styles.description}>
-              L&apos;unification du parcours supprime la frontière entre le
-              front et le back-office. Une seule interface orchestre désormais
-              deux profils aux objectifs opposés, garantissant une fluidité
-              opérationnelle totale.
-            </p>
+            <SectionHeader label={dict.label} heading={dict.heading} />
+            <p className={styles.description}>{dict.description}</p>
           </div>
           <FeatureCard direction="horizontal">
-            <FeatureItem
-              icon={BriefcaseBusiness}
-              title="Pour les CGP"
-              description="Les interruptions de parcours ne coupent plus le flux de travail. Le suivi visuel permet de reprendre n'importe quel dossier en cours, éliminant définitivement les frictions de saisie."
-            />
-            <FeatureItem
-              icon={User}
-              title="Pour le Middle Office"
-              description="Sécurité et fluidité guident le traitement de masse. Les actions contextuelles et la traçabilité intégrée suppriment les erreurs de saisie et fluidifient drastiquement les validations."
-            />
+            {dict.features.map((f, i) => (
+              <FeatureItem
+                key={i}
+                icon={ICONS[i]}
+                title={f.title}
+                description={f.description}
+              />
+            ))}
           </FeatureCard>
         </div>
         <ProjectNav

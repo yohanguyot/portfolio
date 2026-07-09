@@ -1,19 +1,18 @@
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import type { Dictionary } from "@/lib/getDictionary";
 import styles from "./ProjectIdentities.module.css";
 
-export default function ProjectIdentities() {
+type Props = { dict: Dictionary["bloom"]["identities"] };
+
+export default function ProjectIdentities({ dict }: Props) {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <SectionHeader label="Identités" heading="Une structure, plusieurs identités" />
+          <SectionHeader label={dict.label} heading={dict.heading} />
           <div className={styles.body}>
-            <p className={styles.paragraph}>
-              L&apos;architecture des composants et des tokens est identique pour tous. Pour déployer un nouveau client, il suffit d&apos;injecter ses primitives (couleurs, typographies, arrondis) via un fichier de configuration.
-            </p>
-            <p className={styles.paragraph}>
-              L&apos;identité se propage instantanément à toute la plateforme. Côté code, le développeur applique le thème en une ligne, sans toucher aux composants.
-            </p>
+            <p className={styles.paragraph}>{dict.p1}</p>
+            <p className={styles.paragraph}>{dict.p2}</p>
           </div>
         </div>
 

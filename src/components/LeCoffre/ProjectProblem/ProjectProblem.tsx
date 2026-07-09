@@ -1,24 +1,14 @@
 import CardSection from "@/components/Project/CardSection/CardSection";
+import type { Dictionary } from "@/lib/getDictionary";
 import styles from "./ProjectProblem.module.css";
 
-export default function ProjectProblem() {
+type Props = { dict: Dictionary["lecoffre"]["problem"] };
+
+export default function ProjectProblem({ dict }: Props) {
   return (
-    <CardSection
-      label="Problème"
-      heading="Alléger le client sans brider le notaire."
-    >
-      <p className={styles.paragraph}>
-        La collecte de pièces notariales souffre traditionnellement de relances
-        manuelles, de dispersion des fichiers et d&apos;un manque de suivi
-        formel. Face à cette complexité, concevoir un portail unique aurait
-        imposé trop de compromis.
-      </p>
-      <p className={styles.paragraph}>
-        Le notaire exige une forte densité de données et un contrôle total,
-        tandis que le client requiert une clarté absolue. Fusionner ces attentes
-        asymétriques aurait inévitablement dégradé l&apos;expérience de l&apos;un
-        ou de l&apos;autre.
-      </p>
+    <CardSection label={dict.label} heading={dict.heading}>
+      <p className={styles.paragraph}>{dict.p1}</p>
+      <p className={styles.paragraph}>{dict.p2}</p>
     </CardSection>
   );
 }

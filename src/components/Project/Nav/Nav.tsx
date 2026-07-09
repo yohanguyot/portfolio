@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useDict } from "@/lib/dict-context";
 import styles from "./Nav.module.css";
 
 type NavItem = { href: string; label: string };
@@ -10,13 +14,21 @@ type Props = {
 };
 
 export default function ProjectNav({ prev, next }: Props) {
+  const pathname = usePathname();
+  const lang = pathname.split("/")[1] ?? "fr";
+  const dict = useDict();
+
+  function localize(href: string) {
+    return href.startsWith("/") ? `/${lang}${href}` : href;
+  }
+
   return (
     <div className={styles.nav}>
       {prev ? (
-        <Link href={prev.href} className={styles.link}>
+        <Link href={localize(prev.href)} className={styles.link}>
           <ArrowLeft size={16} className={`${styles.icon} ${styles.iconPrev}`} />
           <div className={styles.content}>
-            <span className={styles.direction}>Projet précédent</span>
+            <span className={styles.direction}>{dict.projectNav.prev}</span>
             <span className={styles.title}>{prev.label}</span>
           </div>
         </Link>
@@ -24,9 +36,9 @@ export default function ProjectNav({ prev, next }: Props) {
         <div />
       )}
       {next ? (
-        <Link href={next.href} className={`${styles.link} ${styles.linkNext}`}>
+        <Link href={localize(next.href)} className={`${styles.link} ${styles.linkNext}`}>
           <div className={styles.content}>
-            <span className={styles.direction}>Projet suivant</span>
+            <span className={styles.direction}>{dict.projectNav.next}</span>
             <span className={styles.title}>{next.label}</span>
           </div>
           <ArrowRight size={16} className={`${styles.icon} ${styles.iconNext}`} />

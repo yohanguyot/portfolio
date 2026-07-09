@@ -17,7 +17,7 @@
 /* ── Primary ── */
 .primary {
   gap: var(--space-xs);
-  padding: var(--space-md) var(--space-md);
+  padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius-full);
   overflow: hidden;
   color: var(--color-btn-primary-text);

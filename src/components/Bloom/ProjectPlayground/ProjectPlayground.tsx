@@ -4,6 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import ProjectNav from "@/components/Project/Nav/Nav";
+import type { Dictionary } from "@/lib/getDictionary";
 import styles from "./ProjectPlayground.module.css";
 
 type ClientId = "bloom" | "erable" | "the-elements-nation" | "lqr-house" | "repetto" | "versity";
@@ -44,12 +45,23 @@ type ClientData = {
   font: string;
 };
 
+type Props = { dict: Dictionary["bloom"]["playground"] };
+
+const CATEGORY_KEYS: Record<ClientId, keyof Dictionary["bloom"]["playground"]["categories"]> = {
+  "bloom": "bloom",
+  "erable": "erable",
+  "the-elements-nation": "elements",
+  "lqr-house": "lqr",
+  "repetto": "repetto",
+  "versity": "versity",
+};
+
 const CLIENTS: ClientData[] = [
   {
     id: "bloom",
     tabLabel: "Bloom",
     name: "Bloom",
-    category: "Base Modulaire",
+    category: "",
     imageSrc: "/images/projects/bloom/cards/bloom.png",
     collection: "Bloom Collection",
     vars: {
@@ -77,7 +89,7 @@ const CLIENTS: ClientData[] = [
     id: "erable",
     tabLabel: "Erableº",
     name: "Erableº",
-    category: "Investissement à impact",
+    category: "",
     imageSrc: "/images/projects/bloom/cards/erable.png",
     collection: "Erableº Collection",
     vars: {
@@ -109,7 +121,7 @@ const CLIENTS: ClientData[] = [
     id: "the-elements-nation",
     tabLabel: "The Elements Nation",
     name: "The Elements Nation",
-    category: "Gaming",
+    category: "",
     imageSrc: "/images/projects/bloom/cards/elements-nation.png",
     collection: "The Elements Nation Collection",
     vars: {
@@ -137,7 +149,7 @@ const CLIENTS: ClientData[] = [
     id: "lqr-house",
     tabLabel: "LQR House",
     name: "LQR House",
-    category: "Spiritueux premium",
+    category: "",
     imageSrc: "/images/projects/bloom/cards/lqr-house.png",
     collection: "LQR House Collection",
     vars: {
@@ -165,7 +177,7 @@ const CLIENTS: ClientData[] = [
     id: "repetto",
     tabLabel: "Repetto",
     name: "Repetto",
-    category: "Luxe Retail",
+    category: "",
     imageSrc: "/images/projects/bloom/cards/repetto.png",
     collection: "Repetto Collection",
     vars: {
@@ -193,7 +205,7 @@ const CLIENTS: ClientData[] = [
     id: "versity",
     tabLabel: "Versity",
     name: "Versity",
-    category: "Investissement immobilier",
+    category: "",
     imageSrc: "/images/projects/bloom/cards/versity.png",
     collection: "Versity Collection",
     vars: {
@@ -247,7 +259,7 @@ const TOKEN_ROWS = [
   },
 ];
 
-function CardInner({ client }: { client: ClientData }) {
+function CardInner({ client, btnLabel }: { client: ClientData; btnLabel: string }) {
   return (
     <>
       <div className={styles.cardImage}>
@@ -260,14 +272,14 @@ function CardInner({ client }: { client: ClientData }) {
         </div>
         <span className={styles.cardPrice}>$25</span>
         <div className={styles.cardBtn}>
-          <span className={styles.cardBtnLabel}>Acheter</span>
+          <span className={styles.cardBtnLabel}>{btnLabel}</span>
         </div>
       </div>
     </>
   );
 }
 
-export default function ProjectPlayground() {
+export default function ProjectPlayground({ dict }: Props) {
   const [activeId, setActiveId] = useState<ClientId>("bloom");
   const [fadeLeft, setFadeLeft] = useState(false);
   const [fadeRight, setFadeRight] = useState(false);
@@ -314,22 +326,21 @@ export default function ProjectPlayground() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const client = CLIENTS.find((c) => c.id === activeId)!;
+  const clientBase = CLIENTS.find((c) => c.id === activeId)!;
+  const client = { ...clientBase, category: dict.categories[CATEGORY_KEYS[activeId]] };
 
   return (
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.playground}>
           <div className={styles.header}>
-            <SectionHeader label="Playground" heading="Le design system en action" />
-            <p className={styles.lead}>
-              Sélectionnez une marque pour voir l&apos;ensemble du système se reconfigurer.
-            </p>
+            <SectionHeader label={dict.label} heading={dict.heading} />
+            <p className={styles.lead}>{dict.lead}</p>
           </div>
 
           {/* Tab bar */}
           <div className={styles.tabsRow}>
-            <button className={`${styles.scrollBtn} ${styles.scrollBtnLeft} ${!fadeLeft ? styles.scrollBtnHidden : ""}`} onClick={() => scrollTabs("left")} aria-label="Défiler à gauche" tabIndex={fadeLeft ? 0 : -1}>
+            <button className={`${styles.scrollBtn} ${styles.scrollBtnLeft} ${!fadeLeft ? styles.scrollBtnHidden : ""}`} onClick={() => scrollTabs("left")} aria-label={dict.scrollLeft} tabIndex={fadeLeft ? 0 : -1}>
               <ChevronLeft size={16} />
             </button>
             <div className={[styles.tabsWrapper, fadeLeft ? styles.fadeLeft : "", fadeRight ? styles.fadeRight : ""].filter(Boolean).join(" ")}>
@@ -349,7 +360,7 @@ export default function ProjectPlayground() {
                 ))}
               </div>
             </div>
-            <button className={`${styles.scrollBtn} ${styles.scrollBtnRight} ${!fadeRight ? styles.scrollBtnHidden : ""}`} onClick={() => scrollTabs("right")} aria-label="Défiler à droite" tabIndex={fadeRight ? 0 : -1}>
+            <button className={`${styles.scrollBtn} ${styles.scrollBtnRight} ${!fadeRight ? styles.scrollBtnHidden : ""}`} onClick={() => scrollTabs("right")} aria-label={dict.scrollRight} tabIndex={fadeRight ? 0 : -1}>
               <ChevronRight size={16} />
             </button>
           </div>
@@ -362,7 +373,7 @@ export default function ProjectPlayground() {
                 className={styles.bloomCard}
                 style={client.vars as React.CSSProperties}
               >
-                <CardInner client={client} />
+                <CardInner client={client} btnLabel={dict.cardBtn} />
               </div>
             </div>
 

@@ -1,21 +1,20 @@
 import ProjectIntro from "@/components/Project/Intro/Intro";
+import type { Dictionary } from "@/lib/getDictionary";
 
-const TAGS = ["Certification", "Blockchain"];
+const DEFAULT_TAGS = ["Certification", "Blockchain"];
 
-const META = [
-  { label: "Période",  value: "2023–2024" },
-  { label: "Rôle",    value: "Product Designer" },
-  { label: "Contexte", value: "Smart-Chain · Projet interne" },
-];
+type Props = {
+  tags?: string[];
+  dict: Dictionary["keepro"]["intro"];
+};
 
-export default function KeeproIntro() {
+export default function KeeproIntro({ tags = DEFAULT_TAGS, dict }: Props) {
   return (
     <ProjectIntro
-      tags={TAGS}
+      tags={tags}
       title="Keepro"
-      description="Un SaaS B2B de certification blockchain conçu pour les équipes non techniques. Son architecture à double lecture donne un accès direct aux preuves cryptographiques sans surcharger l'interface principale."
-      meta={META}
-
+      description={dict.description}
+      meta={dict.meta}
     />
   );
 }

@@ -1,26 +1,21 @@
 import SplitSection from "@/components/Project/SplitSection/SplitSection";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import type { Dictionary } from "@/lib/getDictionary";
 import styles from "./ProjectContext.module.css";
 
-export default function ProjectContext() {
+type Props = { dict: Dictionary["keepro"]["context"] };
+
+export default function ProjectContext({ dict }: Props) {
   return (
     <SplitSection
       imageSrc="/images/projects/keepro/context.png"
       imageAlt="Keepro — vue liste des dépôts certifiés"
       dimImage
     >
-      <SectionHeader label="Contexte" heading="Rendre la certification blockchain accessible." />
+      <SectionHeader label={dict.label} heading={dict.heading} />
       <div className={styles.body}>
-        <p className={styles.paragraph}>
-          La plateforme génère l&apos;empreinte cryptographique des fichiers
-          pour prouver leur existence et leur intégrité de façon immuable.
-        </p>
-        <p className={styles.paragraph}>
-          Tout l&apos;enjeu de conception consistait à rendre cet ancrage
-          technique transparent pour les équipes métiers (juridique, RH,
-          conformité) qui déposent et vérifient quotidiennement ces documents
-          sensibles.
-        </p>
+        <p className={styles.paragraph}>{dict.p1}</p>
+        <p className={styles.paragraph}>{dict.p2}</p>
       </div>
     </SplitSection>
   );

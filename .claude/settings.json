@@ -62,7 +62,12 @@
       "Bash(python3 -c ' *)",
       "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/context.png\" \"https://www.figma.com/api/mcp/asset/4fe91213-ff09-4bc8-bacf-bd0f6c663b13\")",
       "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/cgp.png\" \"https://www.figma.com/api/mcp/asset/81ac9f5b-8f71-4794-a7c1-e95a721ce537\")",
-      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/middle-office.png\" \"https://www.figma.com/api/mcp/asset/c9c8db52-da00-48ff-b409-346e532fc382\")"
+      "Bash(curl -L -o \"c:/Users/yohan/Documents/Dev/portfolio/public/images/projects/wenimmo/middle-office.png\" \"https://www.figma.com/api/mcp/asset/c9c8db52-da00-48ff-b409-346e532fc382\")",
+      "Bash(node -e \"const p = require\\('c:/Users/yohan/Documents/Dev/portfolio/node_modules/next/package.json'\\); console.log\\(p.version\\)\")",
+      "PowerShell(head)",
+      "Bash(xxd /c/Users/yohan/Documents/Dev/portfolio/src/dictionaries/en.json)",
+      "Bash(python3 -c \"import json; json.load\\(open\\('/c/Users/yohan/Documents/Dev/portfolio/src/dictionaries/en.json'\\)\\); print\\('JSON valid'\\)\")",
+      "Bash(python3)"
     ]
   }
 }

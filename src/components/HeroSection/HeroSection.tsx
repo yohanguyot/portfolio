@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Button from "@/components/Button/Button";
+import { useDict } from "@/lib/dict-context";
 import styles from "./HeroSection.module.css";
 
 function HeroArcCanvas() {
@@ -203,6 +204,9 @@ function HeroArcCanvas() {
 }
 
 export default function HeroSection() {
+  const dict = useDict();
+  const h = dict.hero;
+
   return (
     <>
       <section className={styles.section} id="hero">
@@ -211,32 +215,33 @@ export default function HeroSection() {
         <div className={styles.content}>
           <div className={styles.textContainer}>
             <div className={styles.titleContainer}>
-              <p className={styles.eyebrow}>
-                Yohan Guyot · Product Builder
-              </p>
+              <p className={styles.eyebrow}>{h.eyebrow}</p>
               <h1 className={styles.displayTitle} style={{ whiteSpace: "nowrap" }}>
-                Design to prod.
+                {h.titleLine1}
                 <br />
-                Sans friction.
+                {h.titleLine2}
               </h1>
             </div>
 
             <p className={styles.subtitle}>
-              Je design pour les{" "}
-              <span className={styles.subtitleHighlight}>utilisateurs</span>
-              , je livre pour les{" "}
-              <span className={styles.subtitleHighlight}>développeurs</span>.
+              {h.subtitlePre1}
+              <span className={styles.subtitleHighlight}>{h.subtitleHighlight1}</span>
+              {h.subtitleMid.charAt(0)}
+              <br className={styles.subtitleBreak} />
+              {h.subtitleMid.slice(1)}
+              <span className={styles.subtitleHighlight}>{h.subtitleHighlight2}</span>
+              {h.subtitlePost}
             </p>
           </div>
 
           <div className={styles.buttons}>
-            <Button label="Voir les projets" type="primary" href="#projets" />
-            <Button label="Me contacter" type="secondary" href="#contact" />
+            <Button label={h.ctaPrimary} type="primary" href="#projets" />
+            <Button label={h.ctaSecondary} type="secondary" href="#contact" />
           </div>
         </div>
 
-        <a href="#projets" className={styles.scrollIndicator} aria-label="Voir les projets">
-          <span className={styles.scrollLabel}>Scroll</span>
+        <a href="#projets" className={styles.scrollIndicator} aria-label={h.ctaPrimary}>
+          <span className={styles.scrollLabel}>{h.scroll}</span>
           <div className={styles.scrollLine} />
         </a>
       </section>

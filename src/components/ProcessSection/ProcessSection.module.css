@@ -73,6 +73,7 @@
 .stepLabel {
   composes: labelMd from '@/styles/typography.module.css';
   color: var(--color-text-muted);
+  margin-top: auto;
 }
 
 /* ── Responsive ── */

@@ -1,20 +1,20 @@
 import ProjectIntro from "@/components/Project/Intro/Intro";
+import type { Dictionary } from "@/lib/getDictionary";
 
-const TAGS = ["Fintech", "Patrimoine"];
+const DEFAULT_TAGS = ["Fintech", "Patrimoine"];
 
-const META = [
-  { label: "Période",  value: "2023–2024" },
-  { label: "Rôle",    value: "Product Designer" },
-  { label: "Contexte", value: "Smart-Chain • Projet client" },
-];
+type Props = {
+  tags?: string[];
+  dict: Dictionary["wenimmo"]["intro"];
+};
 
-export default function WenimmoIntro() {
+export default function WenimmoIntro({ tags = DEFAULT_TAGS, dict }: Props) {
   return (
     <ProjectIntro
-      tags={TAGS}
+      tags={tags}
       title="Wenimmo"
-      description="Un SaaS B2B de distribution financière conçu pour deux métiers aux besoins divergents. Son interface unique adapte les flux des CGP et du Middle Office tout en unifiant le suivi des souscriptions."
-      meta={META}
+      description={dict.description}
+      meta={dict.meta}
     />
   );
 }

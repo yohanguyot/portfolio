@@ -3,36 +3,31 @@ import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import ProjectNav from "@/components/Project/Nav/Nav";
+import type { Dictionary } from "@/lib/getDictionary";
 import styles from "./ProjectImpact.module.css";
 
-export default function ProjectImpact() {
+const ICONS = [FileCheck, User];
+
+type Props = { dict: Dictionary["lecoffre"]["impact"] };
+
+export default function ProjectImpact({ dict }: Props) {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.impact}>
           <div className={styles.header}>
-            <SectionHeader
-              label="Impact"
-              heading="Zéro formation, zéro relance."
-            />
-            <p className={styles.description}>
-              L&apos;interface supprime la complexité de prise en main pour des
-              profils aux usages asymétriques. En cloisonnant les espaces,
-              chaque acteur dispose d&apos;un environnement calibré pour ses
-              objectifs opérationnels, sans bruit visuel inutile.
-            </p>
+            <SectionHeader label={dict.label} heading={dict.heading} />
+            <p className={styles.description}>{dict.description}</p>
           </div>
           <FeatureCard direction="horizontal">
-            <FeatureItem
-              icon={FileCheck}
-              title="Pour les notaires"
-              description="Zéro relance manuelle égarée dans les flux d'emails. L'interface centralise le suivi des dossiers en temps réel, offre une visibilité totale et permet de relancer ou de certifier en un clic."
-            />
-            <FeatureItem
-              icon={User}
-              title="Pour les clients"
-              description="Une autonomie complète dès le départ. FranceConnect lève la friction de l'authentification, le parcours indique les pièces attendues et notifie le client à chaque étape."
-            />
+            {dict.features.map((f, i) => (
+              <FeatureItem
+                key={i}
+                icon={ICONS[i]}
+                title={f.title}
+                description={f.description}
+              />
+            ))}
           </FeatureCard>
         </div>
         <ProjectNav

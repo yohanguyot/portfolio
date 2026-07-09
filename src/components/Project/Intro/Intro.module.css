@@ -78,6 +78,7 @@
 .metaValue {
   composes: bodySm from '@/styles/typography.module.css';
   color: var(--color-text-primary);
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* ── Stats ── */
@@ -109,6 +110,7 @@
   composes: headingLg from '@/styles/typography.module.css';
   color: var(--color-text-primary);
   white-space: nowrap;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .statSuffix {

@@ -1,5 +1,9 @@
+"use client";
+
 import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import Button from "@/components/Button/Button";
+import { useDict } from "@/lib/dict-context";
 import styles from "./Intro.module.css";
 
 export type IntroMetaItem = { label: string; value: string };
@@ -11,7 +15,6 @@ type Props = {
   description: ReactNode;
   meta: IntroMetaItem[];
   stats?: IntroStatItem[];
-  backHref?: string;
 };
 
 export default function ProjectIntro({
@@ -20,17 +23,20 @@ export default function ProjectIntro({
   description,
   meta,
   stats,
-  backHref = "/#projets",
 }: Props) {
+  const pathname = usePathname();
+  const lang = pathname.split("/")[1] ?? "fr";
+  const dict = useDict();
+
   return (
     <section className={styles.section}>
       <div className={styles.container}>
         <Button
           type="text"
-          label="Retour"
+          label={dict.projectNav.back}
           showArrowLeft
           as="a"
-          href={backHref}
+          href={`/${lang}/#projets`}
           className={styles.backButton}
         />
 

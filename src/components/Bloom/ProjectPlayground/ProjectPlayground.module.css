@@ -310,6 +310,7 @@
   font-weight: 700;
   line-height: 1.35;
   color: var(--card-text-primary);
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .cardBtn {

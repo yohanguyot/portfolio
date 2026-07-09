@@ -5,10 +5,8 @@ import { ArrowUpRight, Check } from "lucide-react";
 import Button from "@/components/Button/Button";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
+import { useDict } from "@/lib/dict-context";
 import styles from "./ContactSection.module.css";
-
-const NEEDS = ["Product Design", "Refonte UX/UI", "Design & Site", "Autre"] as const;
-type Need = (typeof NEEDS)[number];
 
 function ContactLink({
   href,
@@ -38,13 +36,16 @@ function ContactLink({
 type Errors = { email?: string; brief?: string };
 
 export default function ContactSection({ noMarginTop = false }: { noMarginTop?: boolean }) {
-  const [selectedNeed, setSelectedNeed] = useState<Need | null>(null);
+  const dict = useDict();
+  const c = dict.contact;
+  const NEEDS = c.needs;
+  const [selectedNeed, setSelectedNeed] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [sendError, setSendError] = useState(false);
 
-  function selectNeed(need: Need) {
+  function selectNeed(need: string) {
     setSelectedNeed((prev) => (prev === need ? null : need));
   }
 
@@ -56,9 +57,9 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
     const brief = (form.elements.namedItem("brief") as HTMLTextAreaElement).value;
 
     const nextErrors: Errors = {};
-    if (!email.trim()) nextErrors.email = "L'email est requis.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = "Adresse email invalide.";
-    if (!brief.trim()) nextErrors.brief = "Décrivez votre projet en quelques mots.";
+    if (!email.trim()) nextErrors.email = c.form.errors.emailRequired;
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = c.form.errors.emailInvalid;
+    if (!brief.trim()) nextErrors.brief = c.form.errors.briefRequired;
 
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
@@ -86,10 +87,8 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
         <div className={styles.leftCol}>
           {/* title + description */}
           <div className={styles.infoContent}>
-            <SectionHeader label="Contact" heading="Concevons votre projet." />
-            <p className={styles.description}>
-              Fixons 15 minutes pour poser les prochaines étapes de production.
-            </p>
+            <SectionHeader label={c.label} heading={c.heading} />
+            <p className={styles.description}>{c.description}</p>
           </div>
 
           {/* links */}
@@ -114,8 +113,8 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
                 <Check size={20} strokeWidth={2} />
               </div>
               <div className={styles.successTextGroup}>
-                <p className={styles.successTitle}>Message envoyé</p>
-                <p className={styles.successSubtitle}>Je réponds vite :)</p>
+                <p className={styles.successTitle}>{c.form.successTitle}</p>
+                <p className={styles.successSubtitle}>{c.form.successSubtitle}</p>
               </div>
             </div>
           ) : (
@@ -124,19 +123,19 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
               <div className={styles.formRow}>
                 <div className={styles.fieldGroup}>
                   <label className={styles.fieldLabel} htmlFor="contact-nom">
-                    Nom complet
+                    {c.form.nameLabel}
                   </label>
                   <input
                     id="contact-nom"
                     name="nom"
                     className={styles.input}
-                    placeholder="Mark Scout"
+                    placeholder={c.form.namePlaceholder}
                     autoComplete="name"
                   />
                 </div>
                 <div className={styles.fieldGroup}>
                   <label className={styles.fieldLabel} htmlFor="contact-email">
-                    Email
+                    {c.form.emailLabel}
                   </label>
                   <input
                     id="contact-email"
@@ -154,7 +153,7 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
 
               {/* Besoin */}
               <div className={styles.needsGroup}>
-                <span className={styles.fieldLabel}>Votre besoin</span>
+                <span className={styles.fieldLabel}>{c.form.needLabel}</span>
                 <div className={styles.chips}>
                   {NEEDS.map((need) => (
                     <button
@@ -173,13 +172,13 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
               {/* Brief */}
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldLabel} htmlFor="contact-brief">
-                  Brief ou idée du projet
+                  {c.form.briefLabel}
                 </label>
                 <textarea
                   id="contact-brief"
                   name="brief"
                   className={`${styles.textarea} ${errors.brief ? styles.inputError : ""}`}
-                  placeholder="Quel est l'objectif principal de votre produit et vos contraintes actuelles (timing, technique, design system...) ?"
+                  placeholder={c.form.briefPlaceholder}
                   aria-invalid={!!errors.brief}
                   aria-describedby={errors.brief ? "error-brief" : undefined}
                 />
@@ -189,14 +188,14 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
               {/* Send error */}
               {sendError && (
                 <p className={styles.sendError}>
-                  Une erreur est survenue. Réessayez ou écrivez-moi directement à{" "}
+                  {c.form.sendError}{" "}
                   <a href="mailto:yohanguyot.contact@gmail.com">yohanguyot.contact@gmail.com</a>.
                 </p>
               )}
 
               {/* Submit */}
               <Button
-                label={sending ? "Envoi…" : "Envoyer le message"}
+                label={sending ? c.form.sending : c.form.submit}
                 showArrowRight={!sending}
                 className={styles.submitBtn}
               />

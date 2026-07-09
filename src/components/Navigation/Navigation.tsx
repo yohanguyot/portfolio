@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useDict } from "@/lib/dict-context";
 import styles from "./Navigation.module.css";
 
 type NavLinkState = "default" | "hover" | "active";
@@ -47,13 +48,23 @@ type LanguageDropdownProps = {
 };
 
 export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const dict = useDict();
+  const currentLang = pathname.split("/")[1]?.toUpperCase() ?? "FR";
   const [isOpen, setIsOpen] = useState(false);
-  const [current, setCurrent] = useState("FR");
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({});
   const [stride, setStride] = useState(0);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLUListElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  function switchLocale(code: string) {
+    const newLang = code.toLowerCase();
+    const segments = pathname.split("/");
+    segments[1] = newLang;
+    router.push(segments.join("/") || `/${newLang}`, { scroll: false });
+  }
 
   function recompute() {
     if (!panelRef.current || !triggerRef.current) return;
@@ -119,7 +130,7 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
   }, [inline]);
 
   if (inline) {
-    const currentIndex = LANGUAGES.findIndex(({ code }) => code === current);
+    const currentIndex = LANGUAGES.findIndex(({ code }) => code === currentLang);
     return (
       <div ref={wrapperRef} className={[styles.langInline, className ?? ""].filter(Boolean).join(" ")}>
         <span
@@ -130,8 +141,8 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
         {LANGUAGES.map(({ code }) => (
           <button
             key={code}
-            className={[styles.langInlineOption, code === current ? styles.langInlineOptionActive : ""].filter(Boolean).join(" ")}
-            onClick={() => setCurrent(code)}
+            className={[styles.langInlineOption, code === currentLang ? styles.langInlineOptionActive : ""].filter(Boolean).join(" ")}
+            onClick={() => switchLocale(code)}
           >
             {code}
           </button>
@@ -149,7 +160,7 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
-        <span className={styles.langLabel}>{current}</span>
+        <span className={styles.langLabel}>{currentLang}</span>
         <span className={styles.langIcon}>
           {isOpen ? (
             <ChevronUp size={16} strokeWidth={1.5} />
@@ -165,17 +176,17 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
           className={styles.langPanel}
           style={panelStyle}
           role="listbox"
-          aria-label="Langue"
+          aria-label={dict.nav.langLabel}
         >
           {LANGUAGES.map(({ code, label }) => (
-            <li key={code} role="option" aria-selected={code === current}>
+            <li key={code} role="option" aria-selected={code === currentLang}>
               <button
                 className={[
                   styles.langOption,
-                  code === current ? styles.langOptionActive : "",
+                  code === currentLang ? styles.langOptionActive : "",
                 ].filter(Boolean).join(" ")}
                 onClick={() => {
-                  setCurrent(code);
+                  switchLocale(code);
                   setIsOpen(false);
                 }}
               >
@@ -190,16 +201,18 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
   );
 }
 
-const NAV_LINKS = [
-  { label: "Projets", href: "#projets" },
-  { label: "À propos", href: "#a-propos" },
-  { label: "Process", href: "#process" },
-  { label: "Contact", href: "#contact", alwaysLocal: true },
-];
-
 export default function Navigation() {
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const dict = useDict();
+  const lang = pathname.split("/")[1] ?? "fr";
+  const isHome = pathname === `/${lang}` || pathname === `/${lang}/`;
+  const NAV_LINKS = [
+    { label: dict.nav.links.projects, href: "#projets" },
+    { label: dict.nav.links.about, href: "#a-propos" },
+    { label: dict.nav.links.process, href: "#process" },
+    { label: dict.nav.links.contact, href: "#contact", alwaysLocal: true },
+  ];
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -304,7 +317,7 @@ export default function Navigation() {
         <div className={styles.container}>
           <div className={styles.logoContainer}>
             <a
-              href={isHome ? "#" : "/"}
+              href={isHome ? "#" : `/${lang}`}
               className={styles.logo}
               onClick={isHome ? (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } : undefined}
             >Yohan Guyot</a>
@@ -314,7 +327,7 @@ export default function Navigation() {
           <div className={styles.right}>
             <div className={styles.links}>
               {NAV_LINKS.map((l) => (
-                <NavLink key={l.href} label={l.label} href={isHome || l.alwaysLocal ? l.href : `/${l.href}`} />
+                <NavLink key={l.href} label={l.label} href={isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`} />
               ))}
             </div>
             <LanguageDropdown />
@@ -325,7 +338,7 @@ export default function Navigation() {
             className={styles.hamburger}
             onClick={() => setMobileOpen((v) => !v)}
             aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={mobileOpen ? dict.nav.closeMenu : dict.nav.openMenu}
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <line x1="3" y1="5" x2="17" y2="5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
@@ -348,12 +361,12 @@ export default function Navigation() {
             style={dropdownStyle}
             role="dialog"
             aria-modal="true"
-            aria-label="Menu"
+            aria-label={dict.nav.menuLabel}
           >
             {NAV_LINKS.map((l, i) => (
               <a
                 key={l.href}
-                href={isHome || l.alwaysLocal ? l.href : `/${l.href}`}
+                href={isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`}
                 className={styles.mobileLink}
                 onClick={close}
                 ref={i === 0 ? firstLinkRef : undefined}
