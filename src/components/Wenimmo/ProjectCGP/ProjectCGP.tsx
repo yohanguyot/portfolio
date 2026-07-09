@@ -1,4 +1,5 @@
 import { GitFork, ListChecks, Tag, Lock } from "lucide-react";
+import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
@@ -19,9 +20,11 @@ export default function ProjectCGP({ dict }: Props) {
             <p className={styles.paragraph}>{dict.description}</p>
           </div>
           <div className={styles.imageWrap}>
-            <img
+            <Image
               src="/images/projects/wenimmo/cgp.png"
               alt="Interface Wenimmo — tunnel de souscription CGP"
+              width={1440}
+              height={900}
               className={styles.image}
             />
           </div>

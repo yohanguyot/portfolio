@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import styles from "./ParcoursSection.module.css";
 
@@ -24,9 +25,11 @@ export default function ParcoursSection({ label, heading, items, dimImage }: Pro
           {items.map((item) => (
             <div key={item.title} className={styles.col}>
               <div className={styles.imageWrap}>
-                <img
+                <Image
                   src={item.imageSrc}
                   alt={item.imageAlt}
+                  width={1440}
+                  height={900}
                   className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`}
                 />
               </div>

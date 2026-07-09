@@ -67,7 +67,26 @@
       "PowerShell(head)",
       "Bash(xxd /c/Users/yohan/Documents/Dev/portfolio/src/dictionaries/en.json)",
       "Bash(python3 -c \"import json; json.load\\(open\\('/c/Users/yohan/Documents/Dev/portfolio/src/dictionaries/en.json'\\)\\); print\\('JSON valid'\\)\")",
-      "Bash(python3)"
+      "Bash(python3)",
+      "Bash(xargs du -sh)",
+      "Bash(cat)",
+      "Bash(python3 /tmp/fix_fr.py)",
+      "Bash(python3 /tmp/fix_wenimmo_context.py)",
+      "Bash(python3 /tmp/fix_solution.py)",
+      "Bash(python3 /tmp/fix_decisions3.py)",
+      "Bash(python3 /tmp/fix_flujos.py)",
+      "Bash(python3 /tmp/fix_flujos2.py)",
+      "Bash(python3 /tmp/fix_decisions_features.py)",
+      "Bash(python3 /tmp/fix_flux_regl.py)",
+      "Bash(python3 /tmp/fix_lecoffre_decisions.py)",
+      "Bash(python3 /tmp/fix_wenimmo_cgp_fr.py)",
+      "Bash(python3 /tmp/fix_cgp_all.py)",
+      "Bash(python3 /tmp/fix_cgp_en.py)",
+      "Bash(python3 /tmp/fix_cgp_es.py)",
+      "Bash(python3 /tmp/fix_middleoffice_all.py)",
+      "Bash(python3 /tmp/fix_middleoffice_es.py)",
+      "Bash(python3 /tmp/fix_mo_desc.py)",
+      "Bash(python3 /tmp/fix_mo_desc_en_es.py)"
     ]
   }
 }

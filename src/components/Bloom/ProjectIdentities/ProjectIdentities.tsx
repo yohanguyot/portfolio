@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import type { Dictionary } from "@/lib/getDictionary";
 import styles from "./ProjectIdentities.module.css";
@@ -18,16 +19,20 @@ export default function ProjectIdentities({ dict }: Props) {
 
         <div className={styles.images}>
           <div className={styles.imageWrap}>
-            <img
+            <Image
               src="/images/projects/bloom/erable-theme.png"
               alt="Interface Bloom avec le thème Erable"
+              width={1440}
+              height={900}
               className={`${styles.image} ${styles.imageDim}`}
             />
           </div>
           <div className={styles.imageWrap}>
-            <img
+            <Image
               src="/images/projects/bloom/lqr-house-theme.png"
               alt="Interface Bloom avec le thème LQR House"
+              width={1440}
+              height={900}
               className={styles.image}
             />
           </div>

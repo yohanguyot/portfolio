@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import ProjectNav from "@/components/Project/Nav/Nav";
 import type { Dictionary } from "@/lib/getDictionary";
@@ -263,7 +264,7 @@ function CardInner({ client, btnLabel }: { client: ClientData; btnLabel: string 
   return (
     <>
       <div className={styles.cardImage}>
-        <img src={client.imageSrc} alt={client.name} className={styles.cardImg} />
+        <Image src={client.imageSrc} alt={client.name} width={316} height={492} className={styles.cardImg} />
       </div>
       <div className={styles.cardInfo}>
         <div className={styles.cardName}>
@@ -330,6 +331,7 @@ export default function ProjectPlayground({ dict }: Props) {
   const client = { ...clientBase, category: dict.categories[CATEGORY_KEYS[activeId]] };
 
   return (
+    <>
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.playground}>
@@ -408,12 +410,12 @@ export default function ProjectPlayground({ dict }: Props) {
           </div>
         </div>
 
-        {/* Project navigation */}
-        <ProjectNav
-          prev={{ href: "/wenimmo", label: "Wenimmo" }}
-          next={{ href: "/keepro", label: "Keepro" }}
-        />
       </div>
     </section>
+    <ProjectNav
+      prev={{ href: "/wenimmo", label: "Wenimmo" }}
+      next={{ href: "/keepro", label: "Keepro" }}
+    />
+    </>
   );
 }

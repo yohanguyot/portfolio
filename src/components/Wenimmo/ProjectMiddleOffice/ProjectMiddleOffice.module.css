@@ -53,6 +53,10 @@
     flex-direction: column;
   }
 
+  .imageWrap {
+    order: 1;
+  }
+
   .textCol,
   .imageWrap {
     flex: none;

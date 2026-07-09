@@ -12,6 +12,7 @@ type Props = { dict: Dictionary["wenimmo"]["impact"] };
 
 export default function ProjectImpact({ dict }: Props) {
   return (
+    <>
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.impact}>
@@ -30,11 +31,12 @@ export default function ProjectImpact({ dict }: Props) {
             ))}
           </FeatureCard>
         </div>
-        <ProjectNav
-          prev={{ href: "/lecoffre", label: "LeCoffre" }}
-          next={{ href: "/bloom", label: "Bloom" }}
-        />
       </div>
     </section>
+    <ProjectNav
+      prev={{ href: "/lecoffre", label: "LeCoffre" }}
+      next={{ href: "/bloom", label: "Bloom" }}
+    />
+    </>
   );
 }

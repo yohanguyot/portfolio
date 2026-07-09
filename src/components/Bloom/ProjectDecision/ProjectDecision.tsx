@@ -1,4 +1,5 @@
 import { TriangleAlert, Layers } from "lucide-react";
+import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
@@ -19,9 +20,11 @@ export default function ProjectDecision({ dict }: Props) {
         </div>
 
         <div className={styles.imageWrap}>
-          <img
+          <Image
             src="/images/projects/bloom/tokens.png"
             alt="Diagramme des tokens Bloom : primitifs, sémantiques et composants"
+            width={1440}
+            height={900}
             className={styles.image}
           />
         </div>

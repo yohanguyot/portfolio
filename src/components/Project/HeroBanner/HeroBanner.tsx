@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./HeroBanner.module.css";
 
 type Props = {
@@ -21,14 +22,14 @@ export default function ProjectHeroBanner({
     <section className={styles.banner}>
       <div className={styles.gradientContainer}>
         <div className={styles.gradientInner}>
-          <img src={gradientSrc} alt="" aria-hidden className={styles.gradientImg} />
+          <Image src={gradientSrc} alt="" aria-hidden width={1440} height={600} className={styles.gradientImg} />
         </div>
       </div>
-      <img
+      <Image
         src={logoSrc}
         alt={logoAlt}
         className={styles.logo}
-        width={logoWidth}
+        width={logoWidth ?? 400}
         height={logoHeight}
         style={{
           height: logoHeight,

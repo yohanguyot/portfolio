@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import Image from "next/image";
 import styles from "./SplitSection.module.css";
 
 type Props = {
@@ -23,7 +24,7 @@ export default function SplitSection({
       <div className={styles.container}>
         <div className={styles.textCol}>{children}</div>
         <div className={styles.imageWrap}>
-          <img src={imageSrc} alt={imageAlt} className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`} />
+          <Image src={imageSrc} alt={imageAlt} width={1440} height={900} className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`} />
         </div>
       </div>
     </section>

@@ -1,7 +1,22 @@
+.section {
+  width: 100%;
+  padding-block: var(--space-4xl);
+  padding-inline: var(--space-xl);
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-3xl);
+    padding-inline: var(--space-md);
+  }
+}
+
 .nav {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  max-width: 1200px;
+  margin-inline: auto;
 }
 
 .link {

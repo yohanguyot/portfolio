@@ -23,29 +23,31 @@ export default function ProjectNav({ prev, next }: Props) {
   }
 
   return (
-    <div className={styles.nav}>
-      {prev ? (
-        <Link href={localize(prev.href)} className={styles.link}>
-          <ArrowLeft size={16} className={`${styles.icon} ${styles.iconPrev}`} />
-          <div className={styles.content}>
-            <span className={styles.direction}>{dict.projectNav.prev}</span>
-            <span className={styles.title}>{prev.label}</span>
-          </div>
-        </Link>
-      ) : (
-        <div />
-      )}
-      {next ? (
-        <Link href={localize(next.href)} className={`${styles.link} ${styles.linkNext}`}>
-          <div className={styles.content}>
-            <span className={styles.direction}>{dict.projectNav.next}</span>
-            <span className={styles.title}>{next.label}</span>
-          </div>
-          <ArrowRight size={16} className={`${styles.icon} ${styles.iconNext}`} />
-        </Link>
-      ) : (
-        <div />
-      )}
-    </div>
+    <section className={styles.section}>
+      <div className={styles.nav}>
+        {prev ? (
+          <Link href={localize(prev.href)} className={styles.link}>
+            <ArrowLeft size={16} className={`${styles.icon} ${styles.iconPrev}`} />
+            <div className={styles.content}>
+              <span className={styles.direction}>{dict.projectNav.prev}</span>
+              <span className={styles.title}>{prev.label}</span>
+            </div>
+          </Link>
+        ) : (
+          <div />
+        )}
+        {next ? (
+          <Link href={localize(next.href)} className={`${styles.link} ${styles.linkNext}`}>
+            <div className={styles.content}>
+              <span className={styles.direction}>{dict.projectNav.next}</span>
+              <span className={styles.title}>{next.label}</span>
+            </div>
+            <ArrowRight size={16} className={`${styles.icon} ${styles.iconNext}`} />
+          </Link>
+        ) : (
+          <div />
+        )}
+      </div>
+    </section>
   );
 }

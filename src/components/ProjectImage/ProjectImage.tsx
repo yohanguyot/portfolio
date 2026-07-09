@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./ProjectImage.module.css";
 
 type ProjectSlug = "bloom" | "keepro" | "lecoffre" | "wenimmo";
@@ -41,15 +42,15 @@ export default function ProjectImage({ project, hovered = false, className }: Pr
   return (
     <div className={`${styles.wrap} ${hovered ? styles.hovered : ""} ${className ?? ""}`}>
       <div className={styles.bgGradient}>
-        <img src={assets.bg} alt="" className={styles.bgGradientImg} aria-hidden />
+        <Image src={assets.bg} alt="" width={800} height={600} className={styles.bgGradientImg} aria-hidden />
       </div>
 
       <div className={styles.screen}>
-        <img src={assets.screen} alt="" className={styles.screenImg} aria-hidden />
+        <Image src={assets.screen} alt="" width={800} height={500} className={styles.screenImg} aria-hidden />
       </div>
 
       <div className={styles.logo}>
-        <img src={assets.logo} alt={project} className={styles.logoImg} />
+        <Image src={assets.logo} alt={project} width={200} height={60} className={styles.logoImg} />
       </div>
     </div>
   );
