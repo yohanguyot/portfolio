@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Button from "@/components/Button/Button";
+import { shouldReduceMotion } from "@/lib/animation";
 import { useDict } from "@/lib/dict-context";
 import styles from "./HeroSection.module.css";
 
@@ -228,7 +229,7 @@ export default function HeroSection() {
   useEffect(() => {
     const el = gradientRef.current;
     if (!el) return;
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (shouldReduceMotion()) return;
 
     function onScroll() {
       if (!el) return;

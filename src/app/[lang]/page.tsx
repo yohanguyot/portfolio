@@ -16,7 +16,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       <Navigation />
       <HeroSection />
       <ProjectsSection />
-      <AboutSection dict={dict.about} />
+      <AboutSection dict={dict.about} lang={lang} />
       <ProcessSection dict={dict.process} />
       <ContactSection />
       <Footer dict={dict.footer} />

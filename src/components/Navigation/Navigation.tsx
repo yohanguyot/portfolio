@@ -312,22 +312,25 @@ export default function Navigation() {
   useEffect(() => {
     if (!isHome) { setActiveSection(null); return; }
     const SECTION_IDS = ["projets", "a-propos", "process", "contact"];
-    const intersecting = new Map<string, boolean>(SECTION_IDS.map(id => [id, false]));
+    const NAV_HEIGHT = 60;
+    const OFFSET = NAV_HEIGHT + Math.round(window.innerHeight * 0.25);
 
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        const id = (e.target as HTMLElement).id;
-        intersecting.set(id, e.isIntersecting);
-      });
-      const active = SECTION_IDS.find(id => intersecting.get(id)) ?? null;
-      setActiveSection(active);
-    }, { rootMargin: "-60px 0px -40% 0px", threshold: 0 });
+    function getActive() {
+      const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
+      if (nearBottom) return "contact";
+      const scrollY = window.scrollY + OFFSET;
+      let active: string | null = null;
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollY) active = id;
+      }
+      return active;
+    }
 
-    SECTION_IDS.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) obs.observe(el);
-    });
-    return () => obs.disconnect();
+    function onScroll() { setActiveSection(getActive()); }
+    setActiveSection(getActive());
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
   return (

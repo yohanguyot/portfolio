@@ -24,6 +24,11 @@
   align-items: flex-start;
   gap: var(--space-xs);
   text-decoration: none;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.link:active {
+  transform: scale(0.95);
 }
 
 .linkNext {

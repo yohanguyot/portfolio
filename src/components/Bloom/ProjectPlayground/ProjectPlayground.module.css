@@ -94,7 +94,12 @@
     opacity var(--duration-fast) var(--ease),
     margin var(--duration-fast) var(--ease),
     color var(--duration-fast) var(--ease),
-    background var(--duration-fast) var(--ease);
+    background var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.scrollBtn:active {
+  transform: scale(0.95);
 }
 
 .scrollBtnLeft { margin-right: var(--space-xs); }
@@ -162,7 +167,11 @@
   border: none;
   cursor: pointer;
   white-space: nowrap;
-  transition: color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+.tab:active {
+  transform: scale(0.95);
 }
 
 @media (hover: hover) {
@@ -315,8 +324,9 @@
 
 .cardBtn {
   position: relative;
-  overflow: hidden;
   width: 100%;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease);
   padding: 8px 16px;
   min-height: 40px;
   font-size: 16px;
@@ -328,7 +338,8 @@
   background: var(--card-btn-bg);
   border-radius: var(--card-btn-radius);
   color: var(--card-btn-color);
-  outline: var(--card-btn-border-width, 0px) solid var(--card-btn-border-color, transparent);
+  border: var(--card-btn-border-width, 0px) solid var(--card-btn-border-color, transparent);
+  box-shadow: var(--card-btn-shadow, none);
 }
 
 .cardBtnLabel {
@@ -340,6 +351,7 @@
   content: '';
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background: var(--card-btn-bg-hover, var(--card-btn-bg));
   opacity: 0;
   transition: opacity var(--duration-fast) var(--ease);
@@ -350,6 +362,11 @@
   .cardBtn:hover::before {
     opacity: 1;
   }
+}
+
+.cardBtn:active {
+  transform: var(--card-btn-active-transform, scale(0.97));
+  box-shadow: var(--card-btn-active-shadow, var(--card-btn-shadow, none));
 }
 
 /* ── Token panel ── */

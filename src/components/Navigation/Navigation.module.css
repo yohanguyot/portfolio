@@ -94,13 +94,17 @@
   overflow: hidden;
   flex-shrink: 0;
   color: var(--color-text-secondary);
-  transition: color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
 }
 
 @media (hover: hover) {
   .hamburger:hover {
     color: var(--color-text-primary);
   }
+}
+
+.hamburger:active {
+  transform: scale(0.95);
 }
 
 /* ── NavLink ── */
@@ -307,11 +311,15 @@
   justify-content: center;
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
-  transition: color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
 }
 
 @media (hover: hover) {
   .langInlineOption:hover { color: var(--color-text-primary); }
+}
+
+.langInlineOption:active {
+  transform: scale(0.95);
 }
 .langInlineOptionActive { color: var(--color-text-primary); }
 
@@ -364,7 +372,7 @@
   padding-block: var(--space-sm);
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
 }
 
 .mobileLink:focus-visible {
@@ -376,6 +384,10 @@
   .mobileLink:hover {
     color: var(--color-text-primary);
   }
+}
+
+.mobileLink:active {
+  transform: scale(0.95);
 }
 
 /* ── Mobile (dynamic breakpoint via JS) ── */

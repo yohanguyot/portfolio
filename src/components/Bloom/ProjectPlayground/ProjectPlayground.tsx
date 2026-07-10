@@ -107,6 +107,8 @@ const CLIENTS: ClientData[] = [
       "--card-btn-color": "#1F1F1F",
       "--card-btn-border-width": "1.5px",
       "--card-btn-border-color": "#1F1F1F",
+      "--card-btn-shadow": "3px 3px 0px 0px #DCCCFF",
+      "--card-btn-active-shadow": "none",
       "--card-font": "'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     accentSwatch: "#98F9CF",

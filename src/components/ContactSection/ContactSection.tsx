@@ -3,10 +3,10 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowUpRight, Check } from "lucide-react";
 import Button from "@/components/Button/Button";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
-import { shouldReduceMotion, reveal, observe, wrapWords, revealWords, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
 import styles from "./ContactSection.module.css";
 
 function ContactLink({
@@ -46,62 +46,98 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
   const [errors, setErrors] = useState<Errors>({});
   const [sendError, setSendError] = useState(false);
 
-  const infoRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (shouldReduceMotion()) return;
 
+    const section = sectionRef.current;
+    const desc = descRef.current;
+    const linksEl = linksRef.current;
+    const form = formRef.current;
+    if (!section) return;
+
+    // ── Initial states ──
+    section.style.transition = 'none';
+    section.style.opacity = '0';
+    section.style.transform = 'scale(0.97) translateY(24px)';
+
+    if (desc) { desc.style.transition = 'none'; desc.style.opacity = '0'; desc.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (linksEl) {
+      Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach(l => {
+        l.style.transition = 'none'; l.style.opacity = '0'; l.style.transform = 'scale(0.98) translateY(12px)';
+      });
+    }
+    if (form) { form.style.transition = 'none'; form.style.opacity = '0'; form.style.transform = 'scale(0.98) translateY(12px)'; }
+
+    void section.offsetHeight;
+
     const cleanups: (() => void)[] = [];
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
 
-    // ── Info: label + heading word reveal + description ──
-    const infoEl = infoRef.current;
-    const label = infoEl?.querySelector<HTMLElement>('[class*="label"]');
-    const h2 = infoEl?.querySelector<HTMLElement>('h2');
-    const desc = infoEl?.querySelector<HTMLElement>(`.${styles.description}`);
+    // ── Card + colonne gauche — même trigger quand le label est visible ──
+    const triggerEl = headerRef.current?.element ?? section;
+    cleanups.push(observe(triggerEl, 0.3, () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        // Card
+        section.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+        section.style.opacity = '1';
+        section.style.transform = 'scale(1) translateY(0)';
+        setTimeout(() => { section.style.transform = ''; section.style.transition = ''; }, DURATION);
 
-    if (label) {
-      label.style.transition = 'none';
-      label.style.opacity = '0';
-      label.style.transform = 'translateY(8px)';
-    }
-    const words = h2 ? wrapWords(h2) : [];
-    if (desc) {
-      desc.style.transition = 'none';
-      desc.style.opacity = '0';
-      desc.style.transform = 'scale(0.98) translateY(12px)';
-    }
+        // Label + heading
+        headerRef.current?.trigger(80);
 
-    cleanups.push(observe(infoEl, 0.1, () => {
-      if (label) {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          label.style.transition = `opacity 600ms ${EASE}, transform 600ms ${EASE}`;
-          label.style.opacity = '1';
-          label.style.transform = 'translateY(0)';
-          setTimeout(() => { label.style.transform = ''; label.style.transition = ''; }, 600);
-        }));
-      }
-      revealWords(words, 80, 50);
-      if (desc) {
-        const descDelay = words.length * 50 + 160;
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          desc.style.transition = `opacity ${DURATION}ms ${EASE} ${descDelay}ms, transform ${DURATION}ms ${EASE} ${descDelay}ms`;
+        if (desc) {
+          desc.style.transition = `opacity ${DURATION}ms ${EASE} 130ms, transform ${DURATION}ms ${EASE} 130ms`;
           desc.style.opacity = '1';
           desc.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION + descDelay);
-        }));
-      }
+          setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION + 130);
+        }
+
+        // Liens — desktop uniquement (cascade depuis le trigger)
+        if (linksEl && !isMobile) {
+          Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach((l, i) => {
+            const delay = 230 + i * 120;
+            l.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+            l.style.opacity = '1';
+            l.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { l.style.transform = ''; l.style.transition = ''; }, DURATION + delay);
+          });
+        }
+      }));
     }));
 
-    // ── Links ──
-    if (linksRef.current) {
-      cleanups.push(observe(linksRef.current, 0.1, reveal(linksRef.current, 0)));
+    // ── Formulaire — observer indépendant ──
+    if (form) {
+      cleanups.push(observe(form, 0.2, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          form.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+          form.style.opacity = '1';
+          form.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { form.style.transform = ''; form.style.transition = ''; }, DURATION);
+        }));
+      }));
     }
 
-    // ── Form ──
-    if (formRef.current) {
-      cleanups.push(observe(formRef.current, 0.05, reveal(formRef.current, 0)));
+    // ── Liens mobile — observer indépendant ──
+    if (linksEl && isMobile) {
+      const links = Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>);
+      cleanups.push(observe(linksEl, 0.3, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          links.forEach((l, i) => {
+            const delay = i * 120;
+            l.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+            l.style.opacity = '1';
+            l.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { l.style.transform = ''; l.style.transition = ''; }, DURATION + delay);
+          });
+        }));
+      }));
     }
 
     return () => cleanups.forEach(fn => fn());
@@ -143,14 +179,14 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
   }
 
   return (
-    <section className={`${styles.section}${noMarginTop ? ` ${styles.noMarginTop}` : ""}`} id="contact">
+    <section ref={sectionRef} className={`${styles.section}${noMarginTop ? ` ${styles.noMarginTop}` : ""}`} id="contact">
       <div className={styles.container}>
         {/* ── Left column wrapper ── */}
         <div className={styles.leftCol}>
           {/* title + description */}
-          <div ref={infoRef} className={styles.infoContent}>
-            <SectionHeader label={c.label} heading={c.heading} />
-            <p className={styles.description}>{c.description}</p>
+          <div className={styles.infoContent}>
+            <SectionHeader ref={headerRef} label={c.label} heading={c.heading} />
+            <p ref={descRef} className={styles.description}>{c.description}</p>
           </div>
 
           {/* links */}
@@ -172,12 +208,9 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
           {submitted ? (
             <div className={styles.successMessage}>
               <div className={styles.successIconWrap} aria-hidden>
-                <Check size={20} strokeWidth={2} />
+                <Check size={16} strokeWidth={2.5} />
               </div>
-              <div className={styles.successTextGroup}>
-                <p className={styles.successTitle}>{c.form.successTitle}</p>
-                <p className={styles.successSubtitle}>{c.form.successSubtitle}</p>
-              </div>
+              <p className={styles.successTitle}>{c.form.successTitle}</p>
             </div>
           ) : (
             <>

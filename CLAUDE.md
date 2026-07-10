@@ -445,30 +445,61 @@ Never animate `background-image` (not animatable) — use a `::before` overlay w
 
 ### Entrance animations
 
-All page-load and scroll-triggered reveals use the expo-out easing at 800ms:
+All page-load and scroll-triggered reveals use the expo-out easing at 600ms:
 
 ```
-cubic-bezier(0.16, 1, 0.3, 1) — 800ms
+cubic-bezier(0.16, 1, 0.3, 1) — 600ms
 ```
 
 **Page-load (hero, nav):** CSS `@keyframes` with `animation-fill-mode: both` and staggered `animation-delay`.
 
-**Scroll-triggered:** `IntersectionObserver` + inline styles via JS. Never use CSS class toggling for scroll animations — the transition won't play reliably if the class is added before the browser paints the initial state. Use the double-`requestAnimationFrame` pattern instead:
+**Scroll-triggered:** shared utilities in `src/lib/animation.ts` — always import from there, never rewrite inline.
 
 ```ts
-const reveal = (el: HTMLElement, delay = 0) => {
-  el.style.transition = 'none';            // block any existing CSS transition
-  el.style.opacity = '0';
-  el.style.transform = 'scale(0.96) translateY(16px)';
-  return () => {
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      el.style.transition = `opacity 800ms cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 800ms cubic-bezier(0.16,1,0.3,1) ${delay}ms`;
-      el.style.opacity = '1';
-      el.style.transform = 'scale(1) translateY(0)';
-    }));
-  };
-};
+import { EASE, DURATION, shouldReduceMotion, reveal, observe } from '@/lib/animation';
+// EASE    = 'cubic-bezier(0.16, 1, 0.3, 1)'
+// DURATION = 600  (ms)
 ```
+
+#### `reveal(el, delay?)` — eager initial state + lazy callback
+
+Sets `opacity: 0 / scale(0.98) / translateY(12px)` immediately (with `void el.offsetHeight` forceReflow), returns a callback that applies the transition via double-rAF:
+
+```ts
+cleanups.push(observe(el, 0.3, reveal(el, 0)));
+```
+
+#### `observe(el, threshold, onEnter, rootMargin?)` — fire-once IntersectionObserver
+
+Default `rootMargin = '0px 0px -5% 0px'` ensures the element is slightly above the viewport bottom before triggering — the user actually sees the animation play. Pass `'0px'` to override for elements that should fire immediately on entry (e.g. a section card).
+
+#### `SectionHeader` — CSS initial state + keyframe
+
+`SectionHeader` sets `opacity: 0` in CSS (committed at SSR), then JS adds `.labelVisible` / `.headingVisible` classes to trigger `@keyframes`. Never set `SectionHeader`'s initial state in JS.
+
+`SectionHeader` exposes a `SectionHeaderHandle` ref for external orchestration:
+
+```tsx
+import SectionHeader, { type SectionHeaderHandle } from '@/components/SectionHeader/SectionHeader';
+
+const headerRef = useRef<SectionHeaderHandle>(null);
+// headerRef.current.trigger(delay)   — starts the label/heading animation
+// headerRef.current.element          — the wrapper DOM element (use as observer target)
+```
+
+#### Animation patterns
+
+**Never query elements by CSS Module class inside `useEffect`** — the hashed class name is the same in JS and CSS, but it's fragile. Always use a `ref` directly on the element or `el.children` / `el.firstElementChild`.
+
+**Single observer for coordinated cascades** (e.g. ContactSection): one `observe()` call triggers the entire sequence with explicit `delay` offsets. This guarantees ordering regardless of scroll speed.
+
+**Independent observers for autonomous elements** (e.g. form, mobile links): each element has its own observer so it animates exactly when it enters the viewport.
+
+**Desktop vs mobile split**: check `window.matchMedia('(max-width: 1024px)').matches` inside `useEffect`. On mobile, stacked elements that are off-screen when the trigger fires should use independent observers instead of cascade delays.
+
+**Stagger**: `120ms` between peer elements (cards, list items, links). No stagger within a single text block.
+
+**Initial state timing**: always call `void el.offsetHeight` after setting inline `opacity: 0` to force reflow before setting up the observer. Without it, the browser may batch the initial and final states into the same frame.
 
 For grouped elements sharing a visible border (e.g. the cards grid), move the border to a `::before` pseudo-element and show it via a `data-*` attribute set in JS — this lets the border animation be controlled independently from the card stagger.
 
@@ -477,9 +508,10 @@ For grouped elements sharing a visible border (e.g. the cards grid), move the bo
 Every interactive element gives tactile feedback on press via a scale-down transform:
 
 - **Nav links, logo, dropdowns, language options**: `transform: scale(0.95)`
+- **Buttons text**: `transform: scale(0.95)`
+- **Buttons primary / secondary**: `transform: scale(0.97)`
 - **Large card**: `transform: scale(0.99)` on the card wrapper itself
 - **Small cards**: `transform: scale(0.98)` scoped to inner content (`.cardBody`, `.cardCta`) — not the card wrapper, to avoid clipping the border
-- **Buttons** (primary / secondary): handled via a `::before` dark overlay on press, not a scale
 
 Pair with `transition: transform var(--duration-fast) var(--ease)` so the release snaps back. Unlike `:hover`, `:active` does **not** need a `@media (hover: hover)` guard — it is safe on touch.
 

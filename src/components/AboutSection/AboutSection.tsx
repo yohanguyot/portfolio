@@ -6,13 +6,53 @@ import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import type { Dictionary } from "@/lib/getDictionary";
-import { shouldReduceMotion, reveal, observe, wrapWords, revealWords, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
 import styles from "./AboutSection.module.css";
 
 const SKILL_ICONS = [Component, Route, CodeXml] as const;
 
-export default function AboutSection({ dict }: { dict: Dictionary["about"] }) {
+const BODY_HIGHLIGHTS: Record<string, string[][]> = {
+  fr: [
+    ["produits complexes"],
+    ["double compétence design & front-end"],
+  ],
+  en: [
+    ["complex products"],
+    ["dual design & front-end expertise"],
+  ],
+  es: [
+    ["productos complejos"],
+    ["doble competencia en diseño y front-end"],
+  ],
+};
+
+function highlight(text: string, words: string[]) {
+  const norm = (s: string) => s.replace(/ /g, ' ').normalize('NFC');
+  let parts: React.ReactNode[] = [text];
+  for (const word of words) {
+    const nWord = norm(word);
+    parts = parts.flatMap((part) => {
+      if (typeof part !== "string") return [part];
+      const nPart = norm(part);
+      const result: React.ReactNode[] = [];
+      let last = 0;
+      let idx = nPart.indexOf(nWord);
+      while (idx !== -1) {
+        if (idx > last) result.push(part.slice(last, idx));
+        result.push(<span key={word + idx} className={styles.highlight}>{part.slice(idx, idx + word.length)}</span>);
+        last = idx + word.length;
+        idx = nPart.indexOf(nWord, last);
+      }
+      if (last < part.length) result.push(part.slice(last));
+      return result;
+    });
+  }
+  return parts;
+}
+
+export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["about"]; lang?: string }) {
   const infoRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -20,42 +60,21 @@ export default function AboutSection({ dict }: { dict: Dictionary["about"] }) {
 
     const cleanups: (() => void)[] = [];
 
-    // ── Info: label + heading word reveal + body paragraphs ──
-    const infoEl = infoRef.current;
-    const label = infoEl?.querySelector<HTMLElement>('p.'+styles.sectionLabel) ?? infoEl?.querySelector<HTMLElement>('[class*="label"]');
-    const h2 = infoEl?.querySelector<HTMLElement>('h2');
-    const bodyPs = infoEl ? Array.from(infoEl.querySelectorAll<HTMLElement>(`.${styles.bodyText}`)) : [];
+    // SectionHeader gère label + h2. On anime seulement les paragraphes body.
+    const bodyDiv = bodyRef.current;
+    const bodyPs = bodyDiv ? Array.from(bodyDiv.children as HTMLCollectionOf<HTMLElement>) : [];
 
-    if (label) {
-      label.style.transition = 'none';
-      label.style.opacity = '0';
-      label.style.transform = 'translateY(8px)';
-    }
-    const words = h2 ? wrapWords(h2) : [];
-    bodyPs.forEach((p, i) => {
-      p.style.transition = 'none';
-      p.style.opacity = '0';
-      p.style.transform = 'scale(0.98) translateY(12px)';
-      void p.offsetHeight;
-    });
+    bodyPs.forEach((p) => { p.style.transition = 'none'; p.style.opacity = '0'; p.style.transform = 'scale(0.98) translateY(12px)'; });
+    void bodyDiv?.offsetHeight;
 
-    cleanups.push(observe(infoEl, 0.1, () => {
-      if (label) {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          label.style.transition = `opacity 600ms ${EASE}, transform 600ms ${EASE}`;
-          label.style.opacity = '1';
-          label.style.transform = 'translateY(0)';
-          setTimeout(() => { label.style.transform = ''; label.style.transition = ''; }, 600);
-        }));
-      }
-      revealWords(words, 80, 50);
+    cleanups.push(observe(bodyDiv, 0.3, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        const wordsDelay = words.length * 50 + 80;
         bodyPs.forEach((p, i) => {
-          p.style.transition = `opacity ${DURATION}ms ${EASE} ${wordsDelay + i * 100}ms, transform ${DURATION}ms ${EASE} ${wordsDelay + i * 100}ms`;
+          const delay = i * 120;
+          p.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
           p.style.opacity = '1';
           p.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { p.style.transform = ''; p.style.transition = ''; }, DURATION + wordsDelay + i * 100);
+          setTimeout(() => { p.style.transform = ''; p.style.transition = ''; }, DURATION + delay);
         });
       }));
     }));
@@ -127,9 +146,11 @@ export default function AboutSection({ dict }: { dict: Dictionary["about"] }) {
             }
           />
 
-          <div className={styles.body}>
+          <div ref={bodyRef} className={styles.body}>
             {dict.body.map((text, i) => (
-              <p key={i} className={styles.bodyText}>{text}</p>
+              <p key={i} className={styles.bodyText}>
+                {highlight(text, BODY_HIGHLIGHTS[lang]?.[i] ?? [])}
+              </p>
             ))}
           </div>
         </div>

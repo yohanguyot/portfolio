@@ -178,6 +178,7 @@
 .fieldError {
   composes: labelSm from '@/styles/typography.module.css';
   color: var(--color-status-error);
+  padding-inline: var(--space-md);
 }
 
 .input {
@@ -234,6 +235,9 @@
     background: var(--color-bg-surface-2);
     color: var(--color-text-primary);
   }
+  .chipSelected:hover {
+    background: var(--color-bg-active);
+  }
 }
 
 .chipSelected {
@@ -251,18 +255,28 @@
 .successMessage {
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: var(--space-md);
   width: 100%;
-  padding-block: var(--space-lg);
+  padding-block: var(--space-2xl);
+  animation: successIn 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes successIn {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .successMessage { animation: none; }
 }
 
 .successIconWrap {
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border-radius: var(--radius-full);
   background: var(--color-status-success);
   display: flex;
@@ -272,36 +286,10 @@
   color: var(--color-bg-canvas);
 }
 
-.successIconWrap::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 180px;
-  height: 80px;
-  border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--color-status-success) 15%, transparent);
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.successTextGroup {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-xs);
-}
 
 .successTitle {
   composes: headingSm from '@/styles/typography.module.css';
   color: var(--color-status-success);
-}
-
-.successSubtitle {
-  composes: labelSm from '@/styles/typography.module.css';
-  color: var(--color-text-secondary);
 }
 
 /* ── Responsive ── */

@@ -7,7 +7,7 @@ import ProjectImage from "@/components/ProjectImage/ProjectImage";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
-import { shouldReduceMotion, reveal, observe, wrapWords, revealWords, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, reveal, observe, EASE, DURATION } from "@/lib/animation";
 import styles from "./ProjectsSection.module.css";
 
 type Project = {
@@ -39,8 +39,6 @@ export default function ProjectsSection() {
   const dict = useDict();
   const p = dict.projects;
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
   const bloomRef = useRef<HTMLAnchorElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -50,29 +48,7 @@ export default function ProjectsSection() {
 
     const cleanups: (() => void)[] = [];
 
-    // ── Header: label fade + heading word reveal ──
-    const headerEl = headerRef.current;
-    const label = headerEl?.querySelector<HTMLElement>('p');
-    const h2 = headerEl?.querySelector<HTMLElement>('h2');
-
-    if (label) {
-      label.style.transition = 'none';
-      label.style.opacity = '0';
-      label.style.transform = 'translateY(8px)';
-    }
-    const words = h2 ? wrapWords(h2) : [];
-
-    cleanups.push(observe(headerEl, 0.5, () => {
-      if (label) {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          label.style.transition = `opacity 600ms ${EASE}, transform 600ms ${EASE}`;
-          label.style.opacity = '1';
-          label.style.transform = 'translateY(0)';
-          setTimeout(() => { label.style.transform = ''; label.style.transition = ''; }, 600);
-        }));
-      }
-      revealWords(words, 80, 50);
-    }));
+    // SectionHeader gère lui-même l'animation du label et du h2
 
     // ── Bloom card ──
     cleanups.push(observe(bloomRef.current, 0.35, reveal(bloomRef.current!, 0)));
@@ -137,11 +113,9 @@ export default function ProjectsSection() {
   }));
 
   return (
-    <section ref={sectionRef} className={styles.section} id="projets">
+    <section className={styles.section} id="projets">
       <div className={styles.container}>
-        <div ref={headerRef}>
-          <SectionHeader label={p.label} heading={p.heading} className={styles.sectionHeader} />
-        </div>
+        <SectionHeader label={p.label} heading={p.heading} className={styles.sectionHeader} animationThreshold={0.5} />
 
         <div className={styles.projectItems}>
           <a

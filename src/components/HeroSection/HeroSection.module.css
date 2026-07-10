@@ -93,7 +93,7 @@
 .buttons,
 .scrollIndicator {
   animation-name: fadeUp;
-  animation-duration: 800ms;
+  animation-duration: 600ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   animation-fill-mode: both;
 }

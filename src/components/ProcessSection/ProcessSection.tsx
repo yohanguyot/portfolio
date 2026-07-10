@@ -5,13 +5,13 @@ import { Search, Layers, RefreshCw, PackageCheck } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import SquareIcon from "@/components/SquareIcon/SquareIcon";
 import type { Dictionary } from "@/lib/getDictionary";
-import { shouldReduceMotion, reveal, observe, wrapWords, revealWords, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
 import styles from "./ProcessSection.module.css";
 
 const STEP_ICONS = [Search, Layers, RefreshCw, PackageCheck] as const;
 
 export default function ProcessSection({ dict }: { dict: Dictionary["process"] }) {
-  const introRef = useRef<HTMLDivElement>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -19,49 +19,27 @@ export default function ProcessSection({ dict }: { dict: Dictionary["process"] }
 
     const cleanups: (() => void)[] = [];
 
-    // ── Intro: label + heading word reveal + description ──
-    const introEl = introRef.current;
-    const label = introEl?.querySelector<HTMLElement>('p:first-child') ?? introEl?.querySelector<HTMLElement>('[class*="label"]');
-    const h2 = introEl?.querySelector<HTMLElement>('h2');
-    const desc = introEl?.querySelector<HTMLElement>(`.${styles.description}`);
+    // SectionHeader gère label + h2. On anime seulement la description.
+    const desc = descRef.current;
 
-    if (label) {
-      label.style.transition = 'none';
-      label.style.opacity = '0';
-      label.style.transform = 'translateY(8px)';
-    }
-    const words = h2 ? wrapWords(h2) : [];
-    if (desc) {
-      desc.style.transition = 'none';
-      desc.style.opacity = '0';
-      desc.style.transform = 'scale(0.98) translateY(12px)';
-    }
+    if (desc) { desc.style.transition = 'none'; desc.style.opacity = '0'; desc.style.transform = 'scale(0.98) translateY(12px)'; }
+    void desc?.offsetHeight;
 
-    cleanups.push(observe(introEl, 0.3, () => {
-      if (label) {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          label.style.transition = `opacity 600ms ${EASE}, transform 600ms ${EASE}`;
-          label.style.opacity = '1';
-          label.style.transform = 'translateY(0)';
-          setTimeout(() => { label.style.transform = ''; label.style.transition = ''; }, 600);
-        }));
-      }
-      revealWords(words, 80, 50);
-      if (desc) {
-        const descDelay = words.length * 50 + 160;
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          desc.style.transition = `opacity ${DURATION}ms ${EASE} ${descDelay}ms, transform ${DURATION}ms ${EASE} ${descDelay}ms`;
+    cleanups.push(observe(desc, 0.3, () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (desc) {
+          desc.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
           desc.style.opacity = '1';
           desc.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION + descDelay);
-        }));
-      }
+          setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION);
+        }
+      }));
     }));
 
     // ── Steps grid ──
     const grid = gridRef.current;
     if (grid) {
-      const steps = Array.from(grid.querySelectorAll<HTMLElement>(`:scope > .${styles.step}`));
+      const steps = Array.from(grid.children as HTMLCollectionOf<HTMLElement>);
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
       grid.style.opacity = '0';
@@ -108,9 +86,9 @@ export default function ProcessSection({ dict }: { dict: Dictionary["process"] }
   return (
     <section className={styles.section} id="process">
       <div className={styles.container}>
-        <div ref={introRef} className={styles.intro}>
+        <div className={styles.intro}>
           <SectionHeader label={dict.label} heading={dict.heading} />
-          <p className={styles.description}>{dict.description}</p>
+          <p ref={descRef} className={styles.description}>{dict.description}</p>
         </div>
 
         <div ref={gridRef} className={styles.stepsGrid}>
