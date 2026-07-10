@@ -40,7 +40,8 @@
     top var(--duration-slow) var(--ease),
     left var(--duration-slow) var(--ease),
     right var(--duration-slow) var(--ease),
-    bottom var(--duration-slow) var(--ease);
+    bottom var(--duration-slow) var(--ease),
+    transform var(--duration-fast) var(--ease);
 }
 
 .screenImg {
@@ -60,6 +61,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1;
+  transition: transform var(--duration-fast) var(--ease);
 }
 
 .logoImg {
@@ -69,6 +71,23 @@
   height: 100%;
   object-fit: contain;
   display: block;
+}
+
+/* ── Active (press) — triggered by any ancestor <a> being :active ── */
+:global(a:active) .screen {
+  transform: scale(0.98);
+}
+
+.screenFixed {
+  transform: none !important;
+}
+
+:global(a:active) .logo {
+  transform: scale(0.98);
+}
+
+.logoFixed {
+  transform: none !important;
 }
 
 /* ── Hover ── */

@@ -56,7 +56,11 @@
   border-top: 1px solid var(--color-border-strong);
   text-decoration: none;
   color: var(--color-text-primary);
-  transition: color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+.contactLink:active {
+  transform: scale(0.97);
 }
 
 @media (hover: hover) {
@@ -217,7 +221,12 @@
   transition:
     background var(--duration-fast) var(--ease),
     border-color var(--duration-fast) var(--ease),
-    color var(--duration-fast) var(--ease);
+    color var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.chip:active {
+  transform: scale(0.97);
 }
 
 @media (hover: hover) {

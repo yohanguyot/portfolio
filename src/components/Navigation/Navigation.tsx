@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useDict } from "@/lib/dict-context";
 import styles from "./Navigation.module.css";
 
@@ -161,12 +161,8 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
         aria-haspopup="listbox"
       >
         <span className={styles.langLabel}>{currentLang}</span>
-        <span className={styles.langIcon}>
-          {isOpen ? (
-            <ChevronUp size={16} strokeWidth={1.5} />
-          ) : (
-            <ChevronDown size={16} strokeWidth={1.5} />
-          )}
+        <span className={`${styles.langIcon} ${isOpen ? styles.langIconOpen : ""}`}>
+          <ChevronDown size={16} strokeWidth={1.5} />
         </span>
       </button>
 
@@ -216,6 +212,7 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
@@ -245,7 +242,7 @@ export default function Navigation() {
     }
 
     function check() {
-      const mobile = thresholdRef.current > 0 && window.innerWidth < thresholdRef.current;
+      const mobile = window.innerWidth <= 600 || (thresholdRef.current > 0 && window.innerWidth < thresholdRef.current);
       if (mobile !== isMobileRef.current) {
         isMobileRef.current = mobile;
         setIsMobile(mobile);
@@ -311,9 +308,31 @@ export default function Navigation() {
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, [mobileOpen]);
 
+  // Scrollspy — only on homepage
+  useEffect(() => {
+    if (!isHome) { setActiveSection(null); return; }
+    const SECTION_IDS = ["projets", "a-propos", "process", "contact"];
+    const intersecting = new Map<string, boolean>(SECTION_IDS.map(id => [id, false]));
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        const id = (e.target as HTMLElement).id;
+        intersecting.set(id, e.isIntersecting);
+      });
+      const active = SECTION_IDS.find(id => intersecting.get(id)) ?? null;
+      setActiveSection(active);
+    }, { rootMargin: "-60px 0px -40% 0px", threshold: 0 });
+
+    SECTION_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, [isHome]);
+
   return (
     <>
-      <nav ref={navRef} className={`${styles.nav} ${isMobile ? styles.navMobile : ""} ${!mounted ? styles.navHidden : ""}`}>
+      <nav ref={navRef} className={`${styles.nav} ${isMobile ? styles.navMobile : ""} ${!mounted ? styles.navHidden : (!isMobile ? styles.navAnimated : "")}`}>
         <div className={styles.container}>
           <div className={styles.logoContainer}>
             <a
@@ -326,9 +345,17 @@ export default function Navigation() {
           {/* Desktop */}
           <div className={styles.right}>
             <div className={styles.links}>
-              {NAV_LINKS.map((l) => (
-                <NavLink key={l.href} label={l.label} href={isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`} />
-              ))}
+              {NAV_LINKS.map((l) => {
+                const sectionId = l.href.replace("#", "");
+                return (
+                  <NavLink
+                    key={l.href}
+                    label={l.label}
+                    href={isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`}
+                    state={activeSection === sectionId ? "active" : "default"}
+                  />
+                );
+              })}
             </div>
             <LanguageDropdown />
           </div>

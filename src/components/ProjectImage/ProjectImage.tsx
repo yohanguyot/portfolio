@@ -33,23 +33,27 @@ const ASSETS: Record<ProjectSlug, {
 type Props = {
   project: ProjectSlug;
   hovered?: boolean;
+  active?: boolean;
+  noActiveEffect?: boolean;
   className?: string;
 };
 
-export default function ProjectImage({ project, hovered = false, className }: Props) {
+export default function ProjectImage({ project, hovered = false, active = false, noActiveEffect = false, className }: Props) {
   const assets = ASSETS[project];
 
   return (
-    <div className={`${styles.wrap} ${hovered ? styles.hovered : ""} ${className ?? ""}`}>
+    <div
+      className={`${styles.wrap} ${hovered ? styles.hovered : ""} ${active ? styles.active : ""} ${className ?? ""}`}
+    >
       <div className={styles.bgGradient}>
         <Image src={assets.bg} alt="" width={800} height={600} className={styles.bgGradientImg} aria-hidden />
       </div>
 
-      <div className={styles.screen}>
+      <div className={`${styles.screen} ${noActiveEffect ? styles.screenFixed : ""}`}>
         <Image src={assets.screen} alt="" width={800} height={500} className={styles.screenImg} aria-hidden />
       </div>
 
-      <div className={styles.logo}>
+      <div className={`${styles.logo} ${noActiveEffect ? styles.logoFixed : ""}`}>
         <Image src={assets.logo} alt={project} width={200} height={60} className={styles.logoImg} />
       </div>
     </div>

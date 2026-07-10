@@ -51,11 +51,19 @@ function HeroArcCanvas() {
 
     let animId: number;
 
+    const isMobileDevice = window.innerWidth < 768;
+    const INTRO_DELAY = isMobileDevice ? 0 : 100;
+    const INTRO_DURATION = 650;
+
     function draw() {
       animId = requestAnimationFrame(draw);
-      const t = (performance.now() - t0) * 0.001;
+      const now = performance.now();
+      const t = (now - t0) * 0.001;
       ctx.fillStyle = "#09090B";
       ctx.fillRect(0, 0, w, h);
+
+      const introRaw = Math.max(0, (now - t0 - INTRO_DELAY) / INTRO_DURATION);
+      const introProgress = introRaw >= 1 ? 1 : 1 - Math.pow(1 - introRaw, 3);
 
       const isMobile = window.innerWidth < 768;
 
@@ -116,6 +124,13 @@ function HeroArcCanvas() {
         ctx.restore();
       }
 
+      // Clip centre→bords pour l'intro
+      ctx.save();
+      ctx.beginPath();
+      const halfReveal = w * introProgress;
+      ctx.rect(w * 0.5 - halfReveal, 0, halfReveal * 2, h);
+      ctx.clip();
+
       // 1. Halo profond
       const gDeep = ctx.createLinearGradient(0, 0, w, 0);
       gDeep.addColorStop(0, "rgba(80,18,4,0.0)");
@@ -151,6 +166,8 @@ function HeroArcCanvas() {
       gEdge.addColorStop(Math.min(1, peak + eR), `rgba(236,110,67,${0.08 * gi})`);
       gEdge.addColorStop(1, "rgba(236,110,67,0.0)");
       drawArc(-8, isMobile ? 2 : 2.5, gEdge, "#FFAA88", 6);
+
+      ctx.restore(); // fin du clip intro
 
       // Occlusion — fondu d'absorption au-dessus de la courbe
       const fadeTop = horizonY - 55;
@@ -206,11 +223,28 @@ function HeroArcCanvas() {
 export default function HeroSection() {
   const dict = useDict();
   const h = dict.hero;
+  const gradientRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = gradientRef.current;
+    if (!el) return;
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    function onScroll() {
+      if (!el) return;
+      const scrollY = window.scrollY;
+      if (scrollY > window.innerHeight * 1.2) return;
+      el.style.transform = `translateX(-50%) translateY(${scrollY * 0.12}px)`;
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <>
       <section className={styles.section} id="hero">
-        <div className={styles.gradient} aria-hidden />
+        <div ref={gradientRef} className={styles.gradient} aria-hidden />
 
         <div className={styles.content}>
           <div className={styles.textContainer}>

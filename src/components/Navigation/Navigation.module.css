@@ -1,3 +1,8 @@
+@keyframes navSlideDown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 .navHidden {
   opacity: 0;
   pointer-events: none;
@@ -38,6 +43,11 @@
   color: var(--color-text-primary);
   white-space: nowrap;
   text-decoration: none;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.logo:active {
+  transform: scale(0.95);
 }
 
 .links {
@@ -102,8 +112,12 @@
   background: none;
   border: none;
   color: var(--color-text-secondary);
-  transition: color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
   text-decoration: none;
+}
+
+.navLink:active {
+  transform: scale(0.95);
 }
 
 .navLinkLabel {
@@ -143,7 +157,12 @@
   transition:
     background var(--duration-fast) var(--ease),
     border-color var(--duration-fast) var(--ease),
-    color var(--duration-fast) var(--ease);
+    color var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.langDropdown:active {
+  transform: scale(0.95);
 }
 
 .langLabel {
@@ -164,7 +183,11 @@
   width: 16px;
   height: 16px;
   color: var(--color-text-secondary);
-  transition: color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+.langIconOpen {
+  transform: rotate(180deg);
 }
 
 .langDropdownHover,
@@ -231,7 +254,11 @@
   color: var(--color-text-secondary);
   white-space: nowrap;
   text-align: left;
-  transition: color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+.langOption:active {
+  transform: scale(0.95);
 }
 
 @media (hover: hover) {
@@ -372,4 +399,37 @@
 
 .navMobile .hamburger {
   display: flex;
+}
+
+/* CSS fallback pour mobile (avant hydratation JS) */
+@media (max-width: 600px) {
+  .nav {
+    width: calc(100% - 48px);
+    padding-left: var(--space-lg);
+    padding-right: var(--space-sm);
+    padding-block: var(--space-sm);
+    /* Animation déclenchée par CSS, sans attendre le JS */
+    animation: navSlideDown 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .nav .container {
+    flex: 1;
+    gap: 0;
+    justify-content: space-between;
+    min-width: 1px;
+  }
+  .nav .right { display: none; }
+  .nav .hamburger { display: flex; }
+
+  /* L'animation écrase opacity de navHidden — rendre les liens cliquables dès le SSR */
+  .navHidden {
+    pointer-events: auto;
+  }
+}
+
+.navAnimated {
+  animation: navSlideDown 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navAnimated { animation: none; }
 }

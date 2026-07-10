@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Button from "@/components/Button/Button";
 import ProjectImage from "@/components/ProjectImage/ProjectImage";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
+import { shouldReduceMotion, reveal, observe, wrapWords, revealWords, EASE, DURATION } from "@/lib/animation";
 import styles from "./ProjectsSection.module.css";
 
 type Project = {
@@ -38,9 +39,88 @@ export default function ProjectsSection() {
   const dict = useDict();
   const p = dict.projects;
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const bloomRef = useRef<HTMLAnchorElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const lang = pathname.split("/")[1] ?? "fr";
 
+  useEffect(() => {
+    if (shouldReduceMotion()) return;
+
+    const cleanups: (() => void)[] = [];
+
+    // ── Header: label fade + heading word reveal ──
+    const headerEl = headerRef.current;
+    const label = headerEl?.querySelector<HTMLElement>('p');
+    const h2 = headerEl?.querySelector<HTMLElement>('h2');
+
+    if (label) {
+      label.style.transition = 'none';
+      label.style.opacity = '0';
+      label.style.transform = 'translateY(8px)';
+    }
+    const words = h2 ? wrapWords(h2) : [];
+
+    cleanups.push(observe(headerEl, 0.5, () => {
+      if (label) {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          label.style.transition = `opacity 600ms ${EASE}, transform 600ms ${EASE}`;
+          label.style.opacity = '1';
+          label.style.transform = 'translateY(0)';
+          setTimeout(() => { label.style.transform = ''; label.style.transition = ''; }, 600);
+        }));
+      }
+      revealWords(words, 80, 50);
+    }));
+
+    // ── Bloom card ──
+    cleanups.push(observe(bloomRef.current, 0.35, reveal(bloomRef.current!, 0)));
+
+    // ── Small cards grid ──
+    const grid = gridRef.current;
+    if (grid) {
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+      cards.forEach(c => {
+        c.style.transition = 'none';
+        c.style.opacity = '0';
+        c.style.transform = 'translateY(12px)';
+      });
+
+      if (isMobile) {
+        cards.forEach((c, i) => {
+          const isFirst = i === 0;
+          cleanups.push(observe(c, 0.2, () => {
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              c.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+              c.style.opacity = '1';
+              c.style.transform = 'translateY(0)';
+              if (isFirst) grid.dataset.ready = 'true';
+              setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION);
+            }));
+          }));
+        });
+      } else {
+        cleanups.push(observe(grid, 0.1, () => {
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            cards.forEach((c, i) => {
+              c.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 120}ms, transform ${DURATION}ms ${EASE} ${i * 120}ms`;
+              c.style.opacity = '1';
+              c.style.transform = 'translateY(0)';
+              setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION + i * 120);
+            });
+            setTimeout(() => { grid.dataset.ready = 'true'; }, (cards.length - 1) * 120);
+          }));
+        }));
+      }
+    }
+
+    return () => cleanups.forEach(fn => fn());
+  }, []);
+
+  const lang = pathname.split("/")[1] ?? "fr";
   const t = dict.tags;
 
   const FEATURED: Project = {
@@ -57,13 +137,15 @@ export default function ProjectsSection() {
   }));
 
   return (
-    <section className={styles.section} id="projets">
+    <section ref={sectionRef} className={styles.section} id="projets">
       <div className={styles.container}>
-        <SectionHeader label={p.label} heading={p.heading} />
+        <div ref={headerRef}>
+          <SectionHeader label={p.label} heading={p.heading} className={styles.sectionHeader} />
+        </div>
 
         <div className={styles.projectItems}>
-          {/* Large featured card */}
           <a
+            ref={bloomRef}
             href={`/${lang}/bloom`}
             className={styles.cardLarge}
             onMouseEnter={() => setHoveredSlug(FEATURED.slug)}
@@ -74,6 +156,7 @@ export default function ProjectsSection() {
               <ProjectImage
                 project={FEATURED.slug}
                 hovered={hoveredSlug === FEATURED.slug}
+                noActiveEffect
               />
             </div>
             <div className={styles.cardLargeContent}>
@@ -94,8 +177,7 @@ export default function ProjectsSection() {
             </div>
           </a>
 
-          {/* Small cards grid */}
-          <div className={styles.cardsGrid}>
+          <div ref={gridRef} className={styles.cardsGrid}>
             {PROJECTS.map((proj) => (
               <a
                 key={proj.slug}
@@ -105,27 +187,29 @@ export default function ProjectsSection() {
                 onMouseLeave={() => setHoveredSlug(null)}
                 onClick={() => trackEvent("project_click", { project: proj.slug })}
               >
-                <div className={styles.cardImageWrap}>
-                  <ProjectImage
-                    project={proj.slug}
-                    hovered={hoveredSlug === proj.slug}
-                  />
-                </div>
-                <div className={styles.cardContent}>
-                  <div className={styles.cardBody}>
-                    <Tags tags={proj.tags} />
-                    <div className={styles.cardText}>
-                      <h3 className={styles.cardTitleSm}>{proj.title}</h3>
-                      <p className={styles.cardDescSm}>{proj.description}</p>
-                    </div>
+                <div className={styles.cardInner}>
+                  <div className={styles.cardImageWrap}>
+                    <ProjectImage
+                      project={proj.slug}
+                      hovered={hoveredSlug === proj.slug}
+                    />
                   </div>
-                  <Button
-                    label={p.cta}
-                    type="text"
-                    showArrowRight
-                    forceHover={hoveredSlug === proj.slug}
-                    className={styles.cardCta}
-                  />
+                  <div className={styles.cardContent}>
+                    <div className={styles.cardBody}>
+                      <Tags tags={proj.tags} />
+                      <div className={styles.cardText}>
+                        <h3 className={styles.cardTitleSm}>{proj.title}</h3>
+                        <p className={styles.cardDescSm}>{proj.description}</p>
+                      </div>
+                    </div>
+                    <Button
+                      label={p.cta}
+                      type="text"
+                      showArrowRight
+                      forceHover={hoveredSlug === proj.slug}
+                      className={styles.cardCta}
+                    />
+                  </div>
                 </div>
               </a>
             ))}

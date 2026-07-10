@@ -211,9 +211,10 @@ Ne jamais utiliser `padding-inline: var(--space-4xl)` sur une section — c'est 
 
 ### Transitions
 
-Two durations, same easing curve for all transitions:
-- **Fast**: `200ms cubic-bezier(0.2, 0, 0, 1)`
-- **Slow**: `300ms cubic-bezier(0.2, 0, 0, 1)`
+Two durations for micro-interactions, one for entrance animations:
+- **Fast**: `200ms cubic-bezier(0.2, 0, 0, 1)` — hover, color, icon
+- **Slow**: `300ms cubic-bezier(0.2, 0, 0, 1)` — layout shifts
+- **Entrance**: `800ms cubic-bezier(0.16, 1, 0.3, 1)` — expo-out, all scroll/page-load reveals
 
 ---
 
@@ -442,6 +443,55 @@ Use `--duration-fast` (200ms) for micro-interactions (hover, color change).
 Use `--duration-slow` (300ms) for larger layout changes.
 Never animate `background-image` (not animatable) — use a `::before` overlay with `opacity` transition instead.
 
+### Entrance animations
+
+All page-load and scroll-triggered reveals use the expo-out easing at 800ms:
+
+```
+cubic-bezier(0.16, 1, 0.3, 1) — 800ms
+```
+
+**Page-load (hero, nav):** CSS `@keyframes` with `animation-fill-mode: both` and staggered `animation-delay`.
+
+**Scroll-triggered:** `IntersectionObserver` + inline styles via JS. Never use CSS class toggling for scroll animations — the transition won't play reliably if the class is added before the browser paints the initial state. Use the double-`requestAnimationFrame` pattern instead:
+
+```ts
+const reveal = (el: HTMLElement, delay = 0) => {
+  el.style.transition = 'none';            // block any existing CSS transition
+  el.style.opacity = '0';
+  el.style.transform = 'scale(0.96) translateY(16px)';
+  return () => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.style.transition = `opacity 800ms cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 800ms cubic-bezier(0.16,1,0.3,1) ${delay}ms`;
+      el.style.opacity = '1';
+      el.style.transform = 'scale(1) translateY(0)';
+    }));
+  };
+};
+```
+
+For grouped elements sharing a visible border (e.g. the cards grid), move the border to a `::before` pseudo-element and show it via a `data-*` attribute set in JS — this lets the border animation be controlled independently from the card stagger.
+
+### Press (`:active`) feedback
+
+Every interactive element gives tactile feedback on press via a scale-down transform:
+
+- **Nav links, logo, dropdowns, language options**: `transform: scale(0.95)`
+- **Large card**: `transform: scale(0.99)` on the card wrapper itself
+- **Small cards**: `transform: scale(0.98)` scoped to inner content (`.cardBody`, `.cardCta`) — not the card wrapper, to avoid clipping the border
+- **Buttons** (primary / secondary): handled via a `::before` dark overlay on press, not a scale
+
+Pair with `transition: transform var(--duration-fast) var(--ease)` so the release snaps back. Unlike `:hover`, `:active` does **not** need a `@media (hover: hover)` guard — it is safe on touch.
+
+```css
+.navLink {
+  transition: transform var(--duration-fast) var(--ease);
+}
+.navLink:active {
+  transform: scale(0.95);
+}
+```
+
 ### Hover states — touchscreen guard
 
 **Every `:hover` rule must be wrapped in `@media (hover: hover)`** — without it, hover styles fire on tap on touchscreens and stay stuck until the user taps elsewhere.
@@ -461,6 +511,40 @@ Never animate `background-image` (not animatable) — use a `::before` overlay w
 ```
 
 This applies to every element: links, buttons, cards, chips, inputs, icons. No exception.
+
+### Internationalisation — ajouter une nouvelle langue
+
+Le système i18n repose sur 5 points d'entrée. Pour ajouter une locale (ex. `pt` pour le portugais brésilien) :
+
+1. **`src/dictionaries/<locale>.json`** — copier `fr.json`, traduire toutes les valeurs, garder les clés identiques.
+
+2. **`src/lib/getDictionary.ts`** — ajouter la locale au type `Locale` et au map `dictionaries` :
+   ```ts
+   export type Locale = "fr" | "en" | "es" | "pt";
+   const dictionaries = {
+     ...
+     pt: () => import("../dictionaries/pt.json").then((m) => m.default),
+   };
+   ```
+
+3. **`src/app/[lang]/layout.tsx`** — ajouter la locale au tableau `LOCALES` :
+   ```ts
+   const LOCALES: Locale[] = ["fr", "en", "es", "pt"];
+   ```
+
+4. **`src/components/Navigation/Navigation.tsx`** — ajouter l'entrée dans `LANGUAGES` :
+   ```ts
+   const LANGUAGES = [
+     { code: "FR", label: "Français" },
+     { code: "EN", label: "English" },
+     { code: "ES", label: "Español" },
+     { code: "PT", label: "Português" },
+   ];
+   ```
+
+5. **`src/proxy.ts`** — vérifier que la locale est incluse dans la liste de redirection initiale (si présente).
+
+> Le segment `[lang]` dans l'URL gère le routage automatiquement. Chaque page sous `src/app/[lang]/` est déjà locale-agnostique — aucune modification des pages elles-mêmes n'est nécessaire.
 
 ### Dropdowns / floating UI
 
@@ -560,3 +644,58 @@ Do not add `text-wrap` again in component CSS.
 ### Full-screen sections
 
 Use `min-height: 100dvh` for viewport-filling sections. `dvh` handles mobile browser chrome correctly. Never use `100vh` (ignores mobile UI chrome).
+
+### Analytics — `trackEvent`
+
+```ts
+import { trackEvent } from "@/lib/analytics";
+trackEvent("event_name", { key: "value" });
+```
+
+Wraps `window.gtag` — no-ops silently if GA isn't loaded (dev, ad-blocker). Call it on meaningful user interactions only:
+
+| Event | Where |
+|---|---|
+| `project_click` | Clic sur une card projet → `{ project: "bloom" }` |
+| `contact_submit` | Envoi du formulaire contact |
+| `cta_click` | Clic sur un CTA principal → `{ label: "..." }` |
+
+Don't track navigation, scroll, or hover — too noisy.
+
+### Traductions — `useDict`
+
+Dans tout composant client, accéder au dictionnaire via le hook :
+
+```tsx
+import { useDict } from "@/lib/dict-context";
+
+export default function MySection() {
+  const dict = useDict();
+  return <h2>{dict.mySection.heading}</h2>;
+}
+```
+
+Le `DictProvider` est monté dans `src/app/[lang]/layout.tsx` — `useDict` est disponible partout sous `[lang]`. Le fallback est `fr.json` si le contexte est absent (ex. Storybook, tests).
+
+Toute nouvelle clé ajoutée dans `fr.json` doit être traduite dans `en.json` et `es.json` (et toute autre locale active) avec la même structure.
+
+### `forceHover` sur `<Button>`
+
+Le composant `Button` accepte un prop `forceHover` pour synchroniser visuellement son état hover avec celui de son parent (ex. une card) :
+
+```tsx
+<a
+  onMouseEnter={() => setHoveredSlug(proj.slug)}
+  onMouseLeave={() => setHoveredSlug(null)}
+>
+  {/* ... */}
+  <Button
+    label={p.cta}
+    type="text"
+    showArrowRight
+    forceHover={hoveredSlug === proj.slug}
+  />
+</a>
+```
+
+Utiliser ce pattern chaque fois qu'un bouton est imbriqué dans une card ou un lien cliquable — sans ça, le bouton ne réagit pas au hover de son parent.
