@@ -24,6 +24,9 @@ type CardVars = {
   "--card-btn-color": string;
   "--card-btn-border-width"?: string;
   "--card-btn-border-color"?: string;
+  "--card-btn-shadow"?: string;
+  "--card-btn-active-shadow"?: string;
+  "--card-btn-active-transform"?: string;
   "--card-font": string;
 };
 
