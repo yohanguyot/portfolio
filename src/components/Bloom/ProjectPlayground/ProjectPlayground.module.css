@@ -29,6 +29,7 @@
 .lead {
   composes: bodyLead from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
+  opacity: 0;
 }
 
 /* ── Tab bar ── */
@@ -38,6 +39,7 @@
   align-items: center;
   width: fit-content;
   max-width: 100%;
+  opacity: 0;
 }
 
 .tabsWrapper {
@@ -196,6 +198,11 @@
   display: flex;
   gap: var(--space-xl);
   align-items: flex-start;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lead, .tabsRow, .viewer { opacity: 1; }
 }
 
 /* ── Card ── */

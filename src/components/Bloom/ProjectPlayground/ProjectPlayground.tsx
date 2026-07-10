@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import ProjectNav from "@/components/Project/Nav/Nav";
 import type { Dictionary } from "@/lib/getDictionary";
+import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
 import styles from "./ProjectPlayground.module.css";
 
 type ClientId = "bloom" | "erable" | "the-elements-nation" | "lqr-house" | "repetto" | "versity";
@@ -78,6 +80,7 @@ const CLIENTS: ClientData[] = [
       "--card-btn-bg-hover": "#4539F2",
       "--card-btn-radius": "8px",
       "--card-btn-color": "#F9FAFB",
+      "--card-btn-active-transform": "scale(0.98)",
       "--card-font": "var(--font-inter)",
     },
     accentSwatch: "#7883FF",
@@ -292,6 +295,10 @@ export default function ProjectPlayground({ dict }: Props) {
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
   const tabsRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const leadRef = useRef<HTMLParagraphElement>(null);
+  const tabsRowRef = useRef<HTMLDivElement>(null);
+  const viewerRef = useRef<HTMLDivElement>(null);
 
   function updateIndicator() {
     const index = CLIENTS.findIndex((c) => c.id === activeId);
@@ -319,6 +326,48 @@ export default function ProjectPlayground({ dict }: Props) {
     el.scrollBy({ left: dir === "right" ? 160 : -160, behavior: "smooth" });
   }
 
+  useIsomorphicLayoutEffect(() => {
+    if (shouldReduceMotion()) return;
+    const leadEl = leadRef.current;
+    const tabsRowEl = tabsRowRef.current;
+    const viewerEl = viewerRef.current;
+    if (leadEl) { leadEl.style.opacity = '0'; leadEl.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (tabsRowEl) { tabsRowEl.style.opacity = '0'; tabsRowEl.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (viewerEl) { viewerEl.style.opacity = '0'; viewerEl.style.transform = 'scale(0.98) translateY(12px)'; }
+  }, []);
+
+  useEffect(() => {
+    if (shouldReduceMotion()) return;
+    const section = sectionRef.current;
+    const leadEl = leadRef.current;
+    const tabsRowEl = tabsRowRef.current;
+    const viewerEl = viewerRef.current;
+    if (!section) return;
+
+    return observe(section, 0.1, () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (leadEl) {
+          leadEl.style.transition = `opacity ${DURATION}ms ${EASE} 80ms, transform ${DURATION}ms ${EASE} 80ms`;
+          leadEl.style.opacity = '1';
+          leadEl.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { leadEl.style.transform = ''; leadEl.style.transition = ''; }, DURATION + 80);
+        }
+        if (tabsRowEl) {
+          tabsRowEl.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
+          tabsRowEl.style.opacity = '1';
+          tabsRowEl.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { tabsRowEl.style.transform = ''; tabsRowEl.style.transition = ''; }, DURATION + 160);
+        }
+        if (viewerEl) {
+          viewerEl.style.transition = `opacity ${DURATION}ms ${EASE} 240ms, transform ${DURATION}ms ${EASE} 240ms`;
+          viewerEl.style.opacity = '1';
+          viewerEl.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { viewerEl.style.transform = ''; viewerEl.style.transition = ''; }, DURATION + 240);
+        }
+      }));
+    });
+  }, []);
+
   useEffect(() => {
     checkFades();
     const el = tabsRef.current;
@@ -337,16 +386,16 @@ export default function ProjectPlayground({ dict }: Props) {
 
   return (
     <>
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.container}>
         <div className={styles.playground}>
           <div className={styles.header}>
             <SectionHeader label={dict.label} heading={dict.heading} />
-            <p className={styles.lead}>{dict.lead}</p>
+            <p ref={leadRef} className={styles.lead}>{dict.lead}</p>
           </div>
 
           {/* Tab bar */}
-          <div className={styles.tabsRow}>
+          <div ref={tabsRowRef} className={styles.tabsRow}>
             <button className={`${styles.scrollBtn} ${styles.scrollBtnLeft} ${!fadeLeft ? styles.scrollBtnHidden : ""}`} onClick={() => scrollTabs("left")} aria-label={dict.scrollLeft} tabIndex={fadeLeft ? 0 : -1}>
               <ChevronLeft size={16} />
             </button>
@@ -373,7 +422,7 @@ export default function ProjectPlayground({ dict }: Props) {
           </div>
 
           {/* Viewer */}
-          <div className={styles.viewer}>
+          <div ref={viewerRef} className={styles.viewer}>
             {/* Card */}
             <div className={styles.cardWrap}>
               <div

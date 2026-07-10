@@ -22,12 +22,18 @@
   composes: bodyMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
   max-width: 600px;
+  opacity: 0;
 }
 
 .imageWrap {
   width: 100%;
   border-radius: var(--radius-lg);
   overflow: hidden;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .description, .imageWrap { opacity: 1; }
 }
 
 .image {

@@ -22,6 +22,11 @@
   composes: bodyMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
   max-width: 600px;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .description { opacity: 1; }
 }
 
 @media (max-width: 768px) {

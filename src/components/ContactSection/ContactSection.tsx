@@ -7,6 +7,7 @@ import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHea
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
 import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./ContactSection.module.css";
 
 function ContactLink({
@@ -52,6 +53,22 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
   const linksRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
+  useIsomorphicLayoutEffect(() => {
+    if (shouldReduceMotion()) return;
+    const section = sectionRef.current;
+    const desc = descRef.current;
+    const linksEl = linksRef.current;
+    const form = formRef.current;
+    if (!section) return;
+    section.style.opacity = '0';
+    section.style.transform = 'scale(0.97) translateY(24px)';
+    if (desc) { desc.style.opacity = '0'; desc.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (linksEl) Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach(l => {
+      l.style.opacity = '0'; l.style.transform = 'scale(0.98) translateY(12px)';
+    });
+    if (form) { form.style.opacity = '0'; form.style.transform = 'scale(0.98) translateY(12px)'; }
+  }, []);
+
   useEffect(() => {
     if (shouldReduceMotion()) return;
 
@@ -61,27 +78,12 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
     const form = formRef.current;
     if (!section) return;
 
-    // ── Initial states ──
-    section.style.transition = 'none';
-    section.style.opacity = '0';
-    section.style.transform = 'scale(0.97) translateY(24px)';
-
-    if (desc) { desc.style.transition = 'none'; desc.style.opacity = '0'; desc.style.transform = 'scale(0.98) translateY(12px)'; }
-    if (linksEl) {
-      Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach(l => {
-        l.style.transition = 'none'; l.style.opacity = '0'; l.style.transform = 'scale(0.98) translateY(12px)';
-      });
-    }
-    if (form) { form.style.transition = 'none'; form.style.opacity = '0'; form.style.transform = 'scale(0.98) translateY(12px)'; }
-
-    void section.offsetHeight;
-
     const cleanups: (() => void)[] = [];
     const isMobile = window.matchMedia('(max-width: 1024px)').matches;
 
     // ── Card + colonne gauche — même trigger quand le label est visible ──
     const triggerEl = headerRef.current?.element ?? section;
-    cleanups.push(observe(triggerEl, 0.3, () => {
+    cleanups.push(observe(triggerEl, 0.1, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         // Card
         section.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
@@ -102,7 +104,7 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
         // Liens — desktop uniquement (cascade depuis le trigger)
         if (linksEl && !isMobile) {
           Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach((l, i) => {
-            const delay = 230 + i * 120;
+            const delay = 230 + i * 80;
             l.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
             l.style.opacity = '1';
             l.style.transform = 'scale(1) translateY(0)';
@@ -130,7 +132,7 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
       cleanups.push(observe(linksEl, 0.3, () => {
         requestAnimationFrame(() => requestAnimationFrame(() => {
           links.forEach((l, i) => {
-            const delay = i * 120;
+            const delay = i * 80;
             l.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
             l.style.opacity = '1';
             l.style.transform = 'scale(1) translateY(0)';
@@ -185,7 +187,7 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
         <div className={styles.leftCol}>
           {/* title + description */}
           <div className={styles.infoContent}>
-            <SectionHeader ref={headerRef} label={c.label} heading={c.heading} />
+            <SectionHeader ref={headerRef} label={c.label} heading={c.heading} skipObserver />
             <p ref={descRef} className={styles.description}>{c.description}</p>
           </div>
 

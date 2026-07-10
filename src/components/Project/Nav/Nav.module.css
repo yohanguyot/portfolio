@@ -25,6 +25,11 @@
   gap: var(--space-xs);
   text-decoration: none;
   transition: transform var(--duration-fast) var(--ease);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link { opacity: 1; }
 }
 
 .link:active {

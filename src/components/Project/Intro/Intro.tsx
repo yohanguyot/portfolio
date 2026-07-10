@@ -1,9 +1,11 @@
 "use client";
 
-import { ReactNode } from "react";
+import { useRef, useEffect, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Button from "@/components/Button/Button";
 import { useDict } from "@/lib/dict-context";
+import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./Intro.module.css";
 
 export type IntroMetaItem = { label: string; value: string };
@@ -17,42 +19,140 @@ type Props = {
   stats?: IntroStatItem[];
 };
 
-export default function ProjectIntro({
-  tags,
-  title,
-  description,
-  meta,
-  stats,
-}: Props) {
+export default function ProjectIntro({ tags, title, description, meta, stats }: Props) {
   const pathname = usePathname();
   const lang = pathname.split("/")[1] ?? "fr";
   const dict = useDict();
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const backRef = useRef<HTMLDivElement>(null);
+  const tagsRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
+  const metaRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  useIsomorphicLayoutEffect(() => {
+    if (shouldReduceMotion()) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const backEl = backRef.current;
+    const tagItems = tagsRef.current ? Array.from(tagsRef.current.children as HTMLCollectionOf<HTMLElement>) : [];
+    const titleEl = titleRef.current;
+    const descEl = descRef.current;
+    const metaItems = metaRef.current ? Array.from(metaRef.current.children as HTMLCollectionOf<HTMLElement>) : [];
+    const statsEl = statsRef.current;
+    const statItems = statsEl ? Array.from(statsEl.children as HTMLCollectionOf<HTMLElement>) : [];
+
+    if (backEl) { backEl.style.opacity = '0'; backEl.style.transform = 'scale(0.98) translateY(8px)'; }
+    tagItems.forEach(t => { t.style.opacity = '0'; t.style.transform = 'scale(0.98) translateY(8px)'; });
+    if (titleEl) { titleEl.style.opacity = '0'; titleEl.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (descEl) { descEl.style.opacity = '0'; descEl.style.transform = 'scale(0.98) translateY(12px)'; }
+    metaItems.forEach(m => { m.style.opacity = '0'; m.style.transform = 'scale(0.98) translateY(12px)'; });
+    if (statsEl) { statsEl.style.opacity = '0'; }
+    statItems.forEach(s => { s.style.opacity = '0'; s.style.transform = 'scale(0.98) translateY(12px)'; });
+  }, []);
+
+  useEffect(() => {
+    if (shouldReduceMotion()) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const backEl = backRef.current;
+    const tagItems = tagsRef.current ? Array.from(tagsRef.current.children as HTMLCollectionOf<HTMLElement>) : [];
+    const titleEl = titleRef.current;
+    const descEl = descRef.current;
+    const metaItems = metaRef.current ? Array.from(metaRef.current.children as HTMLCollectionOf<HTMLElement>) : [];
+    const statsEl = statsRef.current;
+    const statItems = statsEl ? Array.from(statsEl.children as HTMLCollectionOf<HTMLElement>) : [];
+
+    const cleanup = observe(section, 0.05, () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        let delay = 0;
+
+        if (backEl) {
+          backEl.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+          backEl.style.opacity = '1';
+          backEl.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { backEl.style.transform = ''; backEl.style.transition = ''; }, DURATION + delay);
+          delay += 40;
+        }
+
+        tagItems.forEach((t, i) => {
+          const d = delay + i * 40;
+          t.style.transition = `opacity ${DURATION}ms ${EASE} ${d}ms, transform ${DURATION}ms ${EASE} ${d}ms`;
+          t.style.opacity = '1';
+          t.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { t.style.transform = ''; t.style.transition = ''; }, DURATION + d);
+        });
+        delay += tagItems.length * 40;
+
+        if (titleEl) {
+          titleEl.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+          titleEl.style.opacity = '1';
+          titleEl.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { titleEl.style.transform = ''; titleEl.style.transition = ''; }, DURATION + delay);
+          delay += 40;
+        }
+
+        if (descEl) {
+          descEl.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+          descEl.style.opacity = '1';
+          descEl.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { descEl.style.transform = ''; descEl.style.transition = ''; }, DURATION + delay);
+          delay += 40;
+        }
+
+        metaItems.forEach((m, i) => {
+          const d = delay + i * 40;
+          m.style.transition = `opacity ${DURATION}ms ${EASE} ${d}ms, transform ${DURATION}ms ${EASE} ${d}ms`;
+          m.style.opacity = '1';
+          m.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { m.style.transform = ''; m.style.transition = ''; }, DURATION + d);
+        });
+        delay += metaItems.length * 40;
+
+        if (statsEl) { statsEl.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms`; statsEl.style.opacity = '1'; setTimeout(() => { statsEl.style.transition = ''; }, DURATION + delay); }
+        statItems.forEach((s, i) => {
+          const d = delay + i * 40;
+          s.style.transition = `opacity ${DURATION}ms ${EASE} ${d}ms, transform ${DURATION}ms ${EASE} ${d}ms`;
+          s.style.opacity = '1';
+          s.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { s.style.transform = ''; s.style.transition = ''; }, DURATION + d);
+        });
+      }));
+    }, '0px');
+
+    return cleanup;
+  }, []);
+
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.container}>
-        <Button
-          type="text"
-          label={dict.projectNav.back}
-          showArrowLeft
-          as="a"
-          href={`/${lang}/#projets`}
-          className={styles.backButton}
-        />
+        <div ref={backRef} className={styles.backButton}>
+          <Button
+            type="text"
+            label={dict.projectNav.back}
+            showArrowLeft
+            as="a"
+            href={`/${lang}/#projets`}
+          />
+        </div>
 
         <div className={styles.introBlock}>
           <div className={styles.introTop}>
-            <div className={styles.tags}>
+            <div ref={tagsRef} className={styles.tags}>
               {tags.map((tag) => (
                 <span key={tag} className={styles.tag}>{tag}</span>
               ))}
             </div>
-            <h1 className={styles.title}>{title}</h1>
+            <h1 ref={titleRef} className={styles.title}>{title}</h1>
           </div>
-          <p className={styles.description}>{description}</p>
+          <p ref={descRef} className={styles.description}>{description}</p>
         </div>
 
-        <div className={styles.meta}>
+        <div ref={metaRef} className={styles.meta}>
           {meta.map((item) => (
             <div key={item.label} className={styles.metaItem}>
               <span className={styles.metaLabel}>{item.label}</span>
@@ -62,7 +162,7 @@ export default function ProjectIntro({
         </div>
 
         {stats && stats.length > 0 && (
-          <div className={styles.stats}>
+          <div ref={statsRef} className={styles.stats}>
             {stats.map((stat, i) => (
               <div
                 key={stat.label}

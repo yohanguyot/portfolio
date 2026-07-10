@@ -1,6 +1,10 @@
-import { ReactNode } from "react";
+"use client";
+
+import { useRef, useEffect, ReactNode } from "react";
 import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./ShowcaseSection.module.css";
 
 type Props = {
@@ -20,14 +24,53 @@ export default function ShowcaseSection({
   imageAlt = "",
   dimImage,
 }: Props) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const descRef = useRef<HTMLDivElement>(null);
+  const imageWrapRef = useRef<HTMLDivElement>(null);
+
+  useIsomorphicLayoutEffect(() => {
+    if (shouldReduceMotion()) return;
+    const descEl = descRef.current;
+    const imageWrap = imageWrapRef.current;
+    if (descEl) { descEl.style.opacity = '0'; descEl.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (imageWrap) { imageWrap.style.opacity = '0'; imageWrap.style.transform = 'scale(0.98) translateY(12px)'; }
+  }, []);
+
+  useEffect(() => {
+    if (shouldReduceMotion()) return;
+    const section = sectionRef.current;
+    const descEl = descRef.current;
+    const imageWrap = imageWrapRef.current;
+    if (!section) return;
+
+    const cleanup = observe(section, 0.1, () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (descEl) {
+          descEl.style.transition = `opacity ${DURATION}ms ${EASE} 80ms, transform ${DURATION}ms ${EASE} 80ms`;
+          descEl.style.opacity = '1';
+          descEl.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { descEl.style.transform = ''; descEl.style.transition = ''; }, DURATION + 80);
+        }
+        if (imageWrap) {
+          imageWrap.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
+          imageWrap.style.opacity = '1';
+          imageWrap.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION + 160);
+        }
+      }));
+    });
+
+    return cleanup;
+  }, []);
+
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.container}>
         <div className={styles.header}>
           <SectionHeader label={label} heading={heading} />
-          <div className={styles.description}>{description}</div>
+          <div ref={descRef} className={styles.description}>{description}</div>
         </div>
-        <div className={styles.imageWrap}>
+        <div ref={imageWrapRef} className={styles.imageWrap}>
           <Image src={imageSrc} alt={imageAlt} width={1440} height={900} className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`} />
         </div>
       </div>

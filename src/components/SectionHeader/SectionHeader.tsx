@@ -10,6 +10,7 @@ type SectionHeaderProps = {
   className?: string;
   animationThreshold?: number;
   entranceDelay?: number;
+  skipObserver?: boolean;
 };
 
 export type SectionHeaderHandle = {
@@ -18,7 +19,7 @@ export type SectionHeaderHandle = {
 };
 
 const SectionHeader = forwardRef<SectionHeaderHandle, SectionHeaderProps>(function SectionHeader(
-  { label, heading, className, animationThreshold = 0.2, entranceDelay = 0 },
+  { label, heading, className, animationThreshold = 0.2, entranceDelay = 0, skipObserver = false },
   ref
 ) {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -38,11 +39,12 @@ const SectionHeader = forwardRef<SectionHeaderHandle, SectionHeaderProps>(functi
   useImperativeHandle(ref, () => ({ trigger: triggerFn, element: wrapperRef.current }));
 
   useEffect(() => {
+    if (skipObserver) return;
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
     return observe(wrapper, animationThreshold, () => triggerFn(entranceDelay));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animationThreshold, entranceDelay]);
+  }, [animationThreshold, entranceDelay, skipObserver]);
 
   return (
     <div ref={wrapperRef} className={[styles.titleBlock, className].filter(Boolean).join(" ")}>

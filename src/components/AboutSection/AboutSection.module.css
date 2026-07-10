@@ -42,6 +42,7 @@
 .bodyText {
   composes: bodyMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
+  opacity: 0;
 }
 
 .highlight {
@@ -52,6 +53,11 @@
 .card {
   flex: 1 0 0;
   min-width: 0;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bodyText, .card { opacity: 1; }
 }
 
 /* ── Responsive ── */

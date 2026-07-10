@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { usePathname } from "next/navigation";
 import Button from "@/components/Button/Button";
 import ProjectImage from "@/components/ProjectImage/ProjectImage";
@@ -43,6 +44,16 @@ export default function ProjectsSection() {
   const gridRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
+  useIsomorphicLayoutEffect(() => {
+    if (shouldReduceMotion()) return;
+    const bloom = bloomRef.current;
+    const grid = gridRef.current;
+    if (bloom) { bloom.style.opacity = '0'; bloom.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (grid) Array.from(grid.querySelectorAll<HTMLElement>(':scope > a')).forEach(c => {
+      c.style.opacity = '0'; c.style.transform = 'scale(0.98) translateY(12px)';
+    });
+  }, []);
+
   useEffect(() => {
     if (shouldReduceMotion()) return;
 
@@ -59,12 +70,6 @@ export default function ProjectsSection() {
       const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-      cards.forEach(c => {
-        c.style.transition = 'none';
-        c.style.opacity = '0';
-        c.style.transform = 'translateY(12px)';
-      });
-
       if (isMobile) {
         cards.forEach((c, i) => {
           const isFirst = i === 0;
@@ -72,7 +77,7 @@ export default function ProjectsSection() {
             requestAnimationFrame(() => requestAnimationFrame(() => {
               c.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
               c.style.opacity = '1';
-              c.style.transform = 'translateY(0)';
+              c.style.transform = 'scale(1) translateY(0)';
               if (isFirst) grid.dataset.ready = 'true';
               setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION);
             }));
@@ -82,10 +87,10 @@ export default function ProjectsSection() {
         cleanups.push(observe(grid, 0.1, () => {
           requestAnimationFrame(() => requestAnimationFrame(() => {
             cards.forEach((c, i) => {
-              c.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 120}ms, transform ${DURATION}ms ${EASE} ${i * 120}ms`;
+              c.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 80}ms, transform ${DURATION}ms ${EASE} ${i * 80}ms`;
               c.style.opacity = '1';
-              c.style.transform = 'translateY(0)';
-              setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION + i * 120);
+              c.style.transform = 'scale(1) translateY(0)';
+              setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION + i * 80);
             });
             setTimeout(() => { grid.dataset.ready = 'true'; }, (cards.length - 1) * 120);
           }));

@@ -30,6 +30,7 @@
 .paragraph {
   composes: bodyMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
+  opacity: 0;
 }
 
 /* ── Images ── */
@@ -46,6 +47,11 @@
   aspect-ratio: 1440 / 900;
   border-radius: var(--radius-lg);
   overflow: hidden;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paragraph, .imageWrap { opacity: 1; }
 }
 
 .image {

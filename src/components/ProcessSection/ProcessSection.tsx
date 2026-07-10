@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { Search, Layers, RefreshCw, PackageCheck } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import SquareIcon from "@/components/SquareIcon/SquareIcon";
@@ -14,16 +15,25 @@ export default function ProcessSection({ dict }: { dict: Dictionary["process"] }
   const descRef = useRef<HTMLParagraphElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
+  useIsomorphicLayoutEffect(() => {
+    if (shouldReduceMotion()) return;
+    const desc = descRef.current;
+    const grid = gridRef.current;
+    if (desc) { desc.style.opacity = '0'; desc.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (grid) {
+      grid.style.opacity = '0';
+      Array.from(grid.children as HTMLCollectionOf<HTMLElement>).forEach(s => {
+        s.style.opacity = '0'; s.style.transform = 'scale(0.98) translateY(12px)';
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (shouldReduceMotion()) return;
 
     const cleanups: (() => void)[] = [];
 
-    // SectionHeader gère label + h2. On anime seulement la description.
     const desc = descRef.current;
-
-    if (desc) { desc.style.transition = 'none'; desc.style.opacity = '0'; desc.style.transform = 'scale(0.98) translateY(12px)'; }
-    void desc?.offsetHeight;
 
     cleanups.push(observe(desc, 0.3, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -41,13 +51,6 @@ export default function ProcessSection({ dict }: { dict: Dictionary["process"] }
     if (grid) {
       const steps = Array.from(grid.children as HTMLCollectionOf<HTMLElement>);
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-      grid.style.opacity = '0';
-      steps.forEach(s => {
-        s.style.transition = 'none';
-        s.style.opacity = '0';
-        s.style.transform = 'scale(0.98) translateY(12px)';
-      });
 
       if (isMobile) {
         cleanups.push(observe(grid, 0, () => {
@@ -70,10 +73,10 @@ export default function ProcessSection({ dict }: { dict: Dictionary["process"] }
           grid.style.opacity = '1';
           requestAnimationFrame(() => requestAnimationFrame(() => {
             steps.forEach((s, i) => {
-              s.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 120}ms, transform ${DURATION}ms ${EASE} ${i * 120}ms`;
+              s.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 80}ms, transform ${DURATION}ms ${EASE} ${i * 80}ms`;
               s.style.opacity = '1';
               s.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { s.style.transform = ''; s.style.transition = ''; }, DURATION + i * 120);
+              setTimeout(() => { s.style.transform = ''; s.style.transition = ''; }, DURATION + i * 80);
             });
           }));
         }));

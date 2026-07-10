@@ -103,7 +103,8 @@
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__fill",
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__click",
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__take_screenshot",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(npx tsc *)"
     ]
   }
 }

@@ -15,6 +15,7 @@
 .label {
   composes: labelMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
+  opacity: 0;
 }
 
 .row {
@@ -31,6 +32,7 @@
   color: var(--color-text-primary);
   flex: 1 0 0;
   min-width: min(260px, 100%);
+  opacity: 0;
 }
 
 .body {
@@ -40,6 +42,11 @@
   flex-direction: column;
   gap: var(--space-md);
   max-width: 600px;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .label, .heading, .body { opacity: 1; }
 }
 
 @media (max-width: 768px) {

@@ -30,6 +30,11 @@
 .paragraph {
   composes: bodyMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paragraph { opacity: 1; }
 }
 
 .featureCard {

@@ -497,7 +497,7 @@ const headerRef = useRef<SectionHeaderHandle>(null);
 
 **Desktop vs mobile split**: check `window.matchMedia('(max-width: 1024px)').matches` inside `useEffect`. On mobile, stacked elements that are off-screen when the trigger fires should use independent observers instead of cascade delays.
 
-**Stagger**: `120ms` between peer elements (cards, list items, links). No stagger within a single text block.
+**Stagger**: `80ms` between peer elements (cards, list items, links). No stagger within a single text block.
 
 **Initial state timing**: always call `void el.offsetHeight` after setting inline `opacity: 0` to force reflow before setting up the observer. Without it, the browser may batch the initial and final states into the same frame.
 

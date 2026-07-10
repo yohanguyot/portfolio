@@ -26,6 +26,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .col { opacity: 1; }
 }
 
 /* ── Image ── */

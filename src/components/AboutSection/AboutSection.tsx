@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { Component, Route, CodeXml } from "lucide-react";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
@@ -55,22 +56,31 @@ export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["
   const bodyRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
+  useIsomorphicLayoutEffect(() => {
+    if (shouldReduceMotion()) return;
+    const bodyDiv = bodyRef.current;
+    const wrapper = cardRef.current;
+    const bodyPs = bodyDiv ? Array.from(bodyDiv.children as HTMLCollectionOf<HTMLElement>) : [];
+    const items = wrapper?.firstElementChild
+      ? Array.from((wrapper.firstElementChild as HTMLElement).children as HTMLCollectionOf<HTMLElement>)
+      : [];
+    bodyPs.forEach(p => { p.style.opacity = '0'; p.style.transform = 'scale(0.98) translateY(12px)'; });
+    if (wrapper) wrapper.style.opacity = '0';
+    items.forEach(item => { item.style.opacity = '0'; item.style.transform = 'scale(0.98) translateY(12px)'; });
+  }, []);
+
   useEffect(() => {
     if (shouldReduceMotion()) return;
 
     const cleanups: (() => void)[] = [];
 
-    // SectionHeader gère label + h2. On anime seulement les paragraphes body.
     const bodyDiv = bodyRef.current;
     const bodyPs = bodyDiv ? Array.from(bodyDiv.children as HTMLCollectionOf<HTMLElement>) : [];
-
-    bodyPs.forEach((p) => { p.style.transition = 'none'; p.style.opacity = '0'; p.style.transform = 'scale(0.98) translateY(12px)'; });
-    void bodyDiv?.offsetHeight;
 
     cleanups.push(observe(bodyDiv, 0.3, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         bodyPs.forEach((p, i) => {
-          const delay = i * 120;
+          const delay = i * 80;
           p.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
           p.style.opacity = '1';
           p.style.transform = 'scale(1) translateY(0)';
@@ -86,13 +96,6 @@ export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["
       const items = featureCard
         ? Array.from(featureCard.children as HTMLCollectionOf<HTMLElement>)
         : [];
-
-      wrapper.style.opacity = '0';
-      items.forEach(item => {
-        item.style.transition = 'none';
-        item.style.opacity = '0';
-        item.style.transform = 'scale(0.98) translateY(12px)';
-      });
 
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
@@ -117,10 +120,10 @@ export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["
           wrapper.style.opacity = '1';
           requestAnimationFrame(() => requestAnimationFrame(() => {
             items.forEach((item, i) => {
-              item.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 120}ms, transform ${DURATION}ms ${EASE} ${i * 120}ms`;
+              item.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 80}ms, transform ${DURATION}ms ${EASE} ${i * 80}ms`;
               item.style.opacity = '1';
               item.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION + i * 120);
+              setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION + i * 80);
             });
           }));
         }));

@@ -5,6 +5,11 @@
   background: var(--color-bg-surface);
   border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
   margin-top: var(--space-4xl);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section, .description, .contactLink, .form { opacity: 1; }
 }
 
 .noMarginTop {
@@ -39,6 +44,7 @@
   composes: bodyMd from '@/styles/typography.module.css';
   color: var(--color-text-secondary);
   max-width: 600px;
+  opacity: 0;
 }
 
 /* ── Contact links ── */
@@ -57,6 +63,7 @@
   text-decoration: none;
   color: var(--color-text-primary);
   transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+  opacity: 0;
 }
 
 .contactLink:active {
@@ -100,6 +107,7 @@
   gap: var(--space-xl);
   background: var(--color-bg-surface-2);
   border: 1px solid var(--color-border-strong);
+  opacity: 0;
   border-radius: var(--radius-xl);
   padding: var(--space-lg);
   overflow: hidden;
