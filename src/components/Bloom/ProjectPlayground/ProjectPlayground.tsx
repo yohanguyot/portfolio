@@ -299,6 +299,7 @@ export default function ProjectPlayground({ dict }: Props) {
   const leadRef = useRef<HTMLParagraphElement>(null);
   const tabsRowRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef(0);
 
   function updateIndicator() {
     const index = CLIENTS.findIndex((c) => c.id === activeId);
@@ -310,6 +311,14 @@ export default function ProjectPlayground({ dict }: Props) {
   useLayoutEffect(() => {
     updateIndicator();
     document.fonts.ready.then(updateIndicator);
+
+    const index = CLIENTS.findIndex(c => c.id === activeId);
+    const btn = tabRefs.current[index];
+    const container = tabsRef.current;
+    if (btn && container) {
+      const target = btn.offsetLeft - container.clientWidth / 2 + btn.offsetWidth / 2;
+      container.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeId]);
 
@@ -381,6 +390,17 @@ export default function ProjectPlayground({ dict }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const idx = CLIENTS.findIndex(c => c.id === activeId);
+    if (dx < -60 && idx < CLIENTS.length - 1) setActiveId(CLIENTS[idx + 1].id);
+    else if (dx > 60 && idx > 0) setActiveId(CLIENTS[idx - 1].id);
+  }
+
   const clientBase = CLIENTS.find((c) => c.id === activeId)!;
   const client = { ...clientBase, category: dict.categories[CATEGORY_KEYS[activeId]] };
 
@@ -422,7 +442,7 @@ export default function ProjectPlayground({ dict }: Props) {
           </div>
 
           {/* Viewer */}
-          <div ref={viewerRef} className={styles.viewer}>
+          <div ref={viewerRef} className={styles.viewer} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
             {/* Card */}
             <div className={styles.cardWrap}>
               <div

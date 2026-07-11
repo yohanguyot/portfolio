@@ -503,6 +503,43 @@ const headerRef = useRef<SectionHeaderHandle>(null);
 
 For grouped elements sharing a visible border (e.g. the cards grid), move the border to a `::before` pseudo-element and show it via a `data-*` attribute set in JS — this lets the border animation be controlled independently from the card stagger.
 
+#### Surface card pattern (FeatureCard, stats grid, skill card)
+
+A "surface card" is any element with a visible background/border that contains discrete items (FeatureItems, stat cells, etc.).
+
+**Rule: container reveals instantly, items stagger.**
+
+1. **Container** (`opacity: 0` only — no transform): revealed with `transition: none` the moment it enters the viewport. It anchors the zone before content arrives.
+2. **Items** (`opacity: 0, scale(0.98) translateY(12px)`): stagger at 80ms each, 600ms expo-out.
+3. **Observer split**:
+   - Desktop: `observe(container, 0.1, ...)` → instant reveal → items stagger `i * 80`ms
+   - Mobile: `observe(container, 0, ...)` → instant reveal + per-item `observe(item, 0.2, ...)` so each item appears as it scrolls into view
+
+**Never tie the container reveal to a parent section observer** — this would show the empty card surface long before its content. Give the container its own independent observer.
+
+When a section has both a header/desc block and a FeatureCard below:
+- Section observer (0.1) → header trigger + desc at 200ms
+- FeatureCard independent observer (0.1 desktop / 0 mobile) → card + items
+
+```ts
+// Section: header + desc
+cleanups.push(observe(section, 0.1, () => {
+  rAF(() => {
+    headerRef.current?.trigger(0);
+    // desc at 200ms delay
+  });
+}));
+
+// FeatureCard: independent observer
+cleanups.push(observe(card, 0.1, () => {
+  card.style.transition = 'none';
+  card.style.opacity = '1';
+  rAF(() => {
+    items.forEach((item, i) => { /* delay = i * 80 */ });
+  });
+}));
+```
+
 ### Press (`:active`) feedback
 
 Every interactive element gives tactile feedback on press via a scale-down transform:

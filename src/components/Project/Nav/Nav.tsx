@@ -43,7 +43,7 @@ export default function ProjectNav({ prev, next }: Props) {
     return observe(navEl, 0.1, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         links.forEach((l, i) => {
-          const delay = i * 120;
+          const delay = i * 80;
           l.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
           l.style.opacity = '1';
           l.style.transform = 'scale(1) translateY(0)';

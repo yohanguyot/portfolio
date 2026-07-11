@@ -26,7 +26,7 @@ export default function Footer({ dict }: { dict: Dictionary["footer"] }) {
     return observe(logo, 0.5, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         [logo, copyright].forEach((el, i) => {
-          const delay = i * 100;
+          const delay = i * 80;
           el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
           el.style.opacity = '1';
           el.style.transform = 'scale(1) translateY(0)';

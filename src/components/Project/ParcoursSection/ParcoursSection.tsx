@@ -29,9 +29,13 @@ export default function ParcoursSection({ label, heading, items, dimImage }: Pro
     const colsEl = colsRef.current;
     if (!colsEl) return;
     Array.from(colsEl.children as HTMLCollectionOf<HTMLElement>).forEach(col => {
-      col.style.opacity = '0';
-      col.style.transform = 'scale(0.98) translateY(12px)';
+      col.style.opacity = '1'; // neutralise le opacity:0 CSS (SSR), les enfants prennent le relais
+      const imageWrap = col.firstElementChild as HTMLElement | null;
+      const text = col.lastElementChild as HTMLElement | null;
+      if (imageWrap) { imageWrap.style.opacity = '0'; imageWrap.style.transform = 'scale(0.98) translateY(12px)'; }
+      if (text) { text.style.opacity = '0'; text.style.transform = 'scale(0.98) translateY(12px)'; }
     });
+    void colsEl.offsetHeight;
   }, []);
 
   useEffect(() => {
@@ -40,19 +44,54 @@ export default function ParcoursSection({ label, heading, items, dimImage }: Pro
     if (!colsEl) return;
 
     const cols = Array.from(colsEl.children as HTMLCollectionOf<HTMLElement>);
-    const cleanup = observe(colsEl, 0.1, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        cols.forEach((col, i) => {
-          const delay = i * 80;
-          col.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-          col.style.opacity = '1';
-          col.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { col.style.transform = ''; col.style.transition = ''; }, DURATION + delay);
-        });
-      }));
-    });
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    const cleanups: (() => void)[] = [];
 
-    return cleanup;
+    if (isMobile) {
+      // Empilé : chaque imageWrap et text a son propre observer, cascade naturelle au scroll.
+      cols.forEach(col => {
+        const imageWrap = col.firstElementChild as HTMLElement | null;
+        const text = col.lastElementChild as HTMLElement | null;
+        [imageWrap, text].forEach(el => {
+          if (!el) return;
+          cleanups.push(observe(el, 0.2, () => {
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              el.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+              el.style.opacity = '1';
+              el.style.transform = 'scale(1) translateY(0)';
+              setTimeout(() => { el.style.transform = ''; el.style.transition = ''; }, DURATION);
+            }));
+          }));
+        });
+      });
+    } else {
+      // Côte à côte : un seul trigger sur le container + stagger orchestré gauche→droite,
+      // image en premier dans chaque colonne, texte +80ms après.
+      cleanups.push(observe(colsEl, 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          cols.forEach((col, i) => {
+            const imageWrap = col.firstElementChild as HTMLElement | null;
+            const text = col.lastElementChild as HTMLElement | null;
+            const imgDelay = i * 80;
+            const textDelay = i * 80 + 80;
+            if (imageWrap) {
+              imageWrap.style.transition = `opacity ${DURATION}ms ${EASE} ${imgDelay}ms, transform ${DURATION}ms ${EASE} ${imgDelay}ms`;
+              imageWrap.style.opacity = '1';
+              imageWrap.style.transform = 'scale(1) translateY(0)';
+              setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION + imgDelay);
+            }
+            if (text) {
+              text.style.transition = `opacity ${DURATION}ms ${EASE} ${textDelay}ms, transform ${DURATION}ms ${EASE} ${textDelay}ms`;
+              text.style.opacity = '1';
+              text.style.transform = 'scale(1) translateY(0)';
+              setTimeout(() => { text.style.transform = ''; text.style.transition = ''; }, DURATION + textDelay);
+            }
+          });
+        }));
+      }));
+    }
+
+    return () => cleanups.forEach(fn => fn());
   }, []);
 
   return (

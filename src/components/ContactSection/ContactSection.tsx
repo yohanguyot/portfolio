@@ -81,30 +81,32 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
     const cleanups: (() => void)[] = [];
     const isMobile = window.matchMedia('(max-width: 1024px)').matches;
 
-    // ── Card + colonne gauche — même trigger quand le label est visible ──
-    const triggerEl = headerRef.current?.element ?? section;
-    cleanups.push(observe(triggerEl, 0.1, () => {
+    // ── Card — révélation dès que la section entre dans le viewport ──
+    cleanups.push(observe(section, 0.05, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        // Card
         section.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
         section.style.opacity = '1';
         section.style.transform = 'scale(1) translateY(0)';
         setTimeout(() => { section.style.transform = ''; section.style.transition = ''; }, DURATION);
+      }));
+    }, '0px'));
 
-        // Label + heading
-        headerRef.current?.trigger(80);
+    // ── Contenu texte — cascade quand le SectionHeader est réellement visible ──
+    const textTrigger = headerRef.current?.element ?? section;
+    cleanups.push(observe(textTrigger, 0.1, () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        headerRef.current?.trigger(0);
 
         if (desc) {
-          desc.style.transition = `opacity ${DURATION}ms ${EASE} 130ms, transform ${DURATION}ms ${EASE} 130ms`;
+          desc.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
           desc.style.opacity = '1';
           desc.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION + 130);
+          setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION + 160);
         }
 
-        // Liens — desktop uniquement (cascade depuis le trigger)
         if (linksEl && !isMobile) {
           Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach((l, i) => {
-            const delay = 230 + i * 80;
+            const delay = 240 + i * 80;
             l.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
             l.style.opacity = '1';
             l.style.transform = 'scale(1) translateY(0)';

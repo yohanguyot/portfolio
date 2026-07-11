@@ -49,17 +49,31 @@ export default function ProjectIdentities({ dict }: Props) {
     }
 
     if (imagesEl && imageWraps.length) {
-      cleanups.push(observe(imagesEl, 0.1, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          imageWraps.forEach((img, i) => {
-            const delay = i * 80;
-            img.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-            img.style.opacity = '1';
-            img.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { img.style.transform = ''; img.style.transition = ''; }, DURATION + delay);
-          });
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (isMobile) {
+        imageWraps.forEach(img => {
+          cleanups.push(observe(img, 0.2, () => {
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              img.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+              img.style.opacity = '1';
+              img.style.transform = 'scale(1) translateY(0)';
+              setTimeout(() => { img.style.transform = ''; img.style.transition = ''; }, DURATION);
+            }));
+          }));
+        });
+      } else {
+        cleanups.push(observe(imagesEl, 0.1, () => {
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            imageWraps.forEach((img, i) => {
+              const delay = i * 80;
+              img.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+              img.style.opacity = '1';
+              img.style.transform = 'scale(1) translateY(0)';
+              setTimeout(() => { img.style.transform = ''; img.style.transition = ''; }, DURATION + delay);
+            });
+          }));
         }));
-      }));
+      }
     }
 
     return () => cleanups.forEach(fn => fn());

@@ -50,10 +50,10 @@ export default function TextSection({ label, heading, children }: Props) {
           setTimeout(() => { headingEl.style.transform = ''; headingEl.style.transition = ''; }, DURATION + 80);
         }
         if (bodyEl) {
-          bodyEl.style.transition = `opacity ${DURATION}ms ${EASE} 200ms, transform ${DURATION}ms ${EASE} 200ms`;
+          bodyEl.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
           bodyEl.style.opacity = '1';
           bodyEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { bodyEl.style.transform = ''; bodyEl.style.transition = ''; }, DURATION + 200);
+          setTimeout(() => { bodyEl.style.transform = ''; bodyEl.style.transition = ''; }, DURATION + 160);
         }
       }));
     });
