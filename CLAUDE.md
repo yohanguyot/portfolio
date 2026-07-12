@@ -58,7 +58,7 @@ The entire palette is **dark-mode only** (no light mode visible in the file).
 
 These tokens are the only ones to use in code. Never reference the primitive palette directly.
 
-For semi-transparent tokens: write `#HEX` with CSS opacity (`rgba()` or equivalent), no dedicated variable.
+For semi-transparent tokens: use `color-mix()` — see the **Opacity on CSS variables** section below.
 
 #### Backgrounds
 | Token | Base primitive | Opacity | Final CSS value |
@@ -214,7 +214,7 @@ Ne jamais utiliser `padding-inline: var(--space-4xl)` sur une section — c'est 
 Two durations for micro-interactions, one for entrance animations:
 - **Fast**: `200ms cubic-bezier(0.2, 0, 0, 1)` — hover, color, icon
 - **Slow**: `300ms cubic-bezier(0.2, 0, 0, 1)` — layout shifts
-- **Entrance**: `800ms cubic-bezier(0.16, 1, 0.3, 1)` — expo-out, all scroll/page-load reveals
+- **Entrance**: `600ms cubic-bezier(0.16, 1, 0.3, 1)` — expo-out, all scroll/page-load reveals
 
 ---
 
@@ -299,7 +299,8 @@ Same rules as `input`, field height: `96px` instead of `48px`.
 ### `chip`
 
 - 3 states: `state=default`, `state=hover`, `state=selected`
-- Height: `40px`, width: `70px`
+- Height: `40px`, width: `70px` (Figma spec — desktop only)
+- On mobile: `display: flex; flex-wrap: wrap` — chips are content-sized and wrap to next line
 
 ---
 
@@ -762,6 +763,27 @@ Le système i18n repose sur 5 points d'entrée. Pour ajouter une locale (ex. `pt
 
 > Le segment `[lang]` dans l'URL gère le routage automatiquement. Chaque page sous `src/app/[lang]/` est déjà locale-agnostique — aucune modification des pages elles-mêmes n'est nécessaire.
 
+### Metadata localisée — `generateMetadata`
+
+Toutes les pages sous `src/app/[lang]/` utilisent `generateMetadata` (fonction async) plutôt que `export const metadata` (constante statique), afin de retourner une description dans la bonne langue.
+
+Les descriptions sont stockées dans `dict.meta.*` dans chaque fichier de dictionnaire (`fr.json`, `en.json`, `es.json`).
+
+```tsx
+export async function generateMetadata({ params }: PageProps<"/[lang]/monprojet">): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  return {
+    title: "Mon Projet · Yohan Guyot",
+    description: dict.meta.monprojet,
+  };
+}
+```
+
+Pour toute nouvelle page, ajouter la clé correspondante dans les trois dictionnaires sous `"meta": { ... }`.
+
+> Ne jamais utiliser `export const metadata` sur une page `[lang]` — la description serait toujours en français quelle que soit la locale.
+
 ### Dropdowns / floating UI
 
 The `<nav>` has `transform: translateX(-50%)` for centering, which creates a new containing block and breaks `position: fixed` for descendants. Any floating panel that needs true viewport-relative positioning must use `ReactDOM.createPortal(panel, document.body)`.
@@ -783,6 +805,10 @@ background: color-mix(in srgb, var(--color-brand-600) 40%, transparent);
 /* ✗ — hardcodes the primitive, breaks if the token changes */
 background: rgba(198, 83, 46, 0.40);
 ```
+
+### User selection
+
+Interactive elements (`button`, `a`, `[role="button"]`) have `user-select: none` applied globally in `globals.css` — prevents accidental text selection on click or double-click. Do not add it again per-component.
 
 ### Text selection
 

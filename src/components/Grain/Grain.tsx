@@ -16,7 +16,7 @@ function buildTile(): HTMLCanvasElement {
     while (u === 0) u = Math.random();
     while (v === 0) v = Math.random();
     const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-    const luma = Math.max(0, Math.min(255, (z * 38 + 128) | 0));
+    const luma = Math.max(0, Math.min(255, (z * 72 + 128) | 0));
     // Légère variation de teinte par canal
     data[i]     = Math.max(0, Math.min(255, luma + ((Math.random() * 12 - 6) | 0)));
     data[i + 1] = Math.max(0, Math.min(255, luma + ((Math.random() * 12 - 6) | 0)));
@@ -66,7 +66,7 @@ export default function Grain() {
     resize();
     draw();
     canvas.style.transition = 'opacity 800ms ease';
-    canvas.style.opacity = '0.04';
+    canvas.style.opacity = '0.1';
     tick();
     window.addEventListener("resize", resize);
 
@@ -88,7 +88,7 @@ export default function Grain() {
         pointerEvents: "none",
         zIndex: 99999,
         opacity: 0,
-        mixBlendMode: "screen",
+        mixBlendMode: "soft-light",
       }}
     />
   );
