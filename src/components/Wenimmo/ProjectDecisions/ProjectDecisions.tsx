@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { LayoutTemplate, ArrowLeftRight, Shield } from "lucide-react";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
@@ -15,6 +15,8 @@ const ICONS = [LayoutTemplate, ArrowLeftRight, Shield];
 type Props = { dict: Dictionary["wenimmo"]["decisions"] };
 
 export default function ProjectDecisions({ dict }: Props) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const featureRef = useRef<HTMLDivElement>(null);
 
   useIsomorphicLayoutEffect(() => {
@@ -31,48 +33,57 @@ export default function ProjectDecisions({ dict }: Props) {
 
   useEffect(() => {
     if (shouldReduceMotion()) return;
+    const section = sectionRef.current;
+    if (!section) return;
     const card = featureRef.current?.firstElementChild as HTMLElement | null;
     const items = card ? Array.from(card.children as HTMLCollectionOf<HTMLElement>) : [];
-    if (!card || !items.length) return;
 
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
     const cleanups: (() => void)[] = [];
 
-    if (isMobile) {
-      cleanups.push(observe(card, 0, () => { card.style.transition = 'none'; card.style.opacity = '1'; }));
-      items.forEach(item => {
-        cleanups.push(observe(item, 0.2, () => {
+    cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        headerRef.current?.trigger(0);
+      }));
+    }, isMobile ? '0px 0px -15% 0px' : '0px'));
+
+    if (card && items.length) {
+      if (isMobile) {
+        cleanups.push(observe(card, 0, () => { card.style.transition = 'none'; card.style.opacity = '1'; }));
+        items.forEach(item => {
+          cleanups.push(observe(item, 0.2, () => {
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              item.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+              item.style.opacity = '1';
+              item.style.transform = 'scale(1) translateY(0)';
+              setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION);
+            }));
+          }));
+        });
+      } else {
+        cleanups.push(observe(card, 0.1, () => {
+          card.style.transition = 'none';
+          card.style.opacity = '1';
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            item.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-            item.style.opacity = '1';
-            item.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION);
+            items.forEach((item, i) => {
+              const delay = i * 80;
+              item.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+              item.style.opacity = '1';
+              item.style.transform = 'scale(1) translateY(0)';
+              setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION + delay);
+            });
           }));
         }));
-      });
-    } else {
-      cleanups.push(observe(card, 0.1, () => {
-        card.style.transition = 'none';
-        card.style.opacity = '1';
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          items.forEach((item, i) => {
-            const delay = i * 80;
-            item.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-            item.style.opacity = '1';
-            item.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION + delay);
-          });
-        }));
-      }));
+      }
     }
 
     return () => cleanups.forEach(fn => fn());
   }, []);
 
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.container}>
-        <SectionHeader label={dict.label} heading={dict.heading} />
+        <SectionHeader ref={headerRef} label={dict.label} heading={dict.heading} skipObserver />
         <div ref={featureRef}>
           <FeatureCard direction="horizontal">
             {dict.features.map((f, i) => (

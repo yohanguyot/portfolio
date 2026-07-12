@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import styles from "./Button.module.css";
 
@@ -40,8 +42,17 @@ export default function Button({
     .filter(Boolean)
     .join(" ");
 
+  function handleClick(e: React.MouseEvent) {
+    if (href?.startsWith("#")) {
+      e.preventDefault();
+      const el = document.getElementById(href.slice(1));
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" });
+    }
+    onClick?.();
+  }
+
   return (
-    <Tag className={cls} onClick={onClick} href={href}>
+    <Tag className={cls} onClick={handleClick} href={href}>
       {showArrowLeft && (
         <span className={iconClass}>
           <ArrowLeft size={iconSize} strokeWidth={1.5} />

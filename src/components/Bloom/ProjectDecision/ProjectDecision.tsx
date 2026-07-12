@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { TriangleAlert, Layers } from "lucide-react";
 import Image from "next/image";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import type { Dictionary } from "@/lib/getDictionary";
@@ -16,6 +16,8 @@ const ICONS = [TriangleAlert, Layers];
 type Props = { dict: Dictionary["bloom"]["decision"] };
 
 export default function ProjectDecision({ dict }: Props) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const cardWrapRef = useRef<HTMLDivElement>(null);
@@ -40,18 +42,23 @@ export default function ProjectDecision({ dict }: Props) {
     const featureCard = cardWrapRef.current?.firstElementChild as HTMLElement | null;
     const items = featureCard ? Array.from(featureCard.children as HTMLCollectionOf<HTMLElement>) : [];
 
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const section = sectionRef.current;
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
     const cleanups: (() => void)[] = [];
 
-    if (descEl) {
-      cleanups.push(observe(descEl, 0.3, () => {
+    // Cascade coordonnée : label(0) → heading(80ms) → desc(160ms)
+    if (section) {
+      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
         requestAnimationFrame(() => requestAnimationFrame(() => {
-          descEl.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-          descEl.style.opacity = '1';
-          descEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { descEl.style.transform = ''; descEl.style.transition = ''; }, DURATION);
+          headerRef.current?.trigger(0);
+          if (descEl) {
+            descEl.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
+            descEl.style.opacity = '1';
+            descEl.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { descEl.style.transform = ''; descEl.style.transition = ''; }, DURATION + 160);
+          }
         }));
-      }));
+      }, isMobile ? '0px 0px -15% 0px' : '0px'));
     }
 
     if (imageWrap) {
@@ -99,10 +106,10 @@ export default function ProjectDecision({ dict }: Props) {
   }, []);
 
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <SectionHeader label={dict.label} heading={dict.heading} />
+          <SectionHeader ref={headerRef} skipObserver label={dict.label} heading={dict.heading} />
           <p ref={descRef} className={styles.description}>{dict.description}</p>
         </div>
 

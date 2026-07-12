@@ -44,27 +44,35 @@ export default function ShowcaseSection({
     const imageWrap = imageWrapRef.current;
     if (!section) return;
 
-    // label → heading (80ms) → desc (160ms) → image (240ms)
-    const cleanup = observe(section, 0.1, () => {
+    const cleanups: (() => void)[] = [];
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
+    // Text cascade: always stacked layout → section observer for header + desc
+    cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         headerRef.current?.trigger(0);
-
         if (descEl) {
           descEl.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
           descEl.style.opacity = '1';
           descEl.style.transform = 'scale(1) translateY(0)';
           setTimeout(() => { descEl.style.transform = ''; descEl.style.transition = ''; }, DURATION + 160);
         }
-        if (imageWrap) {
-          imageWrap.style.transition = `opacity ${DURATION}ms ${EASE} 240ms, transform ${DURATION}ms ${EASE} 240ms`;
+      }));
+    }, isMobile ? '0px 0px -15% 0px' : '0px'));
+
+    // Image: own observer — layout always stacks image below text
+    if (imageWrap) {
+      cleanups.push(observe(imageWrap, isMobile ? 0.2 : 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          imageWrap.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
           imageWrap.style.opacity = '1';
           imageWrap.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION + 240);
-        }
+          setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION);
+        }));
       }));
-    });
+    }
 
-    return cleanup;
+    return () => cleanups.forEach(fn => fn());
   }, []);
 
   return (

@@ -52,7 +52,7 @@ function HeroArcCanvas() {
 
     let animId: number;
 
-    const isMobileDevice = window.innerWidth < 768;
+    const isMobileDevice = window.innerWidth < 1024;
     const INTRO_DELAY = isMobileDevice ? 0 : 100;
     const INTRO_DURATION = 650;
 
@@ -66,7 +66,7 @@ function HeroArcCanvas() {
       const introRaw = Math.max(0, (now - t0 - INTRO_DELAY) / INTRO_DURATION);
       const introProgress = introRaw >= 1 ? 1 : 1 - Math.pow(1 - introRaw, 3);
 
-      const isMobile = window.innerWidth < 768;
+      const isMobile = window.innerWidth < 1024;
 
       // Mobile: arc centré ; desktop: suit la souris
       const targetMx = isMobile ? w * 0.5 : clientX - canvas!.getBoundingClientRect().left;
@@ -275,7 +275,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <a href="#projets" className={styles.scrollIndicator} aria-label={h.ctaPrimary}>
+        <a href="#projets" className={styles.scrollIndicator} aria-label={h.ctaPrimary} onClick={(e) => { e.preventDefault(); const el = document.getElementById("projets"); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" }); }}>
           <span className={styles.scrollLabel}>{h.scroll}</span>
           <div className={styles.scrollLine} />
         </a>

@@ -456,22 +456,14 @@ cubic-bezier(0.16, 1, 0.3, 1) — 600ms
 **Scroll-triggered:** shared utilities in `src/lib/animation.ts` — always import from there, never rewrite inline.
 
 ```ts
-import { EASE, DURATION, shouldReduceMotion, reveal, observe } from '@/lib/animation';
+import { EASE, DURATION, shouldReduceMotion, observe } from '@/lib/animation';
 // EASE    = 'cubic-bezier(0.16, 1, 0.3, 1)'
 // DURATION = 600  (ms)
 ```
 
-#### `reveal(el, delay?)` — eager initial state + lazy callback
-
-Sets `opacity: 0 / scale(0.98) / translateY(12px)` immediately (with `void el.offsetHeight` forceReflow), returns a callback that applies the transition via double-rAF:
-
-```ts
-cleanups.push(observe(el, 0.3, reveal(el, 0)));
-```
-
 #### `observe(el, threshold, onEnter, rootMargin?)` — fire-once IntersectionObserver
 
-Default `rootMargin = '0px 0px -5% 0px'` ensures the element is slightly above the viewport bottom before triggering — the user actually sees the animation play. Pass `'0px'` to override for elements that should fire immediately on entry (e.g. a section card).
+Default `rootMargin = '0px 0px -5% 0px'`. Pass `'0px'` to override for elements that should fire immediately on entry.
 
 #### `SectionHeader` — CSS initial state + keyframe
 
@@ -483,61 +475,216 @@ Default `rootMargin = '0px 0px -5% 0px'` ensures the element is slightly above t
 import SectionHeader, { type SectionHeaderHandle } from '@/components/SectionHeader/SectionHeader';
 
 const headerRef = useRef<SectionHeaderHandle>(null);
-// headerRef.current.trigger(delay)   — starts the label/heading animation
+// headerRef.current.trigger(delay)   — starts the label/heading animation (label à delay, heading à delay+80ms)
 // headerRef.current.element          — the wrapper DOM element (use as observer target)
 ```
 
-#### Animation patterns
+---
 
-**Never query elements by CSS Module class inside `useEffect`** — the hashed class name is the same in JS and CSS, but it's fragile. Always use a `ref` directly on the element or `el.children` / `el.firstElementChild`.
+#### Règle 1 — Ordre d'apparition
 
-**Single observer for coordinated cascades** (e.g. ContactSection): one `observe()` call triggers the entire sequence with explicit `delay` offsets. This guarantees ordering regardless of scroll speed.
+Hiérarchie universelle (du plus important au détail) :
 
-**Independent observers for autonomous elements** (e.g. form, mobile links): each element has its own observer so it animates exactly when it enters the viewport.
+| Priorité | Élément | Délai relatif |
+|---|---|---|
+| 1 | Label / surtitre | `0 ms` |
+| 2 | Heading (titre) | `+80 ms` — via `SectionHeader.trigger()` |
+| 3 | Description / texte corps | `+160 ms` |
+| 4 | Image / média | Dépend du layout (voir ci-dessous) |
+| 5 | Cards / items | Via observer propre — jamais attaché à la cascade texte |
+| 6 | CTA / bouton | Avec le dernier texte, ou observer propre si hors-écran |
 
-**Desktop vs mobile split**: check `window.matchMedia('(max-width: 1024px)').matches` inside `useEffect`. On mobile, stacked elements that are off-screen when the trigger fires should use independent observers instead of cascade delays.
+**Desktop `imageRight`** (texte gauche, image droite) :
+```
+label(0ms) → [image(80ms) + heading(80ms)] → body(160ms)
+```
+```ts
+const headerDelay = 0;
+const imgDelay    = 80;
+const bodyDelay   = 160; // headerDelay + 160
+```
 
-**Stagger**: `80ms` between peer elements (cards, list items, links). No stagger within a single text block.
+**Desktop `imageLeft`** (image gauche, texte droite) :
+```
+image(0ms) → label(80ms) → heading(160ms) → body(240ms)
+```
+```ts
+const headerDelay = 80;
+const imgDelay    = 0;
+const bodyDelay   = 240; // headerDelay + 160
+```
 
-**Initial state timing**: always call `void el.offsetHeight` after setting inline `opacity: 0` to force reflow before setting up the observer. Without it, the browser may batch the initial and final states into the same frame.
+**Mobile (1 colonne empilée)** — l'image descend toujours sous le texte (`order: 1`) :
+```
+label(0ms) → heading(80ms) → body(160ms) → image(240ms)
+```
+```ts
+const headerDelay = 0;
+const imgDelay    = 240; // image EN DERNIER, visuellement en bas
+const bodyDelay   = 160;
+```
 
-For grouped elements sharing a visible border (e.g. the cards grid), move the border to a `::before` pseudo-element and show it via a `data-*` attribute set in JS — this lets the border animation be controlled independently from the card stagger.
+---
 
-#### Surface card pattern (FeatureCard, stats grid, skill card)
+#### Règle 2 — Stratégie d'observers
 
-A "surface card" is any element with a visible background/border that contains discrete items (FeatureItems, stat cells, etc.).
+**Un seul observer orchestré** → quand les éléments sont **côte à côte** (même Y dans le viewport). Le stagger est explicite par délais.
 
-**Rule: container reveals instantly, items stagger.**
-
-1. **Container** (`opacity: 0` only — no transform): revealed with `transition: none` the moment it enters the viewport. It anchors the zone before content arrives.
-2. **Items** (`opacity: 0, scale(0.98) translateY(12px)`): stagger at 80ms each, 600ms expo-out.
-3. **Observer split**:
-   - Desktop: `observe(container, 0.1, ...)` → instant reveal → items stagger `i * 80`ms
-   - Mobile: `observe(container, 0, ...)` → instant reveal + per-item `observe(item, 0.2, ...)` so each item appears as it scrolls into view
-
-**Never tie the container reveal to a parent section observer** — this would show the empty card surface long before its content. Give the container its own independent observer.
-
-When a section has both a header/desc block and a FeatureCard below:
-- Section observer (0.1) → header trigger + desc at 200ms
-- FeatureCard independent observer (0.1 desktop / 0 mobile) → card + items
+**Observers individuels** → quand les éléments sont **empilés verticalement** (Y différents) : mobile layout, `ParcoursSection` mobile, `FeatureItems` mobile. La cascade est naturelle au scroll.
 
 ```ts
-// Section: header + desc
-cleanups.push(observe(section, 0.1, () => {
-  rAF(() => {
-    headerRef.current?.trigger(0);
-    // desc at 200ms delay
-  });
-}));
+const isMobile = window.matchMedia('(max-width: 1024px)').matches;
 
-// FeatureCard: independent observer
-cleanups.push(observe(card, 0.1, () => {
+if (isMobile) {
+  // Empilé : observer sur chaque élément
+  elements.forEach(el =>
+    cleanups.push(observe(el, 0.2, () => rAF(() => revealEl(el, 0))))
+  );
+} else {
+  // Côte à côte : observer unique + stagger orchestré
+  cleanups.push(observe(container, 0.1, () => {
+    rAF(() => elements.forEach((el, i) => revealEl(el, i * 80)));
+  }));
+}
+```
+
+**Toujours séparer la surface card (FeatureCard) de la section parente** — elle a son propre observer, indépendant. Sinon la carte vide apparaît trop tôt ou trop tard.
+
+**ContactSection — deux observers** (card + texte) :
+```ts
+// Observer 1 : section-card entière dès qu'elle entre
+observe(section, 0.05, () => revealEl(section, 0), '0px');
+
+// Observer 2 : cascade texte quand le SectionHeader est lisible
+observe(headerRef.current?.element ?? section, 0.1, () => {
+  headerRef.current?.trigger(0);
+  revealEl(desc, 160);
+  // links via stagger...
+});
+```
+
+**Opacité compound — piège SSR** : si un parent a `opacity: 0` en CSS, ses enfants sont invisibles même si leur opacity JS est à 1. Toujours `parent.style.opacity = '1'` en `useIsomorphicLayoutEffect` avant de masquer les enfants individuellement.
+
+```ts
+// layoutEffect — overrider le CSS SSR, masquer les enfants en JS
+col.style.opacity = '1';        // ← neutralise le CSS opacity:0
+child.style.opacity = '0';      // ← les enfants gèrent leur propre état
+void col.offsetHeight;          // force reflow
+```
+
+**Never query elements by CSS Module class inside `useEffect`** — toujours utiliser un `ref` ou `el.children` / `el.firstElementChild`.
+
+---
+
+#### Règle 3 — Durées, distances & easing
+
+| Élément | translateY | scale | duration | rootMargin | threshold |
+|---|---|---|---|---|---|
+| Section-card entière (ContactSection) | `24px` | `0.97` | `600ms` | `'0px'` | `0.05` |
+| Texte (label, heading, desc) | `12px` | `0.98` | `600ms` | `'-15% bottom'` | `0.1` |
+| Image / média | `12px` | `0.98` | `600ms` | `'-5% bottom'` | `0.2` |
+| FeatureCard container (surface) | — | — | `none` | `'0px'` | `0.1` |
+| FeatureItems dans card | `12px` | `0.98` | `600ms` | hérité du card | — |
+| Hero (page load, CSS) | `16px` | `0.97` | `600ms` | — | — |
+
+Helper `revealEl` à créer en local dans chaque composant :
+
+```ts
+function revealEl(el: HTMLElement, delay: number) {
+  el.style.transition =
+    `opacity ${DURATION}ms ${EASE} ${delay}ms, ` +
+    `transform ${DURATION}ms ${EASE} ${delay}ms`;
+  el.style.opacity = '1';
+  el.style.transform = 'scale(1) translateY(0)';
+  setTimeout(() => {
+    el.style.transform = '';
+    el.style.transition = '';
+  }, DURATION + delay);
+}
+```
+
+---
+
+#### Règle 4 — Stagger
+
+`STAGGER = 80ms`. Maximum 4 étapes visibles (délai max = `3 × 80 = 240ms`). Au-delà, plafonner.
+
+```ts
+const STAGGER = 80;
+const MAX_STEPS = 4;
+
+items.forEach((item, i) => {
+  const delay = Math.min(i, MAX_STEPS - 1) * STAGGER;
+  revealEl(item, delay);
+});
+```
+
+**Cascade texte canonique** :
+```ts
+headerRef.current?.trigger(0);   // label à 0ms, heading à 80ms
+revealEl(desc, 160);             // heading + 80ms
+revealEl(meta, 240);             // desc + 80ms
+```
+
+**ParcoursSection** — image d'abord, texte 80ms après dans chaque colonne :
+```ts
+cols.forEach((col, i) => {
+  const imgDelay  = i * 80;       // col0: 0ms, col1: 80ms
+  const textDelay = i * 80 + 80;  // col0: 80ms, col1: 160ms
+  revealEl(col.firstElementChild as HTMLElement, imgDelay);
+  revealEl(col.lastElementChild as HTMLElement,  textDelay);
+});
+```
+
+---
+
+#### Règle 5 — Adaptation écrans
+
+**Sections très hautes sur mobile** : `threshold: 0.05` sur une section de 2000px = 100px doivent être visibles avant le trigger. Utiliser `threshold: 0` sur mobile pour les sections dont la hauteur dépasse ~1.5× le viewport (Intro, ParcoursSection 3+ items, SplitSection avec stats).
+
+```ts
+const isMobile    = window.matchMedia('(max-width: 1024px)').matches;
+const shortScreen = window.innerHeight < 700;
+const triggerNow  = isMobile || shortScreen;
+
+const threshold  = triggerNow ? 0    : 0.1;
+const rootMargin = triggerNow ? '0px' : '0px 0px -15% 0px';
+```
+
+**CSS `order` vs DOM order** : sur mobile, `order: 1` déplace l'image visuellement en bas mais elle reste en premier dans le DOM. Toujours faire un split `isMobile` pour les sections dont l'ordre CSS diffère de l'ordre DOM (ex. `ProjectMiddleOffice`).
+
+| Section | Desktop threshold | Mobile threshold | Mobile rootMargin |
+|---|---|---|---|
+| SplitSection | `0.1` | `0` | `'0px 0px -15% 0px'` |
+| Intro (ProjectIntro) | `0.05` | `0` | `'0px'` |
+| ParcoursSection cols | `0.1` (container) | par-element `0.2` | par-element |
+| FeatureCard items mobile | n/a | `0.2` each | default |
+
+---
+
+#### Surface card pattern (FeatureCard, stats grid)
+
+A "surface card" est un élément avec background/border visible contenant des items discrets.
+
+**Règle : container révélé instantanément, items en stagger.**
+
+1. **Container** (`opacity: 0` seulement — pas de transform) : révélé avec `transition: none` dès qu'il entre dans le viewport.
+2. **Items** (`opacity: 0, scale(0.98) translateY(12px)`) : stagger à 80ms chacun, 600ms expo-out.
+3. **Observer split** :
+   - Desktop : `observe(container, 0.1, ...)` → révélation instantanée → items stagger `i * 80ms`
+   - Mobile : `observe(container, 0, ...)` → révélation instantanée + `observe(item, 0.2, ...)` par item
+
+```ts
+// Desktop
+observe(card, 0.1, () => {
   card.style.transition = 'none';
   card.style.opacity = '1';
-  rAF(() => {
-    items.forEach((item, i) => { /* delay = i * 80 */ });
-  });
-}));
+  rAF(() => items.forEach((item, i) => revealEl(item, i * 80)));
+});
+
+// Mobile
+observe(card, 0, () => { card.style.transition = 'none'; card.style.opacity = '1'; });
+items.forEach(item => observe(item, 0.2, () => rAF(() => revealEl(item, 0))));
 ```
 
 ### Press (`:active`) feedback

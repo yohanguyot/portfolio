@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import styles from "./HeroBanner.module.css";
 
 type Props = {
@@ -26,15 +25,14 @@ export default function ProjectHeroBanner({
           {gradientNode}
         </div>
       </div>
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src={logoSrc}
         alt={logoAlt}
         className={styles.logo}
-        width={logoWidth ?? 400}
-        height={logoHeight}
+        fetchPriority="high"
         style={{
-          height: logoHeight,
-          width: "auto",
+          "--logo-height": `${logoHeight}px`,
           "--logo-height-mobile": `${logoHeightMobile ?? Math.round(logoHeight * 0.7)}px`,
         } as React.CSSProperties}
       />

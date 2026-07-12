@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import Image from "next/image";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./ParcoursSection.module.css";
@@ -22,6 +22,8 @@ type Props = {
 };
 
 export default function ParcoursSection({ label, heading, items, dimImage }: Props) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const colsRef = useRef<HTMLDivElement>(null);
 
   useIsomorphicLayoutEffect(() => {
@@ -46,6 +48,16 @@ export default function ParcoursSection({ label, heading, items, dimImage }: Pro
     const cols = Array.from(colsEl.children as HTMLCollectionOf<HTMLElement>);
     const isMobile = window.matchMedia('(max-width: 1024px)').matches;
     const cleanups: (() => void)[] = [];
+
+    // Header cascade : label(0) → heading(80ms)
+    const section = sectionRef.current;
+    if (section) {
+      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
+        }));
+      }, isMobile ? '0px 0px -15% 0px' : '0px'));
+    }
 
     if (isMobile) {
       // Empilé : chaque imageWrap et text a son propre observer, cascade naturelle au scroll.
@@ -95,11 +107,11 @@ export default function ParcoursSection({ label, heading, items, dimImage }: Pro
   }, []);
 
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.container}>
-        <SectionHeader label={label} heading={heading} />
+        <SectionHeader ref={headerRef} skipObserver label={label} heading={heading} />
         <div ref={colsRef} className={styles.cols}>
-          {items.map((item) => (
+          {items.map((item, i) => (
             <div key={item.title} className={styles.col}>
               <div className={styles.imageWrap}>
                 <Image
@@ -107,6 +119,7 @@ export default function ParcoursSection({ label, heading, items, dimImage }: Pro
                   alt={item.imageAlt}
                   width={1440}
                   height={900}
+                  loading={i === 0 ? "eager" : "lazy"}
                   className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`}
                 />
               </div>

@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import Image from "next/image";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import type { Dictionary } from "@/lib/getDictionary";
 import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
@@ -11,6 +11,8 @@ import styles from "./ProjectIdentities.module.css";
 type Props = { dict: Dictionary["bloom"]["identities"] };
 
 export default function ProjectIdentities({ dict }: Props) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const imagesRef = useRef<HTMLDivElement>(null);
 
@@ -32,26 +34,29 @@ export default function ProjectIdentities({ dict }: Props) {
     const bodyPs = bodyEl ? Array.from(bodyEl.children as HTMLCollectionOf<HTMLElement>) : [];
     const imageWraps = imagesEl ? Array.from(imagesEl.children as HTMLCollectionOf<HTMLElement>) : [];
 
+    const section = sectionRef.current;
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
     const cleanups: (() => void)[] = [];
 
-    if (bodyEl && bodyPs.length) {
-      cleanups.push(observe(bodyEl, 0.3, () => {
+    // Cascade coordonnée : label(0) → heading(80ms) → bodyPs(160ms, 240ms)
+    if (section) {
+      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
         requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
           bodyPs.forEach((p, i) => {
-            const delay = i * 80;
+            const delay = 160 + i * 80;
             p.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
             p.style.opacity = '1';
             p.style.transform = 'scale(1) translateY(0)';
             setTimeout(() => { p.style.transform = ''; p.style.transition = ''; }, DURATION + delay);
           });
         }));
-      }));
+      }, isMobile ? '0px 0px -15% 0px' : '0px'));
     }
 
     if (imagesEl && imageWraps.length) {
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
       if (isMobile) {
-        imageWraps.forEach(img => {
+        imageWraps.forEach((img) => {
           cleanups.push(observe(img, 0.2, () => {
             requestAnimationFrame(() => requestAnimationFrame(() => {
               img.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
@@ -80,10 +85,10 @@ export default function ProjectIdentities({ dict }: Props) {
   }, []);
 
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <SectionHeader label={dict.label} heading={dict.heading} />
+          <SectionHeader ref={headerRef} skipObserver label={dict.label} heading={dict.heading} />
           <div ref={bodyRef} className={styles.body}>
             <p className={styles.paragraph}>{dict.p1}</p>
             <p className={styles.paragraph}>{dict.p2}</p>

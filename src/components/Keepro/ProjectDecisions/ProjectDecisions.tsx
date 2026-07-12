@@ -43,13 +43,13 @@ export default function ProjectDecisions({ dict }: Props) {
     if (!section) return;
 
     const cleanups: (() => void)[] = [];
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
     const featureEl = featureRef.current;
     const card = featureEl?.firstElementChild as HTMLElement | null;
     const items = card ? Array.from(card.children as HTMLCollectionOf<HTMLElement>) : [];
 
     // Section observer : header + desc uniquement
-    cleanups.push(observe(section, 0.1, () => {
+    cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         headerRef.current?.trigger(0);
         const descEl = descRef.current;
@@ -60,7 +60,7 @@ export default function ProjectDecisions({ dict }: Props) {
           setTimeout(() => { descEl.style.transform = ''; descEl.style.transition = ''; }, DURATION + 160);
         }
       }));
-    }));
+    }, isMobile ? '0px 0px -15% 0px' : '0px'));
 
     // FeatureCard : observer propre, déclenché quand la card entre dans le viewport
     if (card && items.length) {

@@ -45,30 +45,56 @@ export default function ProjectCGP({ dict }: Props) {
     if (!section) return;
 
     const cleanups: (() => void)[] = [];
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
     const paragraphEl = paragraphRef.current;
     const imageWrap = imageWrapRef.current;
     const card = featureRef.current?.firstElementChild as HTMLElement | null;
     const items = card ? Array.from(card.children as HTMLCollectionOf<HTMLElement>) : [];
 
-    // Split : label(0) → heading(80ms) → paragraph(160ms) → imageWrap(240ms)
-    cleanups.push(observe(section, 0.1, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        headerRef.current?.trigger(0);
-        if (paragraphEl) {
-          paragraphEl.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
-          paragraphEl.style.opacity = '1';
-          paragraphEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { paragraphEl.style.transform = ''; paragraphEl.style.transition = ''; }, DURATION + 160);
-        }
-        if (imageWrap) {
-          imageWrap.style.transition = `opacity ${DURATION}ms ${EASE} 240ms, transform ${DURATION}ms ${EASE} 240ms`;
-          imageWrap.style.opacity = '1';
-          imageWrap.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION + 240);
-        }
-      }));
-    }, '0px 0px -15% 0px'));
+    if (isMobile) {
+      // Stacked: text cascade on section entry, image when it scrolls into view
+      cleanups.push(observe(section, 0, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
+          if (paragraphEl) {
+            paragraphEl.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
+            paragraphEl.style.opacity = '1';
+            paragraphEl.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { paragraphEl.style.transform = ''; paragraphEl.style.transition = ''; }, DURATION + 160);
+          }
+        }));
+      }, '0px 0px -15% 0px'));
+
+      if (imageWrap) {
+        cleanups.push(observe(imageWrap, 0.2, () => {
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            imageWrap.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+            imageWrap.style.opacity = '1';
+            imageWrap.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION);
+          }));
+        }));
+      }
+    } else {
+      // Desktop: side-by-side (imageRight) → label(0) → [heading(80ms) + image(80ms)] → paragraph(160ms)
+      cleanups.push(observe(section, 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
+          if (paragraphEl) {
+            paragraphEl.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
+            paragraphEl.style.opacity = '1';
+            paragraphEl.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { paragraphEl.style.transform = ''; paragraphEl.style.transition = ''; }, DURATION + 160);
+          }
+          if (imageWrap) {
+            imageWrap.style.transition = `opacity ${DURATION}ms ${EASE} 80ms, transform ${DURATION}ms ${EASE} 80ms`;
+            imageWrap.style.opacity = '1';
+            imageWrap.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION + 80);
+          }
+        }));
+      }, '0px'));
+    }
 
     // FeatureCard : observer propre
     if (card && items.length) {

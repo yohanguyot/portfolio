@@ -54,7 +54,7 @@ export default function ProjectMiddleOffice({ dict }: Props) {
     if (isMobile) {
       // Mobile : textCol en haut, image en bas (order:1 CSS).
       // Texte cascade depuis le trigger section, image avec son propre observer.
-      cleanups.push(observe(section, 0.1, () => {
+      cleanups.push(observe(section, 0, () => {
         requestAnimationFrame(() => requestAnimationFrame(() => {
           headerRef.current?.trigger(0);
           if (paragraphEl) {
@@ -93,7 +93,7 @@ export default function ProjectMiddleOffice({ dict }: Props) {
             setTimeout(() => { paragraphEl.style.transform = ''; paragraphEl.style.transition = ''; }, DURATION + 240);
           }
         }));
-      }, '0px 0px -15% 0px'));
+      }, '0px'));
     }
 
     // FeatureCard : observer propre

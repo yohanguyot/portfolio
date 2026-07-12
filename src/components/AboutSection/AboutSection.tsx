@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { Component, Route, CodeXml } from "lucide-react";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import type { Dictionary } from "@/lib/getDictionary";
@@ -52,6 +52,8 @@ function highlight(text: string, words: string[]) {
 }
 
 export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["about"]; lang?: string }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const infoRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -74,20 +76,26 @@ export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["
 
     const cleanups: (() => void)[] = [];
 
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
+    const section = sectionRef.current;
     const bodyDiv = bodyRef.current;
     const bodyPs = bodyDiv ? Array.from(bodyDiv.children as HTMLCollectionOf<HTMLElement>) : [];
 
-    cleanups.push(observe(bodyDiv, 0.3, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        bodyPs.forEach((p, i) => {
-          const delay = i * 80;
-          p.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-          p.style.opacity = '1';
-          p.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { p.style.transform = ''; p.style.transition = ''; }, DURATION + delay);
-        });
-      }));
-    }));
+    if (section) {
+      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
+          bodyPs.forEach((p, i) => {
+            const delay = 160 + i * 80;
+            p.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+            p.style.opacity = '1';
+            p.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { p.style.transform = ''; p.style.transition = ''; }, DURATION + delay);
+          });
+        }));
+      }, isMobile ? '0px 0px -15% 0px' : '0px'));
+    }
 
     // ── Skill card: surface instant + items stagger ──
     const wrapper = cardRef.current;
@@ -96,8 +104,6 @@ export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["
       const items = featureCard
         ? Array.from(featureCard.children as HTMLCollectionOf<HTMLElement>)
         : [];
-
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
       if (isMobile) {
         cleanups.push(observe(wrapper, 0, () => {
@@ -134,10 +140,12 @@ export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["
   }, []);
 
   return (
-    <section className={styles.section} id="a-propos">
+    <section ref={sectionRef} className={styles.section} id="a-propos">
       <div className={styles.container}>
         <div ref={infoRef} className={styles.info}>
           <SectionHeader
+            ref={headerRef}
+            skipObserver
             label={dict.label}
             heading={
               <>

@@ -4,7 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import ProjectNav from "@/components/Project/Nav/Nav";
 import type { Dictionary } from "@/lib/getDictionary";
 import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
@@ -272,7 +272,7 @@ function CardInner({ client, btnLabel }: { client: ClientData; btnLabel: string 
   return (
     <>
       <div className={styles.cardImage}>
-        <Image src={client.imageSrc} alt={client.name} width={316} height={492} className={styles.cardImg} />
+        <Image src={client.imageSrc} alt={client.name} fill sizes="316px" className={styles.cardImg} />
       </div>
       <div className={styles.cardInfo}>
         <div className={styles.cardName}>
@@ -296,10 +296,10 @@ export default function ProjectPlayground({ dict }: Props) {
   const tabsRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const leadRef = useRef<HTMLParagraphElement>(null);
   const tabsRowRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<HTMLDivElement>(null);
-  const touchStartX = useRef(0);
 
   function updateIndicator() {
     const index = CLIENTS.findIndex((c) => c.id === activeId);
@@ -353,28 +353,40 @@ export default function ProjectPlayground({ dict }: Props) {
     const viewerEl = viewerRef.current;
     if (!section) return;
 
-    return observe(section, 0.1, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        if (leadEl) {
-          leadEl.style.transition = `opacity ${DURATION}ms ${EASE} 80ms, transform ${DURATION}ms ${EASE} 80ms`;
-          leadEl.style.opacity = '1';
-          leadEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { leadEl.style.transform = ''; leadEl.style.transition = ''; }, DURATION + 80);
-        }
-        if (tabsRowEl) {
-          tabsRowEl.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
-          tabsRowEl.style.opacity = '1';
-          tabsRowEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { tabsRowEl.style.transform = ''; tabsRowEl.style.transition = ''; }, DURATION + 160);
-        }
-        if (viewerEl) {
-          viewerEl.style.transition = `opacity ${DURATION}ms ${EASE} 240ms, transform ${DURATION}ms ${EASE} 240ms`;
-          viewerEl.style.opacity = '1';
-          viewerEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { viewerEl.style.transform = ''; viewerEl.style.transition = ''; }, DURATION + 240);
-        }
+    const cleanups: (() => void)[] = [];
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
+    function revealEl(el: HTMLElement, delay: number) {
+      el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+      el.style.opacity = '1';
+      el.style.transform = 'scale(1) translateY(0)';
+      setTimeout(() => { el.style.transform = ''; el.style.transition = ''; }, DURATION + delay);
+    }
+
+    if (isMobile) {
+      // Section: header + lead cascade
+      cleanups.push(observe(section, 0, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
+          if (leadEl) revealEl(leadEl, 160);
+        }));
+      }, isMobile ? '0px 0px -15% 0px' : '0px'));
+      // tabsRow + viewer each fire when they scroll into view
+      if (tabsRowEl) cleanups.push(observe(tabsRowEl, 0.2, () => requestAnimationFrame(() => requestAnimationFrame(() => revealEl(tabsRowEl, 0)))));
+      if (viewerEl) cleanups.push(observe(viewerEl, 0.1, () => requestAnimationFrame(() => requestAnimationFrame(() => revealEl(viewerEl, 0)))));
+    } else {
+      // Desktop: single observer, staggered cascade
+      cleanups.push(observe(section, 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
+          if (leadEl) revealEl(leadEl, 160);
+          if (tabsRowEl) revealEl(tabsRowEl, 240);
+          if (viewerEl) revealEl(viewerEl, 320);
+        }));
       }));
-    });
+    }
+
+    return () => cleanups.forEach(fn => fn());
   }, []);
 
   useEffect(() => {
@@ -390,16 +402,12 @@ export default function ProjectPlayground({ dict }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleTouchStart(e: React.TouchEvent) {
-    touchStartX.current = e.touches[0].clientX;
-  }
+  const currentIdx = CLIENTS.findIndex(c => c.id === activeId);
+  const canPrev = currentIdx > 0;
+  const canNext = currentIdx < CLIENTS.length - 1;
 
-  function handleTouchEnd(e: React.TouchEvent) {
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    const idx = CLIENTS.findIndex(c => c.id === activeId);
-    if (dx < -60 && idx < CLIENTS.length - 1) setActiveId(CLIENTS[idx + 1].id);
-    else if (dx > 60 && idx > 0) setActiveId(CLIENTS[idx - 1].id);
-  }
+  function handlePrev() { if (canPrev) setActiveId(CLIENTS[currentIdx - 1].id); }
+  function handleNext() { if (canNext) setActiveId(CLIENTS[currentIdx + 1].id); }
 
   const clientBase = CLIENTS.find((c) => c.id === activeId)!;
   const client = { ...clientBase, category: dict.categories[CATEGORY_KEYS[activeId]] };
@@ -410,7 +418,7 @@ export default function ProjectPlayground({ dict }: Props) {
       <div className={styles.container}>
         <div className={styles.playground}>
           <div className={styles.header}>
-            <SectionHeader label={dict.label} heading={dict.heading} />
+            <SectionHeader ref={headerRef} skipObserver label={dict.label} heading={dict.heading} />
             <p ref={leadRef} className={styles.lead}>{dict.lead}</p>
           </div>
 
@@ -442,15 +450,31 @@ export default function ProjectPlayground({ dict }: Props) {
           </div>
 
           {/* Viewer */}
-          <div ref={viewerRef} className={styles.viewer} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+          <div ref={viewerRef} className={styles.viewer}>
             {/* Card */}
             <div className={styles.cardWrap}>
+              <button
+                className={`${styles.navBtn} ${!canPrev ? styles.navBtnDisabled : ""}`}
+                onClick={handlePrev}
+                disabled={!canPrev}
+                aria-label={dict.scrollLeft}
+              >
+                <ChevronLeft size={16} />
+              </button>
               <div
                 className={styles.bloomCard}
                 style={client.vars as React.CSSProperties}
               >
                 <CardInner client={client} btnLabel={dict.cardBtn} />
               </div>
+              <button
+                className={`${styles.navBtn} ${!canNext ? styles.navBtnDisabled : ""}`}
+                onClick={handleNext}
+                disabled={!canNext}
+                aria-label={dict.scrollRight}
+              >
+                <ChevronRight size={16} />
+              </button>
             </div>
 
             {/* Token panel */}

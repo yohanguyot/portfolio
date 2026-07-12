@@ -208,11 +208,47 @@
 /* ── Card ── */
 
 .cardWrap {
-  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-lg);
   flex-shrink: 0;
+}
+
+.navBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface-2);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease),
+    background var(--duration-fast) var(--ease),
+    opacity var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.navBtn:active {
+  transform: scale(0.95);
+}
+
+.navBtnDisabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .navBtn:not(.navBtnDisabled):hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-surface-3);
+  }
 }
 
 @property --card-bg {
@@ -479,12 +515,13 @@
 
   .cardWrap {
     width: 100%;
-    max-width: 240px;
-    margin-inline: auto;
+    justify-content: center;
   }
 
   .bloomCard {
-    width: 100%;
+    flex: 1;
+    max-width: 240px;
+    width: auto;
   }
 
   .tokenPanel {

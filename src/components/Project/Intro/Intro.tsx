@@ -67,64 +67,61 @@ export default function ProjectIntro({ tags, title, description, meta, stats }: 
     const statsEl = statsRef.current;
     const statItems = statsEl ? Array.from(statsEl.children as HTMLCollectionOf<HTMLElement>) : [];
 
-    const cleanup = observe(section, 0.05, () => {
+    const cleanups: (() => void)[] = [];
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
+    function revealEl(el: HTMLElement, delay: number) {
+      el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+      el.style.opacity = '1';
+      el.style.transform = 'scale(1) translateY(0)';
+      setTimeout(() => { el.style.transform = ''; el.style.transition = ''; }, DURATION + delay);
+    }
+
+    cleanups.push(observe(section, isMobile ? 0 : 0.05, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
+        const vh = window.innerHeight;
         let delay = 0;
 
-        if (backEl) {
-          backEl.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-          backEl.style.opacity = '1';
-          backEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { backEl.style.transform = ''; backEl.style.transition = ''; }, DURATION + delay);
-          delay += 40;
-        }
-
-        tagItems.forEach((t, i) => {
-          const d = delay + i * 40;
-          t.style.transition = `opacity ${DURATION}ms ${EASE} ${d}ms, transform ${DURATION}ms ${EASE} ${d}ms`;
-          t.style.opacity = '1';
-          t.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { t.style.transform = ''; t.style.transition = ''; }, DURATION + d);
-        });
+        if (backEl) { revealEl(backEl, delay); delay += 40; }
+        tagItems.forEach((t, i) => revealEl(t, delay + i * 40));
         delay += tagItems.length * 40;
+        if (titleEl) { revealEl(titleEl, delay); delay += 40; }
+        if (descEl) { revealEl(descEl, delay); delay += 40; }
 
-        if (titleEl) {
-          titleEl.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-          titleEl.style.opacity = '1';
-          titleEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { titleEl.style.transform = ''; titleEl.style.transition = ''; }, DURATION + delay);
-          delay += 40;
+        // Meta : cascade si déjà visible, sinon observer propre
+        const metaEl = metaRef.current;
+        if (metaEl && metaItems.length) {
+          if (metaEl.getBoundingClientRect().top < vh) {
+            metaItems.forEach((m, i) => revealEl(m, delay + i * 40));
+            delay += metaItems.length * 40;
+          } else {
+            cleanups.push(observe(metaEl, 0, () => {
+              requestAnimationFrame(() => requestAnimationFrame(() => {
+                metaItems.forEach((m, i) => revealEl(m, i * 40));
+              }));
+            }));
+            delay += metaItems.length * 40;
+          }
         }
 
-        if (descEl) {
-          descEl.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-          descEl.style.opacity = '1';
-          descEl.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { descEl.style.transform = ''; descEl.style.transition = ''; }, DURATION + delay);
-          delay += 40;
+        // Stats : surface fade in + items en stagger depuis le même délai
+        if (statsEl && statItems.length) {
+          if (statsEl.getBoundingClientRect().top < vh) {
+            revealEl(statsEl, delay);
+            statItems.forEach((s, i) => revealEl(s, delay + i * 40));
+          } else {
+            cleanups.push(observe(statsEl, 0, () => {
+              requestAnimationFrame(() => requestAnimationFrame(() => {
+                revealEl(statsEl, 0);
+                statItems.forEach((s, i) => revealEl(s, i * 40));
+              }));
+            }));
+          }
         }
-
-        metaItems.forEach((m, i) => {
-          const d = delay + i * 40;
-          m.style.transition = `opacity ${DURATION}ms ${EASE} ${d}ms, transform ${DURATION}ms ${EASE} ${d}ms`;
-          m.style.opacity = '1';
-          m.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { m.style.transform = ''; m.style.transition = ''; }, DURATION + d);
-        });
-        delay += metaItems.length * 40;
-
-        if (statsEl) { statsEl.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms`; statsEl.style.opacity = '1'; setTimeout(() => { statsEl.style.transition = ''; }, DURATION + delay); }
-        statItems.forEach((s, i) => {
-          const d = delay + i * 40;
-          s.style.transition = `opacity ${DURATION}ms ${EASE} ${d}ms, transform ${DURATION}ms ${EASE} ${d}ms`;
-          s.style.opacity = '1';
-          s.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { s.style.transform = ''; s.style.transition = ''; }, DURATION + d);
-        });
       }));
-    }, '0px');
+    }, '0px'));
 
-    return cleanup;
+    return () => cleanups.forEach(fn => fn());
   }, []);
 
   return (

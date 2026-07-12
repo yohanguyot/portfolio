@@ -22,8 +22,8 @@ export default function TextSection({ label, heading, children }: Props) {
     const labelEl = labelRef.current;
     const headingEl = headingRef.current;
     const bodyEl = bodyRef.current;
-    if (labelEl) { labelEl.style.opacity = '0'; labelEl.style.transform = 'translateY(16px)'; }
-    if (headingEl) { headingEl.style.opacity = '0'; headingEl.style.transform = 'translateY(24px)'; }
+    if (labelEl) { labelEl.style.opacity = '0'; labelEl.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (headingEl) { headingEl.style.opacity = '0'; headingEl.style.transform = 'scale(0.98) translateY(12px)'; }
     if (bodyEl) { bodyEl.style.opacity = '0'; bodyEl.style.transform = 'scale(0.98) translateY(12px)'; }
   }, []);
 
@@ -35,18 +35,19 @@ export default function TextSection({ label, heading, children }: Props) {
     const bodyEl = bodyRef.current;
     if (!section) return;
 
-    return observe(section, 0.15, () => {
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    return observe(section, isMobile ? 0 : 0.1, () => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         if (labelEl) {
           labelEl.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
           labelEl.style.opacity = '1';
-          labelEl.style.transform = 'translateY(0)';
+          labelEl.style.transform = 'scale(1) translateY(0)';
           setTimeout(() => { labelEl.style.transform = ''; labelEl.style.transition = ''; }, DURATION);
         }
         if (headingEl) {
           headingEl.style.transition = `opacity ${DURATION}ms ${EASE} 80ms, transform ${DURATION}ms ${EASE} 80ms`;
           headingEl.style.opacity = '1';
-          headingEl.style.transform = 'translateY(0)';
+          headingEl.style.transform = 'scale(1) translateY(0)';
           setTimeout(() => { headingEl.style.transform = ''; headingEl.style.transition = ''; }, DURATION + 80);
         }
         if (bodyEl) {
@@ -56,7 +57,7 @@ export default function TextSection({ label, heading, children }: Props) {
           setTimeout(() => { bodyEl.style.transform = ''; bodyEl.style.transition = ''; }, DURATION + 160);
         }
       }));
-    });
+    }, isMobile ? '0px 0px -15% 0px' : '0px');
   }, []);
 
   return (

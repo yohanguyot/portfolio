@@ -25,10 +25,20 @@ export function NavLink({ label, state = "default", href = "#", className, onCli
       ? styles.navLinkHover
       : "";
 
+  function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const id = href.slice(1);
+      const el = document.getElementById(id);
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" });
+    }
+    onClickAction?.();
+  }
+
   return (
     <a
       href={href}
-      onClick={onClickAction}
+      onClick={handleClick}
       className={[styles.navLink, stateClass, className ?? ""].filter(Boolean).join(" ")}
     >
       <span className={styles.navLinkLabel}>{label}</span>
@@ -393,17 +403,28 @@ export default function Navigation() {
             aria-modal="true"
             aria-label={dict.nav.menuLabel}
           >
-            {NAV_LINKS.map((l, i) => (
-              <a
-                key={l.href}
-                href={isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`}
-                className={styles.mobileLink}
-                onClick={close}
-                ref={i === 0 ? firstLinkRef : undefined}
-              >
-                {l.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((l, i) => {
+              const href = isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`;
+              return (
+                <a
+                  key={l.href}
+                  href={href}
+                  className={styles.mobileLink}
+                  onClick={(e) => {
+                    if (href.startsWith("#")) {
+                      e.preventDefault();
+                      const id = href.slice(1);
+                      const el = document.getElementById(id);
+                      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" });
+                    }
+                    close();
+                  }}
+                  ref={i === 0 ? firstLinkRef : undefined}
+                >
+                  {l.label}
+                </a>
+              );
+            })}
             <div className={styles.mobileDivider} />
             <div className={styles.mobileFooter}>
               <LanguageDropdown inline />

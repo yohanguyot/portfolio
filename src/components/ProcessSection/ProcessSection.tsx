@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { Search, Layers, RefreshCw, PackageCheck } from "lucide-react";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import SquareIcon from "@/components/SquareIcon/SquareIcon";
 import type { Dictionary } from "@/lib/getDictionary";
 import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
@@ -12,6 +12,8 @@ import styles from "./ProcessSection.module.css";
 const STEP_ICONS = [Search, Layers, RefreshCw, PackageCheck] as const;
 
 export default function ProcessSection({ dict }: { dict: Dictionary["process"] }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -33,25 +35,29 @@ export default function ProcessSection({ dict }: { dict: Dictionary["process"] }
 
     const cleanups: (() => void)[] = [];
 
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
+    const section = sectionRef.current;
     const desc = descRef.current;
 
-    cleanups.push(observe(desc, 0.3, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        if (desc) {
-          desc.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-          desc.style.opacity = '1';
-          desc.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION);
-        }
-      }));
-    }));
+    if (section) {
+      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
+          if (desc) {
+            desc.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
+            desc.style.opacity = '1';
+            desc.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION + 160);
+          }
+        }));
+      }, isMobile ? '0px 0px -15% 0px' : '0px'));
+    }
 
     // ── Steps grid ──
     const grid = gridRef.current;
     if (grid) {
       const steps = Array.from(grid.children as HTMLCollectionOf<HTMLElement>);
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
       if (isMobile) {
         cleanups.push(observe(grid, 0, () => {
           grid.style.transition = 'none';
@@ -87,10 +93,10 @@ export default function ProcessSection({ dict }: { dict: Dictionary["process"] }
   }, []);
 
   return (
-    <section className={styles.section} id="process">
+    <section ref={sectionRef} className={styles.section} id="process">
       <div className={styles.container}>
         <div className={styles.intro}>
-          <SectionHeader label={dict.label} heading={dict.heading} />
+          <SectionHeader ref={headerRef} label={dict.label} heading={dict.heading} skipObserver />
           <p ref={descRef} className={styles.description}>{dict.description}</p>
         </div>
 

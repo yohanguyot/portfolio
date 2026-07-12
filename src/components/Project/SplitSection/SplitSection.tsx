@@ -12,6 +12,7 @@ type Props = {
   imageAlt?: string;
   imagePosition?: "left" | "right";
   dimImage?: boolean;
+  priority?: boolean;
   children: ReactNode;
 };
 
@@ -20,6 +21,7 @@ export default function SplitSection({
   imageAlt = "",
   imagePosition = "right",
   dimImage,
+  priority,
   children,
 }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -64,36 +66,61 @@ export default function SplitSection({
     const imageWrap = imageWrapRef.current;
     if (!section || !textCol || !imageWrap) return;
 
+    const cleanups: (() => void)[] = [];
     const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-    // imageLeft desktop : image(0) → label(80ms) → heading(160ms) → body(240ms)
-    // imageRight desktop: label(0ms) → [imageWrap(80ms) + heading(80ms)] → body(160ms)
-    // mobile            : label(0ms) → heading(80ms) → body(160ms) → imageWrap(240ms)
-    const imageFirst = !isMobile && imagePosition === 'left';
-    const headerDelay = imageFirst ? 80 : 0;
-    const imgDelay = imageFirst ? 0 : isMobile ? 240 : 80;
-    const bodyDelay = headerDelay + 160;
-
     const bodyDiv = textCol.lastElementChild as HTMLElement | null;
 
-    const cleanup = observe(section, 0.1, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        internalHeaderRef.current?.trigger(headerDelay);
+    if (isMobile) {
+      // Stacked: text cascade on section entry, image when it scrolls into view
+      cleanups.push(observe(section, 0, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          internalHeaderRef.current?.trigger(0);
+          if (bodyDiv) {
+            bodyDiv.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
+            bodyDiv.style.opacity = '1';
+            bodyDiv.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { bodyDiv.style.transform = ''; bodyDiv.style.transition = ''; }, DURATION + 160);
+          }
+        }));
+      }, '0px 0px -15% 0px'));
 
-        imageWrap.style.transition = `opacity ${DURATION}ms ${EASE} ${imgDelay}ms, transform ${DURATION}ms ${EASE} ${imgDelay}ms`;
-        imageWrap.style.opacity = '1';
-        imageWrap.style.transform = 'scale(1) translateY(0)';
-        setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION + imgDelay);
-
-        if (bodyDiv) {
-          bodyDiv.style.transition = `opacity ${DURATION}ms ${EASE} ${bodyDelay}ms, transform ${DURATION}ms ${EASE} ${bodyDelay}ms`;
-          bodyDiv.style.opacity = '1';
-          bodyDiv.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { bodyDiv.style.transform = ''; bodyDiv.style.transition = ''; }, DURATION + bodyDelay);
-        }
+      cleanups.push(observe(imageWrap, 0.2, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          imageWrap.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+          imageWrap.style.opacity = '1';
+          imageWrap.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION);
+        }));
       }));
-    }, '0px 0px -15% 0px');
+    } else {
+      // Desktop: side-by-side → single observer + stagger
+      // imageLeft : image(0ms) → label(80ms) → heading(160ms) → body(240ms)
+      // imageRight: label(0ms) → [image(80ms) + heading(80ms)] → body(160ms)
+      const imageFirst = imagePosition === 'left';
+      const headerDelay = imageFirst ? 80 : 0;
+      const imgDelay = imageFirst ? 0 : 80;
+      const bodyDelay = headerDelay + 160;
 
-    return cleanup;
+      cleanups.push(observe(section, 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          internalHeaderRef.current?.trigger(headerDelay);
+
+          imageWrap.style.transition = `opacity ${DURATION}ms ${EASE} ${imgDelay}ms, transform ${DURATION}ms ${EASE} ${imgDelay}ms`;
+          imageWrap.style.opacity = '1';
+          imageWrap.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION + imgDelay);
+
+          if (bodyDiv) {
+            bodyDiv.style.transition = `opacity ${DURATION}ms ${EASE} ${bodyDelay}ms, transform ${DURATION}ms ${EASE} ${bodyDelay}ms`;
+            bodyDiv.style.opacity = '1';
+            bodyDiv.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { bodyDiv.style.transform = ''; bodyDiv.style.transition = ''; }, DURATION + bodyDelay);
+          }
+        }));
+      }, '0px'));
+    }
+
+    return () => cleanups.forEach(fn => fn());
   }, [imagePosition]);
 
   return (
@@ -104,7 +131,7 @@ export default function SplitSection({
       <div className={styles.container}>
         <div ref={textColRef} className={styles.textCol}>{processedChildren}</div>
         <div ref={imageWrapRef} className={styles.imageWrap}>
-          <Image src={imageSrc} alt={imageAlt} width={1440} height={900} className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`} />
+          <Image src={imageSrc} alt={imageAlt} width={1440} height={900} priority={priority} className={`${styles.image}${dimImage ? ` ${styles.dim}` : ""}`} />
         </div>
       </div>
     </section>

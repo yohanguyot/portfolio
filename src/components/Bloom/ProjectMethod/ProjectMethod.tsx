@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { FileCheck, Variable } from "lucide-react";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import type { Dictionary } from "@/lib/getDictionary";
@@ -15,6 +15,8 @@ const ICONS = [FileCheck, Variable];
 type Props = { dict: Dictionary["bloom"]["method"] };
 
 export default function ProjectMethod({ dict }: Props) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const cardWrapRef = useRef<HTMLDivElement>(null);
 
@@ -37,21 +39,24 @@ export default function ProjectMethod({ dict }: Props) {
     const items = featureCard ? Array.from(featureCard.children as HTMLCollectionOf<HTMLElement>) : [];
     const bodyPs = bodyEl ? Array.from(bodyEl.children as HTMLCollectionOf<HTMLElement>) : [];
 
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const section = sectionRef.current;
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
     const cleanups: (() => void)[] = [];
 
-    if (bodyEl && bodyPs.length) {
-      cleanups.push(observe(bodyEl, 0.3, () => {
+    // Cascade coordonnée : label(0) → heading(80ms) → bodyPs(160ms, 240ms)
+    if (section) {
+      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
         requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
           bodyPs.forEach((p, i) => {
-            const delay = i * 80;
+            const delay = 160 + i * 80;
             p.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
             p.style.opacity = '1';
             p.style.transform = 'scale(1) translateY(0)';
             setTimeout(() => { p.style.transform = ''; p.style.transition = ''; }, DURATION + delay);
           });
         }));
-      }));
+      }, isMobile ? '0px 0px -15% 0px' : '0px'));
     }
 
     if (featureCard && items.length) {
@@ -88,10 +93,12 @@ export default function ProjectMethod({ dict }: Props) {
   }, []);
 
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.container}>
         <div className={styles.left}>
           <SectionHeader
+            ref={headerRef}
+            skipObserver
             label={dict.label}
             heading={dict.heading.split("\n").map((line, i) => (
               <span key={i} style={{ display: "block" }}>{line}</span>

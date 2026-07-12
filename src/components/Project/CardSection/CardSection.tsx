@@ -22,7 +22,7 @@ export default function CardSection({ label, heading, children }: Props) {
     const card = cardRef.current;
     const body = bodyRef.current;
     if (!card) return;
-    card.style.opacity = '0';
+    card.style.opacity = '1'; // override CSS opacity:0 — parent visible, seuls les enfants portent l'animation
     card.style.transform = 'scale(0.97) translateY(24px)';
     if (body) { body.style.opacity = '0'; body.style.transform = 'scale(0.98) translateY(12px)'; }
   }, []);
@@ -37,8 +37,7 @@ export default function CardSection({ label, heading, children }: Props) {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         headerRef.current?.trigger(0);
 
-        card.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-        card.style.opacity = '1';
+        card.style.transition = `transform ${DURATION}ms ${EASE}`;
         card.style.transform = 'scale(1) translateY(0)';
         setTimeout(() => { card.style.transform = ''; card.style.transition = ''; }, DURATION);
 

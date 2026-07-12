@@ -5,7 +5,7 @@ import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { usePathname } from "next/navigation";
 import Button from "@/components/Button/Button";
 import ProjectImage from "@/components/ProjectImage/ProjectImage";
-import SectionHeader from "@/components/SectionHeader/SectionHeader";
+import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
 import { shouldReduceMotion, reveal, observe, EASE, DURATION } from "@/lib/animation";
@@ -40,6 +40,8 @@ export default function ProjectsSection() {
   const dict = useDict();
   const p = dict.projects;
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<SectionHeaderHandle>(null);
   const bloomRef = useRef<HTMLAnchorElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -59,16 +61,50 @@ export default function ProjectsSection() {
 
     const cleanups: (() => void)[] = [];
 
-    // SectionHeader gère lui-même l'animation du label et du h2
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
+    const section = sectionRef.current;
+    const bloom = bloomRef.current;
+    const grid = gridRef.current;
+
+    // Back-navigation: section already in viewport → fire cascade immediately
+    if (section && section.getBoundingClientRect().top < window.innerHeight) {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        headerRef.current?.trigger(0);
+        if (bloom) {
+          bloom.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
+          bloom.style.opacity = '1';
+          bloom.style.transform = 'scale(1) translateY(0)';
+          setTimeout(() => { bloom.style.transform = ''; bloom.style.transition = ''; }, DURATION);
+        }
+        if (grid) {
+          const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
+          cards.forEach((c, i) => {
+            c.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 80}ms, transform ${DURATION}ms ${EASE} ${i * 80}ms`;
+            c.style.opacity = '1';
+            c.style.transform = 'scale(1) translateY(0)';
+            setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION + i * 80);
+          });
+          setTimeout(() => { grid.dataset.ready = 'true'; }, (cards.length - 1) * 120);
+        }
+      }));
+      return () => cleanups.forEach(fn => fn());
+    }
+
+    if (section) {
+      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          headerRef.current?.trigger(0);
+        }));
+      }, isMobile ? '0px 0px -15% 0px' : '0px'));
+    }
 
     // ── Bloom card ──
-    cleanups.push(observe(bloomRef.current, 0.35, reveal(bloomRef.current!, 0)));
+    cleanups.push(observe(bloomRef.current, isMobile ? 0 : 0.2, reveal(bloomRef.current!, 0)));
 
     // ── Small cards grid ──
-    const grid = gridRef.current;
     if (grid) {
       const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
       if (isMobile) {
         cards.forEach((c, i) => {
@@ -118,9 +154,9 @@ export default function ProjectsSection() {
   }));
 
   return (
-    <section className={styles.section} id="projets">
+    <section ref={sectionRef} className={styles.section} id="projets">
       <div className={styles.container}>
-        <SectionHeader label={p.label} heading={p.heading} className={styles.sectionHeader} animationThreshold={0.5} />
+        <SectionHeader ref={headerRef} label={p.label} heading={p.heading} className={styles.sectionHeader} skipObserver />
 
         <div className={styles.projectItems}>
           <a
@@ -136,6 +172,7 @@ export default function ProjectsSection() {
                 project={FEATURED.slug}
                 hovered={hoveredSlug === FEATURED.slug}
                 noActiveEffect
+                eager
               />
             </div>
             <div className={styles.cardLargeContent}>
@@ -171,6 +208,7 @@ export default function ProjectsSection() {
                     <ProjectImage
                       project={proj.slug}
                       hovered={hoveredSlug === proj.slug}
+                      eager
                     />
                   </div>
                   <div className={styles.cardContent}>

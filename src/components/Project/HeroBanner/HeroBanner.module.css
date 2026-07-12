@@ -18,13 +18,13 @@
   right: 0;
   top: 268px;
   height: 192px;
-  animation: bannerGradient 1000ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Figma: inset -104.17% -13.89% → extends 200px beyond each edge of the container */
 .gradientInner {
   position: absolute;
   inset: -104.17% -13.89%;
+  animation: bannerGradient 1000ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .gradientImg {
@@ -38,6 +38,8 @@
 .logo {
   position: relative;
   z-index: 1;
+  height: var(--logo-height);
+  width: auto;
   max-width: 80%;
   object-fit: contain;
   pointer-events: none;
@@ -70,8 +72,7 @@
   }
 
   .logo {
-    height: var(--logo-height-mobile) !important;
-    width: auto !important;
+    height: var(--logo-height-mobile);
     max-width: 65%;
   }
 }
