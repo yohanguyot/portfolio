@@ -5,7 +5,6 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ViewTransitions } from "next-view-transitions";
-import Grain from "@/components/Grain/Grain";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -95,7 +94,6 @@ export default function RootLayout({
         </ViewTransitions>
         <Analytics />
         <SpeedInsights />
-        <Grain />
       </body>
     </html>
   );
