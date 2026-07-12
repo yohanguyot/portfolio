@@ -16,7 +16,7 @@ function buildTile(): HTMLCanvasElement {
     while (u === 0) u = Math.random();
     while (v === 0) v = Math.random();
     const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-    const luma = Math.max(0, Math.min(255, (z * 72 + 128) | 0));
+    const luma = Math.max(0, Math.min(255, (z * 72 + 80) | 0));
     // Légère variation de teinte par canal
     data[i]     = Math.max(0, Math.min(255, luma + ((Math.random() * 12 - 6) | 0)));
     data[i + 1] = Math.max(0, Math.min(255, luma + ((Math.random() * 12 - 6) | 0)));
@@ -89,6 +89,8 @@ export default function Grain() {
         zIndex: 99999,
         opacity: 0,
         mixBlendMode: "soft-light",
+        transform: "translateZ(0)",
+        willChange: "transform",
       }}
     />
   );
