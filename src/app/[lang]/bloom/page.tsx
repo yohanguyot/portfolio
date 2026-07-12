@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import Navigation from "@/components/Navigation/Navigation";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]/bloom">): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  return {
+    title: "Bloom · Yohan Guyot",
+    description: dict.meta.bloom,
+  };
+}
 import HeroBanner from "@/components/Bloom/HeroBanner/HeroBanner";
 import ProjectIntro from "@/components/Bloom/ProjectIntro/ProjectIntro";
 import ProjectContext from "@/components/Bloom/ProjectContext/ProjectContext";

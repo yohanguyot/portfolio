@@ -13,6 +13,7 @@
     "@vercel/speed-insights": "^2.0.0",
     "lucide-react": "^1.22.0",
     "next": "^16.2.9",
+    "next-view-transitions": "^0.3.5",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.17.1"

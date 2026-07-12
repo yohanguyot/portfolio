@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import Navigation from "@/components/Navigation/Navigation";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]/keepro">): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  return {
+    title: "Keepro · Yohan Guyot",
+    description: dict.meta.keepro,
+  };
+}
 import HeroBanner from "@/components/Keepro/HeroBanner/HeroBanner";
 import ProjectIntro from "@/components/Keepro/ProjectIntro/ProjectIntro";
 import ProjectContext from "@/components/Keepro/ProjectContext/ProjectContext";

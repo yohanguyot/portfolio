@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import Navigation from "@/components/Navigation/Navigation";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]/wenimmo">): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  return {
+    title: "Wenimmo · Yohan Guyot",
+    description: dict.meta.wenimmo,
+  };
+}
 import HeroBanner from "@/components/Wenimmo/HeroBanner/HeroBanner";
 import ProjectIntro from "@/components/Wenimmo/ProjectIntro/ProjectIntro";
 import ProjectContext from "@/components/Wenimmo/ProjectContext/ProjectContext";

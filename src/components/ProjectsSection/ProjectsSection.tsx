@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { usePathname } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import Button from "@/components/Button/Button";
 import ProjectImage from "@/components/ProjectImage/ProjectImage";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
@@ -40,6 +41,13 @@ export default function ProjectsSection() {
   const dict = useDict();
   const p = dict.projects;
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const router = useTransitionRouter();
+
+  function navigate(e: React.MouseEvent, href: string) {
+    e.preventDefault();
+    router.push(href);
+  }
+
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<SectionHeaderHandle>(null);
   const bloomRef = useRef<HTMLAnchorElement>(null);
@@ -165,7 +173,7 @@ export default function ProjectsSection() {
             className={styles.cardLarge}
             onMouseEnter={() => setHoveredSlug(FEATURED.slug)}
             onMouseLeave={() => setHoveredSlug(null)}
-            onClick={() => trackEvent("project_click", { project: FEATURED.slug })}
+            onClick={(e) => { navigate(e, `/${lang}/bloom`); trackEvent("project_click", { project: FEATURED.slug }); }}
           >
             <div className={styles.cardLargeImageWrap}>
               <ProjectImage
@@ -201,7 +209,7 @@ export default function ProjectsSection() {
                 className={styles.card}
                 onMouseEnter={() => setHoveredSlug(proj.slug)}
                 onMouseLeave={() => setHoveredSlug(null)}
-                onClick={() => trackEvent("project_click", { project: proj.slug })}
+                onClick={(e) => { navigate(e, `/${lang}/${proj.slug}`); trackEvent("project_click", { project: proj.slug }); }}
               >
                 <div className={styles.cardInner}>
                   <div className={styles.cardImageWrap}>

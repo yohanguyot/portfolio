@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import { getDictionary, type Locale } from "@/lib/getDictionary";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  return {
+    title: "Yohan Guyot · Product Builder",
+    description: dict.meta.home,
+  };
+}
 import Navigation from "@/components/Navigation/Navigation";
 import HeroSection from "@/components/HeroSection/HeroSection";
 import ProjectsSection from "@/components/ProjectsSection/ProjectsSection";

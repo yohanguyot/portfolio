@@ -62,7 +62,7 @@ export default function ProjectNav({ prev, next }: Props) {
       <div ref={navRef} className={styles.nav}>
         {prev ? (
           <Link href={localize(prev.href)} className={styles.link}>
-            <ArrowLeft size={16} className={`${styles.icon} ${styles.iconPrev}`} />
+            <ArrowLeft size={20} className={`${styles.icon} ${styles.iconPrev}`} />
             <div className={styles.content}>
               <span className={styles.direction}>{dict.projectNav.prev}</span>
               <span className={styles.title}>{prev.label}</span>
@@ -77,7 +77,7 @@ export default function ProjectNav({ prev, next }: Props) {
               <span className={styles.direction}>{dict.projectNav.next}</span>
               <span className={styles.title}>{next.label}</span>
             </div>
-            <ArrowRight size={16} className={`${styles.icon} ${styles.iconNext}`} />
+            <ArrowRight size={20} className={`${styles.icon} ${styles.iconNext}`} />
           </Link>
         ) : (
           <div />

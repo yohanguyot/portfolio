@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import Button from "@/components/Button/Button";
 import { useDict } from "@/lib/dict-context";
 import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
@@ -23,6 +24,7 @@ export default function ProjectIntro({ tags, title, description, meta, stats }: 
   const pathname = usePathname();
   const lang = pathname.split("/")[1] ?? "fr";
   const dict = useDict();
+  const router = useTransitionRouter();
 
   const sectionRef = useRef<HTMLElement>(null);
   const backRef = useRef<HTMLDivElement>(null);
@@ -134,6 +136,7 @@ export default function ProjectIntro({ tags, title, description, meta, stats }: 
             showArrowLeft
             as="a"
             href={`/${lang}/#projets`}
+            onClick={() => router.push(`/${lang}/#projets`)}
           />
         </div>
 

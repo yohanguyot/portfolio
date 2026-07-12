@@ -4,6 +4,8 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ViewTransitions } from "next-view-transitions";
+import Grain from "@/components/Grain/Grain";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,8 +42,15 @@ const archivo = Archivo({
 });
 
 export const metadata: Metadata = {
-  title: "Yohan Guyot — Product Builder",
-  description: "Designer avec une culture technique. Design to prod, sans friction.",
+  metadataBase: new URL("https://yohanguyot.com"),
+  title: "Yohan Guyot · Product Builder",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
+  openGraph: {
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
+  },
 };
 
 export default function RootLayout({
@@ -81,9 +90,12 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {children}
+        <ViewTransitions>
+          {children}
+        </ViewTransitions>
         <Analytics />
         <SpeedInsights />
+        <Grain />
       </body>
     </html>
   );

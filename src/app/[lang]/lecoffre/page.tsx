@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import Navigation from "@/components/Navigation/Navigation";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]/lecoffre">): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  return {
+    title: "LeCoffre · Yohan Guyot",
+    description: dict.meta.lecoffre,
+  };
+}
 import HeroBanner from "@/components/LeCoffre/HeroBanner/HeroBanner";
 import ProjectIntro from "@/components/LeCoffre/ProjectIntro/ProjectIntro";
 import ProjectContext from "@/components/LeCoffre/ProjectContext/ProjectContext";

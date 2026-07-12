@@ -117,7 +117,7 @@
   "contact": {
     "label": "Contacto",
     "heading": "Diseñemos tu proyecto.",
-    "description": "Describe tu proyecto, te respondo rápidamente.",
+    "description": "Describe tu proyecto, respondo rápido.",
     "needs": [
       "Product Design",
       "Rediseño UX/UI",
@@ -602,5 +602,12 @@
         "versity": "Inversión inmobiliaria"
       }
     }
+  },
+  "meta": {
+    "home": "Portfolio de Yohan Guyot, Product Designer. Proyectos SaaS B2B, design system e interfaces de producto entregadas en producción.",
+    "bloom": "Lead Product Designer en un marketplace Web3 white-label. Arquitectura modular, design system multi-cliente, entrega en producción.",
+    "keepro": "Product Designer en un SaaS B2B de certificación blockchain. La prueba criptográfica hecha legible para equipos no técnicos.",
+    "lecoffre": "Product Designer en una plataforma notarial B2B2C. Tres espacios distintos, cero seguimiento manual, anclaje blockchain integrado.",
+    "wenimmo": "Product Designer en un SaaS de distribución financiera. Una interfaz única diseñada para CGP y Middle Office con necesidades opuestas."
   }
 }

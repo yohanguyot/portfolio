@@ -47,6 +47,8 @@ export default function Button({
       e.preventDefault();
       const el = document.getElementById(href.slice(1));
       if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" });
+    } else if (onClick) {
+      e.preventDefault();
     }
     onClick?.();
   }
