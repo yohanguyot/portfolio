@@ -139,6 +139,7 @@
         "briefRequired": "Describe your project in a few words."
       },
       "sendError": "Something went wrong. Try again or reach me directly at",
+      "rateLimited": "Too many attempts. Please try again in a few minutes.",
       "successTitle": "Message sent",
       "successSubtitle": "I'll get back to you soon :)"
     }

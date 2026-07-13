@@ -131,7 +131,10 @@
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__take_heapsnapshot",
       "Bash(npx memlab *)",
       "Bash(grep -rn \"// transform\\\\|hideEl.*; // transform\\\\|style\\\\.opacity = '0'\" src/components/ --include=\"*.tsx\")",
-      "Bash(grep -E \"\\(--|//|styles\\\\.|className\\)\")"
+      "Bash(grep -E \"\\(--|//|styles\\\\.|className\\)\")",
+      "Bash(dir /b \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\src\")",
+      "Bash(Test-Path \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\README.md\")",
+      "Bash(git secret *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yohan\\Documents\\Dev\\portfolio\\src\\app\\[lang]"

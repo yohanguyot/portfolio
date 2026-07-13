@@ -139,6 +139,7 @@
         "briefRequired": "Décrivez votre projet en quelques mots."
       },
       "sendError": "Une erreur est survenue. Réessayez ou écrivez-moi directement à",
+      "rateLimited": "Trop de tentatives. Réessayez dans quelques minutes.",
       "successTitle": "Message envoyé",
       "successSubtitle": "Je réponds vite :)"
     }

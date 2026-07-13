@@ -139,6 +139,7 @@
         "briefRequired": "Describe tu proyecto en pocas palabras."
       },
       "sendError": "Ocurrió un error. Intenta de nuevo o escríbeme directamente a",
+      "rateLimited": "Demasiados intentos. Por favor, inténtalo de nuevo en unos minutos.",
       "successTitle": "Mensaje enviado",
       "successSubtitle": "Te respondo pronto :)"
     }

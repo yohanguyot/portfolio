@@ -46,6 +46,7 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [sendError, setSendError] = useState(false);
+  const [rateLimited, setRateLimited] = useState(false);
 
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<SectionHeaderHandle>(null);
@@ -144,6 +145,7 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
     setErrors({});
     setSending(true);
     setSendError(false);
+    setRateLimited(false);
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -153,7 +155,11 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
     if (res.ok) {
       setSubmitted(true);
       trackEvent("contact_form_submit");
-    } else setSendError(true);
+    } else if (res.status === 429) {
+      setRateLimited(true);
+    } else {
+      setSendError(true);
+    }
   }
 
   return (
@@ -254,6 +260,10 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
                 />
                 {errors.brief && <p id="error-brief" className={styles.fieldError}>{errors.brief}</p>}
               </div>
+
+              {rateLimited && (
+                <p className={styles.sendError}>{contact.form.rateLimited}</p>
+              )}
 
               {sendError && (
                 <p className={styles.sendError}>

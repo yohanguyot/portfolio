@@ -588,19 +588,20 @@ void col.offsetHeight;          // force reflow
 | FeatureItems dans card | `12px` | `0.98` | `600ms` | hérité du card | — |
 | Hero (page load, CSS) | `16px` | `0.97` | `600ms` | — | — |
 
-Helper `revealEl` à créer en local dans chaque composant :
+Helper `revealEl` à créer en local dans chaque composant. Retourne un cancel handle `() => void` (clearTimeout interne) :
 
 ```ts
-function revealEl(el: HTMLElement, delay: number) {
+function revealEl(el: HTMLElement, delay: number): () => void {
   el.style.transition =
     `opacity ${DURATION}ms ${EASE} ${delay}ms, ` +
     `transform ${DURATION}ms ${EASE} ${delay}ms`;
   el.style.opacity = '1';
   el.style.transform = 'scale(1) translateY(0)';
-  setTimeout(() => {
+  const id = setTimeout(() => {
     el.style.transform = '';
     el.style.transition = '';
   }, DURATION + delay);
+  return () => clearTimeout(id);
 }
 ```
 
@@ -641,15 +642,20 @@ cols.forEach((col, i) => {
 
 #### Règle 5 — Adaptation écrans
 
-**Sections très hautes sur mobile** : `threshold: 0.05` sur une section de 2000px = 100px doivent être visibles avant le trigger. Utiliser `threshold: 0` sur mobile pour les sections dont la hauteur dépasse ~1.5× le viewport (Intro, ParcoursSection 3+ items, SplitSection avec stats).
+**Sections très hautes sur mobile** : utiliser `threshold: 0` uniquement pour les **wrappers de section** dont la hauteur dépasse ~1.5× le viewport (Intro, ParcoursSection 3+ items, SplitSection avec stats). Pour les éléments de contenu à l'intérieur (form, texte, liens), toujours utiliser au minimum `threshold: 0.1` — même sur mobile — afin d'éviter une apparition dès le premier pixel.
 
 ```ts
 const isMobile    = window.matchMedia('(max-width: 1024px)').matches;
 const shortScreen = window.innerHeight < 700;
 const triggerNow  = isMobile || shortScreen;
 
+// Wrapper de section très haute
 const threshold  = triggerNow ? 0    : 0.1;
 const rootMargin = triggerNow ? '0px' : '0px 0px -15% 0px';
+
+// Élément de contenu (form, texte, liens) — même sur mobile, pas de threshold: 0
+const threshold  = 0.1;
+const rootMargin = isMobile ? '0px' : '0px 0px -5% 0px';
 ```
 
 **CSS `order` vs DOM order** : sur mobile, `order: 1` déplace l'image visuellement en bas mais elle reste en premier dans le DOM. Toujours faire un split `isMobile` pour les sections dont l'ordre CSS diffère de l'ordre DOM (ex. `ProjectMiddleOffice`).
@@ -658,6 +664,10 @@ const rootMargin = triggerNow ? '0px' : '0px 0px -15% 0px';
 |---|---|---|---|
 | SplitSection | `0.1` | `0` | `'0px 0px -15% 0px'` |
 | Intro (ProjectIntro) | `0.05` | `0` | `'0px'` |
+| CardSection (card wrapper) | `0.1` | `0` | `'0px'` |
+| ContactSection (section card) | `0.05` | `0.05` | `'0px'` |
+| ContactSection (form) | `0.1` | `0.1` | `'0px'` |
+| ContactSection (liens mobile) | n/a | `0.1` | default |
 | ParcoursSection cols | `0.1` (container) | par-element `0.2` | par-element |
 | FeatureCard items mobile | n/a | `0.2` each | default |
 
@@ -686,6 +696,20 @@ observe(card, 0.1, () => {
 // Mobile
 observe(card, 0, () => { card.style.transition = 'none'; card.style.opacity = '1'; });
 items.forEach(item => observe(item, 0.2, () => rAF(() => revealEl(item, 0))));
+```
+
+En pratique, utiliser le helper `observeFeatureCard` de `src/lib/animation.ts` plutôt que de réimplémenter ce pattern manuellement. Il prend le **premier enfant** du wrapper `FeatureCard` et l'`isMobile` pré-calculé :
+
+```ts
+import { observeFeatureCard, isMobileViewport } from '@/lib/animation';
+
+// Dans useEffect :
+const isMobile = isMobileViewport();
+const cleanup = observeFeatureCard(
+  featureRef.current?.firstElementChild as HTMLElement | null,
+  isMobile
+);
+return cleanup;
 ```
 
 ### Press (`:active`) feedback
@@ -903,6 +927,22 @@ Wraps `window.gtag` — no-ops silently if GA isn't loaded (dev, ad-blocker). Ca
 | `cta_click` | Clic sur un CTA principal → `{ label: "..." }` |
 
 Don't track navigation, scroll, or hover — too noisy.
+
+### API contact — `/api/contact`
+
+Route POST qui envoie un email via Resend. Trois protections en place :
+
+- **Rate limiting** — 3 requêtes par IP sur 10 minutes. Réponse `429` avec header `Retry-After` (secondes restantes). In-memory → se réinitialise sur cold start, suffisant pour un portfolio.
+- **Validation** — email format + brief non vide, taille max sur chaque champ (nom/email/besoin : 200 chars, brief : 5 000 chars). Réponse `400` si invalide.
+- **Échappement HTML** — tous les champs sont passés par `esc()` avant injection dans le template email (`&`, `<`, `>`, `"` échappés).
+
+Côté front (`ContactSection`), trois états d'erreur distincts :
+
+| État | Condition | Message |
+|---|---|---|
+| `errors.email` / `errors.brief` | Validation locale | Inline sous le champ |
+| `rateLimited` | `res.status === 429` | `contact.form.rateLimited` (clé i18n) |
+| `sendError` | Toute autre erreur serveur | `contact.form.sendError` + lien mailto |
 
 ### Traductions — `useDict`
 
