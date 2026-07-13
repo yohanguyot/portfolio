@@ -1,0 +1,39 @@
+.section {
+  width: 100%;
+  padding-block: var(--space-4xl);
+  padding-inline: var(--space-xl);
+}
+
+.container {
+  max-width: 1200px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.description {
+  composes: bodyMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .description { opacity: 1; }
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-3xl);
+    padding-inline: var(--space-md);
+  }
+}

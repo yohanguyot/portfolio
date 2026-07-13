@@ -1,0 +1,295 @@
+.section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--space-xl);
+  padding-block: var(--space-4xl);
+  overflow: hidden;
+}
+
+/* Radial brand-color glow — matches Figma positioning, in oklch for banding-free interpolation */
+.gradient {
+  position: absolute;
+  width: 3200px;
+  height: 1200px;
+  top: -374px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    in oklch
+    ellipse 1600px 600px at 50% 50%,
+    rgba(198, 83, 46, 0.06) 0%,
+    rgba(198, 83, 46, 0) 100%
+  );
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (max-width: 768px), (max-height: 700px) {
+  .gradient {
+    top: -550px;
+  }
+}
+
+/* Content */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xl);
+  max-width: 1200px;
+  width: 100%;
+  padding-block: var(--space-2xl);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 8vh;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  text-align: center;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* ── Entrance animations ─────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUpEyebrow {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 0.7; transform: translateY(0); }
+}
+
+@keyframes fadeUpCentered {
+  from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.eyebrow,
+.displayTitle,
+.subtitle,
+.buttons,
+.scrollIndicator {
+  animation-name: fadeUp;
+  animation-duration: 600ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+.eyebrow      { animation-delay:   0ms; animation-name: fadeUpEyebrow; }
+.displayTitle { animation-delay: 120ms; }
+.subtitle     { animation-delay: 220ms; }
+.buttons      { animation-delay: 340ms; }
+.scrollIndicator { animation-delay: 480ms; animation-name: fadeUpCentered; animation-fill-mode: backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow, .displayTitle,
+  .subtitle, .buttons, .scrollIndicator {
+    animation: none;
+  }
+}
+/* ─────────────────────────────────────────────────── */
+
+/* label/md eyebrow */
+.eyebrow {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+/* display title — gradient text */
+.displayTitle {
+  composes: display from '@/styles/typography.module.css';
+  font-size: clamp(2.75rem, calc((100vw - 2 * var(--space-xl)) / 6.5), 7rem);
+  background: linear-gradient(
+    180deg,
+    var(--color-neutral-50) 0%,
+    var(--color-neutral-300) 60%,
+    var(--color-neutral-500) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  white-space: nowrap;
+}
+
+/* body/lead subtitle */
+.subtitle {
+  composes: bodyLead from '@/styles/typography.module.css';
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.subtitleHighlight {
+  color: var(--color-text-primary);
+}
+
+.subtitleBreak {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .subtitleBreak {
+    display: inline;
+  }
+}
+
+/* CTA buttons */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+/* Scroll indicator */
+.scrollIndicator {
+  position: absolute;
+  bottom: 160px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  z-index: 1;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.scrollIndicator:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+@media (pointer: fine) and (min-height: 1050px) {
+  .scrollIndicator {
+    display: flex;
+  }
+}
+
+.scrollLabel {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  animation: scroll-breathe 2s ease-in-out infinite;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .scrollIndicator:hover .scrollLabel {
+    color: color-mix(in srgb, var(--color-text-secondary) 60%, var(--color-neutral-300));
+    animation: none;
+  }
+}
+
+.scrollLine {
+  width: 1px;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-text-secondary) 15%, transparent);
+}
+
+.scrollLine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--color-text-secondary) 70%, transparent) 50%,
+    transparent 100%
+  );
+  animation: scroll-drip 2s ease-in-out infinite;
+  transform: translateY(-100%);
+}
+
+
+@keyframes scroll-breathe {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+@keyframes scroll-drip {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollLabel { animation: none; opacity: 0.6; }
+  .scrollLine::after { animation: none; transform: translateY(-50%); }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding-inline: var(--space-md);
+    padding-top: calc(60px + var(--space-3xl));
+    padding-bottom: var(--space-3xl);
+  }
+
+  .eyebrow {
+    white-space: normal;
+    font-size: 0.75rem;
+    line-height: 1.65;
+  }
+
+  .displayTitle {
+    width: 100%;
+    font-size: clamp(1rem, calc((100vw - 2 * var(--space-md)) / 6.5), 7rem);
+  }
+
+
+  .buttons {
+    width: 100%;
+    max-width: calc(100vw - 80px);
+  }
+
+}
+
+@media (max-width: 460px) {
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Canvas arc — positioned as sibling after <section> */
+.arcCanvas {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  margin-top: -320px;
+  margin-bottom: -100px;
+  pointer-events: none;
+}

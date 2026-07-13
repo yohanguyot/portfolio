@@ -1,0 +1,126 @@
+.section {
+  width: 100%;
+  padding-block: var(--space-4xl);
+  padding-inline: var(--space-xl);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* ── Intro ── */
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: 600px;
+}
+
+.description {
+  composes: bodyMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  opacity: 0;
+}
+
+/* ── Steps grid ── */
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  opacity: 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  overflow: hidden;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .description, .stepsGrid, .step { opacity: 1; }
+}
+
+.step + .step {
+  border-left: 1px solid var(--color-border-strong);
+}
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Step text ── */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.stepTitle {
+  composes: headingSm from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+.stepDesc {
+  composes: bodySm from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+.stepLabel {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-muted);
+  margin-top: auto;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .stepsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .step:nth-child(2) {
+    border-left: 1px solid var(--color-border-strong);
+  }
+
+  .step:nth-child(3) {
+    border-left: none;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .step:nth-child(4) {
+    border-left: 1px solid var(--color-border-strong);
+    border-top: 1px solid var(--color-border-strong);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-3xl);
+    padding-inline: var(--space-md);
+  }
+
+  .stepsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .step + .step {
+    border-left: none;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .step:nth-child(3),
+  .step:nth-child(4) {
+    border-left: none;
+  }
+}

@@ -1,0 +1,158 @@
+.page {
+  min-height: 100dvh;
+  background: var(--color-bg-canvas);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Exact same radial glow as HeroSection */
+.gradient {
+  position: absolute;
+  width: 3200px;
+  height: 1200px;
+  top: -374px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    in oklch
+    ellipse 1600px 600px at 50% 50%,
+    rgba(198, 83, 46, 0.06) 0%,
+    rgba(198, 83, 46, 0) 100%
+  );
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xl);
+  padding: var(--space-4xl) var(--space-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  text-align: center;
+  width: 100%;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.code,
+.title {
+  background: linear-gradient(
+    180deg,
+    var(--color-neutral-50)  0%,
+    var(--color-neutral-300) 60%,
+    var(--color-neutral-500) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  width: 100%;
+  animation: fadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.code {
+  composes: display from '@/styles/typography.module.css';
+  font-size: clamp(3.5rem, 18vw, 7rem);
+  animation-delay: 80ms;
+}
+
+.title {
+  composes: headingLg from '@/styles/typography.module.css';
+  font-size: clamp(1.5rem, 7.5vw, 3rem);
+  animation-delay: 160ms;
+}
+
+.description {
+  composes: bodyLead from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  animation: fadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 240ms both;
+}
+
+.buttonWrap {
+  animation: fadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 320ms both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient,
+  .code,
+  .title,
+  .description,
+  .buttonWrap,
+  .footerLogo,
+  .footerCopyright {
+    animation: none;
+  }
+}
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--color-border-strong);
+  background: var(--color-bg-surface);
+  padding: var(--space-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.footerContainer {
+  max-width: 1200px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.footerLogo {
+  composes: headingXs from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+  animation: fadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms both;
+}
+
+.footerCopyright {
+  composes: labelSm from '@/styles/typography.module.css';
+  color: var(--color-text-muted);
+  animation: fadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 480ms both;
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: var(--space-3xl) var(--space-md);
+  }
+}

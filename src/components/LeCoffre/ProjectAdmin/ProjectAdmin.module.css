@@ -1,0 +1,10 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.paragraph {
+  composes: bodyMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,104 @@
+.wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg-canvas);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ── Gradient ── */
+/* Default : top=-28% (=22% - 64.1%×78%), lateral=-31.25%, bottom=-50% */
+/* Hover   : top=-50%, le reste inchangé */
+.bgGradient {
+  position: absolute;
+  top: -28%;
+  left: -31.25%;
+  right: -31.25%;
+  bottom: -50%;
+  opacity: 0.6;
+  transition: top var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
+}
+
+
+/* ── Screen mockup ── */
+/* default: inset(32%, 6.25%, -19.5%, 6.25%) → hover: inset(30.25%, 4.38%, -21.5%, 4.38%) */
+.screen {
+  position: absolute;
+  top: 32%;
+  left: 6.25%;
+  right: 6.25%;
+  bottom: -19.5%;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 1;
+  transition:
+    top var(--duration-slow) var(--ease),
+    left var(--duration-slow) var(--ease),
+    right var(--duration-slow) var(--ease),
+    bottom var(--duration-slow) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.screenImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Logo — fixe ── */
+.logo {
+  position: absolute;
+  top: 10%;
+  left: 30%;
+  right: 30%;
+  bottom: 78%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.logoImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── Active (press) — triggered by any ancestor <a> being :active ── */
+:global(a:active) .screen {
+  transform: scale(0.98);
+}
+
+.screenFixed {
+  transform: none !important;
+}
+
+:global(a:active) .logo {
+  transform: scale(0.98);
+}
+
+.logoFixed {
+  transform: none !important;
+}
+
+/* ── Hover ── */
+@media (hover: hover) {
+  /* Le gradient remonte et s'intensifie */
+  .hovered .bgGradient {
+    top: -50%;
+    opacity: 0.7;
+  }
+
+  /* La maquette grossit légèrement */
+  .hovered .screen {
+    top: 30.25%;
+    left: 4.38%;
+    right: 4.38%;
+    bottom: -21.5%;
+  }
+}

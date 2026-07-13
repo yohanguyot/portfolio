@@ -1,0 +1,28 @@
+.footer {
+  width: 100%;
+  background: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border-strong);
+  padding: var(--space-xl);
+}
+
+.container {
+  max-width: 1200px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.logoWrap {
+  padding-block: 4px;
+}
+
+.logo {
+  composes: headingXs from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+.copyright {
+  composes: labelSm from '@/styles/typography.module.css';
+  color: var(--color-text-muted);
+}

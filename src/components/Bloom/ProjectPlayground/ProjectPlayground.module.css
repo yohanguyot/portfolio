@@ -1,0 +1,539 @@
+.section {
+  width: 100%;
+  padding-block: var(--space-4xl);
+  padding-inline: var(--space-xl);
+}
+
+.container {
+  max-width: 1200px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4xl);
+}
+
+/* ── Playground block ── */
+
+.playground {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.lead {
+  composes: bodyLead from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  opacity: 0;
+}
+
+/* ── Tab bar ── */
+
+.tabsRow {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  opacity: 0;
+}
+
+.tabsWrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tabsWrapper::before,
+.tabsWrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+  z-index: 1;
+}
+
+.tabsWrapper::before {
+  left: 0;
+  background: linear-gradient(to left, transparent, var(--color-bg-canvas));
+  border-radius: var(--radius-full) 0 0 var(--radius-full);
+}
+
+.tabsWrapper::after {
+  right: 0;
+  background: linear-gradient(to right, transparent, var(--color-bg-canvas));
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+}
+
+.fadeLeft::before { opacity: 1; }
+.fadeRight::after { opacity: 1; }
+
+.scrollBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface-2);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  opacity: 1;
+  transition:
+    width var(--duration-fast) var(--ease),
+    opacity var(--duration-fast) var(--ease),
+    margin var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease),
+    background var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.scrollBtn:active {
+  transform: scale(0.95);
+}
+
+.scrollBtnLeft { margin-right: var(--space-xs); }
+.scrollBtnRight { margin-left: var(--space-xs); }
+
+.scrollBtnHidden {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+}
+
+@media (hover: hover) {
+  .scrollBtn:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-surface-3);
+  }
+}
+
+@media (hover: none) {
+  .scrollBtn {
+    display: none;
+  }
+}
+
+.tabs {
+  position: relative;
+  display: flex;
+  gap: var(--space-xs);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  padding: var(--space-xs);
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabIndicator {
+  position: absolute;
+  top: var(--space-xs);
+  left: 0;
+  height: calc(100% - 2 * var(--space-xs));
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface-3);
+  pointer-events: none;
+  transition:
+    transform var(--duration-fast) var(--ease),
+    width var(--duration-fast) var(--ease);
+  will-change: transform, width;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  composes: labelMd from '@/styles/typography.module.css';
+  position: relative;
+  z-index: 1;
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+.tab:active {
+  transform: scale(0.95);
+}
+
+@media (hover: hover) {
+  .tab:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+.tabActive {
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) {
+  .tabActive:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+/* ── Viewer ── */
+
+.viewer {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: flex-start;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lead, .tabsRow, .viewer { opacity: 1; }
+}
+
+/* ── Card ── */
+
+.cardWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-lg);
+  flex-shrink: 0;
+}
+
+.navBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface-2);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease),
+    background var(--duration-fast) var(--ease),
+    opacity var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.navBtn:active {
+  transform: scale(0.95);
+}
+
+.navBtnDisabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .navBtn:not(.navBtnDisabled):hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-surface-3);
+  }
+}
+
+@property --card-bg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #111827;
+}
+@property --card-text-primary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f9fafb;
+}
+@property --card-text-secondary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #9da4af;
+}
+@property --card-btn-color {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f9fafb;
+}
+@property --card-border-color {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+@property --card-radius {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 16px;
+}
+@property --card-btn-radius {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 8px;
+}
+@property --card-border-width {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+.bloomCard {
+  width: 316px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--card-bg);
+  border-radius: var(--card-radius);
+  outline: var(--card-border-width) solid var(--card-border-color);
+  box-shadow: var(--card-shadow);
+  font-family: var(--card-font, sans-serif);
+  transition:
+    --card-bg var(--duration-slow) ease-in-out,
+    --card-text-primary var(--duration-slow) ease-in-out,
+    --card-text-secondary var(--duration-slow) ease-in-out,
+    --card-btn-color var(--duration-slow) ease-in-out,
+    --card-border-color var(--duration-slow) ease-in-out,
+    --card-border-width var(--duration-slow) ease-in-out,
+    --card-radius var(--duration-slow) ease-in-out,
+    --card-btn-radius var(--duration-slow) ease-in-out;
+}
+
+.cardImage {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.cardImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.cardName {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardCollection {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  letter-spacing: 0.03em;
+  color: var(--card-text-secondary);
+}
+
+.cardTitle {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--card-text-primary);
+}
+
+.cardPrice {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--card-text-primary);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.cardBtn {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease);
+  padding: 8px 16px;
+  min-height: 40px;
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-btn-bg);
+  border-radius: var(--card-btn-radius);
+  color: var(--card-btn-color);
+  border: var(--card-btn-border-width, 0px) solid var(--card-btn-border-color, transparent);
+  box-shadow: var(--card-btn-shadow, none);
+}
+
+.cardBtnLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.cardBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--card-btn-bg-hover, var(--card-btn-bg));
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .cardBtn:hover::before {
+    opacity: 1;
+  }
+}
+
+.cardBtn:active {
+  transform: var(--card-btn-active-transform, scale(0.97));
+  box-shadow: var(--card-btn-active-shadow, var(--card-btn-shadow, none));
+}
+
+/* ── Token panel ── */
+
+.tokenPanel {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.tokenHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tokenName {
+  composes: headingSm from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+.tokenCategory {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+}
+
+.tokenRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.tokenRow {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: center;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+}
+
+.tokenRowBorder {
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.tokenLeft {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  width: 128px;
+  flex-shrink: 0;
+}
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-strong);
+  flex-shrink: 0;
+}
+
+.tokenLabel {
+  composes: bodySm from '@/styles/typography.module.css';
+  color: var(--color-text-primary);
+}
+
+.tokenValue {
+  composes: labelMd from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  flex: 1;
+}
+
+.fontTag {
+  composes: labelSm from '@/styles/typography.module.css';
+  color: var(--color-text-secondary);
+  background: var(--color-bg-surface-3);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  align-self: flex-start;
+}
+
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-3xl);
+    padding-inline: var(--space-md);
+  }
+
+  .container {
+    gap: var(--space-3xl);
+  }
+
+  .viewer {
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .cardWrap {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .bloomCard {
+    flex: 1;
+    max-width: 240px;
+    width: auto;
+  }
+
+  .tokenPanel {
+    flex: none;
+    width: 100%;
+  }
+
+  .tokenRow {
+    justify-content: space-between;
+  }
+
+  .tokenValue {
+    text-align: right;
+  }
+}

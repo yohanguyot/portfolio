@@ -1,0 +1,69 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.horizontal > * {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+/* Dividers between children */
+.card:not(.horizontal) > *:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.horizontal > *:not(:last-child) {
+  border-right: 1px solid var(--color-border-strong);
+}
+
+/* ── Responsive ── */
+
+/* 2×2 grid at medium screens (only for .wrap cards) */
+@media (max-width: 1024px) {
+  .horizontal.wrap {
+    flex-wrap: wrap;
+  }
+
+  .horizontal.wrap > * {
+    flex: 0 0 calc(50% - 0.5px);
+    min-width: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  /* Right border on left-column items */
+  .horizontal.wrap > *:nth-child(odd) {
+    border-right: 1px solid var(--color-border-strong);
+  }
+
+  /* No bottom border on last two items (bottom row) */
+  .horizontal.wrap > *:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .horizontal {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .horizontal > * {
+    flex: none;
+    width: 100%;
+  }
+
+  .horizontal > *:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+}
