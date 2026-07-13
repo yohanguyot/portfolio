@@ -56,13 +56,15 @@ export async function POST(req: Request) {
     replyTo: email,
     subject: `[Portfolio]${besoin ? ` ${besoin}` : ""}${nom ? ` · ${nom}` : ""}`,
     html: `
-      <p style="margin:0;color:#71717a;font-size:14px;">
-        De : <strong style="color:#e4e4e7;">${esc(nom || email)}</strong>
-        ${nom ? `(${esc(email)})` : ""}
-        ${besoin ? `· ${esc(besoin)}` : ""}
-      </p>
-      <hr style="border:none;border-top:1px solid #27272a;margin:16px 0;">
-      <p style="margin:0;white-space:pre-wrap;font-size:15px;line-height:1.6;color:#e4e4e7;">${esc(brief || "—")}</p>
+      <div style="background-color:#09090B;padding:32px;border-radius:8px;font-family:sans-serif;">
+        <p style="margin:0;color:#71717a;font-size:14px;">
+          De : <strong style="color:#e4e4e7;">${esc(nom || email)}</strong>
+          ${nom ? `(${esc(email)})` : ""}
+          ${besoin ? `· ${esc(besoin)}` : ""}
+        </p>
+        <hr style="border:none;border-top:1px solid #27272a;margin:16px 0;">
+        <p style="margin:0;white-space:pre-wrap;font-size:15px;line-height:1.6;color:#e4e4e7;">${esc(brief || "—")}</p>
+      </div>
     `,
   });
 
