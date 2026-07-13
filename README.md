@@ -46,6 +46,7 @@ src/
 ├── dictionaries/             # Translation files (fr.json, en.json, es.json)
 ├── lib/
 │   ├── animation.ts          # Scroll animation utilities (observe, revealEl…)
+│   ├── config.ts             # Shared constants: BASE_URL, LOCALES
 │   ├── getDictionary.ts      # Locale → JSON loader
 │   └── dict-context.tsx      # Dictionary React context
 ├── styles/
@@ -65,7 +66,7 @@ Three locales: `fr` (default), `en`, `es`. No third-party library.
 
 1. Create `src/dictionaries/<locale>.json` (copy `fr.json`, translate all values)
 2. Add the locale to `getDictionary.ts` → `Locale` type + `dictionaries` map
-3. Add it to the `LOCALES` array in `src/app/[lang]/layout.tsx`
+3. Add it to the `LOCALES` array in `src/lib/config.ts`
 4. Add an entry to `LANGUAGES` in `src/components/Navigation/Navigation.tsx`
 5. Verify `src/proxy.ts` includes the new locale in its redirect list
 

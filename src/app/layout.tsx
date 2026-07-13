@@ -3,6 +3,7 @@ import { Geist, Inter, Poppins, Josefin_Sans, Archivo } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import NoDrag from "@/components/NoDrag/NoDrag";
+import { BASE_URL } from "@/lib/config";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -43,7 +44,7 @@ const archivo = Archivo({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://yohanguyot.com"),
+  metadataBase: new URL(BASE_URL),
   title: "Yohan Guyot · Product Builder",
   icons: {
     icon: "/icon.png",

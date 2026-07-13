@@ -1,12 +1,24 @@
 import type { Metadata } from "next";
 import Navigation from "@/components/Navigation/Navigation";
 
+import { BASE_URL, LOCALES } from "@/lib/config";
+
 export async function generateMetadata({ params }: PageProps<"/[lang]/wenimmo">): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
   return {
     title: "Wenimmo · Yohan Guyot",
     description: dict.meta.wenimmo,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/wenimmo`,
+      languages: Object.fromEntries(LOCALES.map((l) => [l, `${BASE_URL}/${l}/wenimmo`])),
+    },
+    openGraph: {
+      title: "Wenimmo · Yohan Guyot",
+      description: dict.meta.wenimmo,
+      url: `${BASE_URL}/${lang}/wenimmo`,
+      images: [{ url: "/og.png", width: 1200, height: 630 }],
+    },
   };
 }
 import HeroBanner from "@/components/Wenimmo/HeroBanner/HeroBanner";

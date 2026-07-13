@@ -134,7 +134,8 @@
       "Bash(grep -E \"\\(--|//|styles\\\\.|className\\)\")",
       "Bash(dir /b \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\src\")",
       "Bash(Test-Path \"c:\\\\Users\\\\yohan\\\\Documents\\\\Dev\\\\portfolio\\\\README.md\")",
-      "Bash(git secret *)"
+      "Bash(git secret *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('meta', {}\\), indent=2, ensure_ascii=False\\)\\)\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\yohan\\Documents\\Dev\\portfolio\\src\\app\\[lang]"

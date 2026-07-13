@@ -1,12 +1,24 @@
 import type { Metadata } from "next";
 import Navigation from "@/components/Navigation/Navigation";
 
+import { BASE_URL, LOCALES } from "@/lib/config";
+
 export async function generateMetadata({ params }: PageProps<"/[lang]/lecoffre">): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
   return {
     title: "LeCoffre · Yohan Guyot",
     description: dict.meta.lecoffre,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/lecoffre`,
+      languages: Object.fromEntries(LOCALES.map((l) => [l, `${BASE_URL}/${l}/lecoffre`])),
+    },
+    openGraph: {
+      title: "LeCoffre · Yohan Guyot",
+      description: dict.meta.lecoffre,
+      url: `${BASE_URL}/${lang}/lecoffre`,
+      images: [{ url: "/og.png", width: 1200, height: 630 }],
+    },
   };
 }
 import HeroBanner from "@/components/LeCoffre/HeroBanner/HeroBanner";

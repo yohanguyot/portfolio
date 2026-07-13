@@ -2,8 +2,15 @@ import type { Metadata } from "next";
 import { getDictionary, type Locale } from "@/lib/getDictionary";
 import { DictProvider } from "@/lib/dict-context";
 import { notFound } from "next/navigation";
+import LangSetter from "@/components/LangSetter/LangSetter";
 
-const LOCALES: Locale[] = ["fr", "en", "es"];
+import { BASE_URL, LOCALES } from "@/lib/config";
+
+const OG_LOCALE: Record<string, string> = {
+  fr: "fr_FR",
+  en: "en_US",
+  es: "es_ES",
+};
 
 export async function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
@@ -16,7 +23,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   return {
-    other: { lang },
+    metadataBase: new URL(BASE_URL),
+    openGraph: {
+      siteName: "Yohan Guyot",
+      locale: OG_LOCALE[lang] ?? "fr_FR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
   };
 }
 
@@ -30,5 +45,10 @@ export default async function LangLayout({
 
   const dict = await getDictionary(lang as Locale);
 
-  return <DictProvider dict={dict}>{children}</DictProvider>;
+  return (
+    <DictProvider dict={dict}>
+      <LangSetter lang={lang} />
+      {children}
+    </DictProvider>
+  );
 }

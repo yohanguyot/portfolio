@@ -1,12 +1,24 @@
 import type { Metadata } from "next";
 import Navigation from "@/components/Navigation/Navigation";
 
+import { BASE_URL, LOCALES } from "@/lib/config";
+
 export async function generateMetadata({ params }: PageProps<"/[lang]/keepro">): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
   return {
     title: "Keepro · Yohan Guyot",
     description: dict.meta.keepro,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/keepro`,
+      languages: Object.fromEntries(LOCALES.map((l) => [l, `${BASE_URL}/${l}/keepro`])),
+    },
+    openGraph: {
+      title: "Keepro · Yohan Guyot",
+      description: dict.meta.keepro,
+      url: `${BASE_URL}/${lang}/keepro`,
+      images: [{ url: "/og.png", width: 1200, height: 630 }],
+    },
   };
 }
 import HeroBanner from "@/components/Keepro/HeroBanner/HeroBanner";

@@ -808,6 +808,60 @@ Pour toute nouvelle page, ajouter la clé correspondante dans les trois dictionn
 
 > Ne jamais utiliser `export const metadata` sur une page `[lang]` — la description serait toujours en français quelle que soit la locale.
 
+### SEO — metadata par page
+
+Chaque page sous `src/app/[lang]/` doit inclure `alternates` (canonical + hreflang) et `openGraph` dans son `generateMetadata`.
+
+Toujours importer `BASE_URL` et `LOCALES` depuis `@/lib/config` — ne jamais les redéclarer localement.
+
+```tsx
+import { BASE_URL, LOCALES } from "@/lib/config";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]/mapage">): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  return {
+    title: "Ma Page · Yohan Guyot",
+    description: dict.meta.mapage,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}/mapage`,
+      languages: Object.fromEntries(LOCALES.map((l) => [l, `${BASE_URL}/${l}/mapage`])),
+    },
+    openGraph: {
+      title: "Ma Page · Yohan Guyot",
+      description: dict.meta.mapage,
+      url: `${BASE_URL}/${lang}/mapage`,
+      images: [{ url: "/og.png", width: 1200, height: 630 }],
+    },
+  };
+}
+```
+
+### `lang` attribute — `LangSetter`
+
+Next.js ne permet pas de définir l'attribut `lang` sur `<html>` depuis un layout imbriqué. Le composant client `LangSetter` le fait dynamiquement :
+
+```tsx
+// src/components/LangSetter/LangSetter.tsx
+"use client";
+import { useEffect } from "react";
+export default function LangSetter({ lang }: { lang: string }) {
+  useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+  return null;
+}
+```
+
+Il est monté dans `src/app/[lang]/layout.tsx` à côté des enfants de la page.
+
+### `src/lib/config.ts` — constantes partagées
+
+Source unique de vérité pour `BASE_URL` et `LOCALES`. À importer dans tout fichier qui en a besoin (pages, sitemap, robots, proxy) — ne jamais redéclarer ces valeurs localement.
+
+```ts
+export const BASE_URL = "https://yohanguyot.com";
+export const LOCALES = ["fr", "en", "es"] as const;
+```
+
 ### Dropdowns / floating UI
 
 The `<nav>` has `transform: translateX(-50%)` for centering, which creates a new containing block and breaks `position: fixed` for descendants. Any floating panel that needs true viewport-relative positioning must use `ReactDOM.createPortal(panel, document.body)`.

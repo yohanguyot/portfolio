@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const BASE_URL = "https://yohanguyot.com";
-const LOCALES = ["fr", "en", "es"] as const;
+import { BASE_URL, LOCALES } from "@/lib/config";
 const PATHS = ["", "/bloom", "/keepro", "/lecoffre", "/wenimmo"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
