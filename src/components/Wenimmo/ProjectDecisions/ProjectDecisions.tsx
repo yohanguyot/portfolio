@@ -5,7 +5,7 @@ import { LayoutTemplate, ArrowLeftRight, Shield } from "lucide-react";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, observeFeatureCard, afterLayout, isMobileViewport, hideFeatureCard } from "@/lib/animation";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import type { Dictionary } from "@/lib/getDictionary";
 import styles from "./ProjectDecisions.module.css";
@@ -21,63 +21,27 @@ export default function ProjectDecisions({ dict }: Props) {
 
   useIsomorphicLayoutEffect(() => {
     if (shouldReduceMotion()) return;
-    const card = featureRef.current?.firstElementChild as HTMLElement | null;
-    if (card) {
-      card.style.opacity = '0';
-      Array.from(card.children as HTMLCollectionOf<HTMLElement>).forEach(item => {
-        item.style.opacity = '0';
-        item.style.transform = 'scale(0.98) translateY(12px)';
-      });
-    }
+    hideFeatureCard(featureRef.current?.firstElementChild as HTMLElement | null);
   }, []);
 
   useEffect(() => {
     if (shouldReduceMotion()) return;
-    const section = sectionRef.current;
-    if (!section) return;
-    const card = featureRef.current?.firstElementChild as HTMLElement | null;
-    const items = card ? Array.from(card.children as HTMLCollectionOf<HTMLElement>) : [];
-
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-    const cleanups: (() => void)[] = [];
-
-    cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        headerRef.current?.trigger(0);
-      }));
-    }, isMobile ? '0px 0px -15% 0px' : '0px'));
-
-    if (card && items.length) {
-      if (isMobile) {
-        cleanups.push(observe(card, 0, () => { card.style.transition = 'none'; card.style.opacity = '1'; }));
-        items.forEach(item => {
-          cleanups.push(observe(item, 0.2, () => {
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-              item.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-              item.style.opacity = '1';
-              item.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION);
-            }));
-          }));
-        });
-      } else {
-        cleanups.push(observe(card, 0.1, () => {
-          card.style.transition = 'none';
-          card.style.opacity = '1';
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            items.forEach((item, i) => {
-              const delay = i * 80;
-              item.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-              item.style.opacity = '1';
-              item.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION + delay);
-            });
-          }));
-        }));
-      }
-    }
-
+    const isMobile = isMobileViewport();
+    const cleanups = [
+      watchHeader(),
+      observeFeatureCard(featureRef.current?.firstElementChild as HTMLElement | null, isMobile),
+    ];
     return () => cleanups.forEach(fn => fn());
+
+    function watchHeader(): () => void {
+      const section = sectionRef.current;
+      if (!section) return () => {};
+      return observe(section, isMobile ? 0 : 0.1, () => {
+        afterLayout(() => {
+          headerRef.current?.trigger(0);
+        });
+      }, isMobile ? '0px 0px -15% 0px' : '0px');
+    }
   }, []);
 
   return (

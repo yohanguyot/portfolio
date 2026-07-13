@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import type { Dictionary } from "@/lib/getDictionary";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, revealEl, STAGGER, afterLayout, hideEl } from "@/lib/animation";
 import styles from "./Footer.module.css";
 
 export default function Footer({ dict }: { dict: Dictionary["footer"] }) {
@@ -18,21 +18,17 @@ export default function Footer({ dict }: { dict: Dictionary["footer"] }) {
 
     [logo, copyright].forEach(el => {
       el.style.transition = 'none';
-      el.style.opacity = '0';
-      el.style.transform = 'scale(0.98) translateY(12px)';
+            hideEl(el);
     });
     void logo.offsetHeight;
 
     return observe(logo, 0.5, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
+      afterLayout(() => {
         [logo, copyright].forEach((el, i) => {
-          const delay = i * 80;
-          el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-          el.style.opacity = '1';
-          el.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { el.style.transform = ''; el.style.transition = ''; }, DURATION + delay);
+          const delay = i * STAGGER;
+          revealEl(el, delay);
         });
-      }));
+      });
     });
   }, []);
 

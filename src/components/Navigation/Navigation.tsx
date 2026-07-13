@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
+import { Link, useTransitionRouter } from "next-view-transitions";
 import { useDict } from "@/lib/dict-context";
+import { NAV_SCROLL_OFFSET } from "@/lib/animation";
+import { useNavMobileBreakpoint } from "@/lib/useNavMobileBreakpoint";
+import { useScrollSpy } from "@/lib/useScrollSpy";
 import styles from "./Navigation.module.css";
 
 type NavLinkState = "default" | "hover" | "active";
@@ -18,6 +22,10 @@ type NavLinkProps = {
 };
 
 export function NavLink({ label, state = "default", href = "#", className, onClickAction }: NavLinkProps) {
+  const pathname = usePathname();
+  const router = useTransitionRouter();
+  const lang = pathname.split("/")[1] || "fr";
+
   const stateClass =
     state === "active"
       ? styles.navLinkActive
@@ -26,23 +34,29 @@ export function NavLink({ label, state = "default", href = "#", className, onCli
       : "";
 
   function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    if (href.startsWith("#")) {
+    if (href.includes("#")) {
       e.preventDefault();
-      const id = href.slice(1);
+      const id = href.slice(href.indexOf("#") + 1);
       const el = document.getElementById(id);
-      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" });
+      if (el) {
+        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_SCROLL_OFFSET, behavior: "smooth" });
+      } else {
+        router.push(href.startsWith("/") ? href : `/${lang}${href}`);
+      }
     }
     onClickAction?.();
   }
 
+  const Tag = href.startsWith("/") && !href.includes("#") ? Link : "a";
+
   return (
-    <a
+    <Tag
       href={href}
       onClick={handleClick}
       className={[styles.navLink, stateClass, className ?? ""].filter(Boolean).join(" ")}
     >
       <span className={styles.navLinkLabel}>{label}</span>
-    </a>
+    </Tag>
   );
 }
 
@@ -59,9 +73,9 @@ type LanguageDropdownProps = {
 
 export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
   const pathname = usePathname();
-  const router = useRouter();
+  const router = useTransitionRouter();
   const dict = useDict();
-  const currentLang = pathname.split("/")[1]?.toUpperCase() ?? "FR";
+  const currentLang = (pathname.split("/")[1] || "fr").toUpperCase();
   const [isOpen, setIsOpen] = useState(false);
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({});
   const [stride, setStride] = useState(0);
@@ -209,8 +223,9 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
 
 export default function Navigation() {
   const pathname = usePathname();
+  const router = useTransitionRouter();
   const dict = useDict();
-  const lang = pathname.split("/")[1] ?? "fr";
+  const lang = pathname.split("/")[1] || "fr";
   const isHome = pathname === `/${lang}` || pathname === `/${lang}/`;
   const NAV_LINKS = [
     { label: dict.nav.links.projects, href: "#projets" },
@@ -220,15 +235,17 @@ export default function Navigation() {
   ];
 
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [activeSection, setActiveSection] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
-  const thresholdRef = useRef(0);
-  const isMobileRef = useRef(false);
+
+  const { isMobile, mounted, checkDesktopSize } = useNavMobileBreakpoint(navRef);
+  const activeSection = useScrollSpy(isHome);
+
+  useEffect(() => {
+    if (!isMobile) setMobileOpen(false);
+  }, [isMobile]);
 
   const close = () => setMobileOpen(false);
 
@@ -241,32 +258,6 @@ export default function Navigation() {
       width: rect.width,
     });
   }
-
-  // Dynamic mobile breakpoint: switch when nav touches viewport edges
-  useLayoutEffect(() => {
-    if (!navRef.current) return;
-
-    function measureThreshold() {
-      if (!navRef.current || isMobileRef.current) return;
-      thresholdRef.current = navRef.current.scrollWidth + 48;
-    }
-
-    function check() {
-      const mobile = window.innerWidth <= 600 || (thresholdRef.current > 0 && window.innerWidth < thresholdRef.current);
-      if (mobile !== isMobileRef.current) {
-        isMobileRef.current = mobile;
-        setIsMobile(mobile);
-        if (!mobile) setMobileOpen(false);
-      }
-    }
-
-    measureThreshold();
-    check();
-    setMounted(true);
-    document.fonts.ready.then(() => { measureThreshold(); check(); });
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
 
   useLayoutEffect(() => {
     if (!mobileOpen) return;
@@ -282,11 +273,8 @@ export default function Navigation() {
   useEffect(() => {
     if (!mobileOpen) return;
     function onResize() {
-      if (window.innerWidth >= thresholdRef.current) {
-        close();
-      } else {
-        recomputeDropdown();
-      }
+      if (checkDesktopSize()) close();
+      else recomputeDropdown();
     }
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
@@ -318,41 +306,16 @@ export default function Navigation() {
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, [mobileOpen]);
 
-  // Scrollspy — only on homepage
-  useEffect(() => {
-    if (!isHome) { setActiveSection(null); return; }
-    const SECTION_IDS = ["projets", "a-propos", "process", "contact"];
-    const NAV_HEIGHT = 60;
-    const OFFSET = NAV_HEIGHT + Math.round(window.innerHeight * 0.25);
-
-    function getActive() {
-      const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
-      if (nearBottom) return "contact";
-      const scrollY = window.scrollY + OFFSET;
-      let active: string | null = null;
-      for (const id of SECTION_IDS) {
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollY) active = id;
-      }
-      return active;
-    }
-
-    function onScroll() { setActiveSection(getActive()); }
-    setActiveSection(getActive());
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isHome]);
-
   return (
     <>
       <nav ref={navRef} className={`${styles.nav} ${isMobile ? styles.navMobile : ""} ${!mounted ? styles.navHidden : (!isMobile ? styles.navAnimated : "")}`}>
         <div className={styles.container}>
           <div className={styles.logoContainer}>
-            <a
-              href={isHome ? "#" : `/${lang}`}
-              className={styles.logo}
-              onClick={isHome ? (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } : undefined}
-            >Yohan Guyot</a>
+            {isHome ? (
+              <a href="#" className={styles.logo} onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Yohan Guyot</a>
+            ) : (
+              <Link href={`/${lang}`} className={styles.logo}>Yohan Guyot</Link>
+            )}
           </div>
 
           {/* Desktop */}
@@ -405,24 +368,29 @@ export default function Navigation() {
           >
             {NAV_LINKS.map((l, i) => {
               const href = isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`;
+              const MobileTag = href.startsWith("/") && !href.includes("#") ? Link : "a";
               return (
-                <a
+                <MobileTag
                   key={l.href}
                   href={href}
                   className={styles.mobileLink}
-                  onClick={(e) => {
-                    if (href.startsWith("#")) {
+                  onClick={(e: React.MouseEvent) => {
+                    if (href.includes("#")) {
                       e.preventDefault();
-                      const id = href.slice(1);
+                      const id = href.slice(href.indexOf("#") + 1);
                       const el = document.getElementById(id);
-                      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" });
+                      if (el) {
+                        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_SCROLL_OFFSET, behavior: "smooth" });
+                      } else {
+                        router.push(href.startsWith("/") ? href : `/${lang}${href}`);
+                      }
                     }
                     close();
                   }}
                   ref={i === 0 ? firstLinkRef : undefined}
                 >
                   {l.label}
-                </a>
+                </MobileTag>
               );
             })}
             <div className={styles.mobileDivider} />

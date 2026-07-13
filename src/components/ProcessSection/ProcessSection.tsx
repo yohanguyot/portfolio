@@ -6,7 +6,7 @@ import { Search, Layers, RefreshCw, PackageCheck } from "lucide-react";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import SquareIcon from "@/components/SquareIcon/SquareIcon";
 import type { Dictionary } from "@/lib/getDictionary";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, revealEl, STAGGER, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import styles from "./ProcessSection.module.css";
 
 const STEP_ICONS = [Search, Layers, RefreshCw, PackageCheck] as const;
@@ -21,75 +21,57 @@ export default function ProcessSection({ dict }: { dict: Dictionary["process"] }
     if (shouldReduceMotion()) return;
     const desc = descRef.current;
     const grid = gridRef.current;
-    if (desc) { desc.style.opacity = '0'; desc.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (desc) hideEl(desc);
     if (grid) {
       grid.style.opacity = '0';
       Array.from(grid.children as HTMLCollectionOf<HTMLElement>).forEach(s => {
-        s.style.opacity = '0'; s.style.transform = 'scale(0.98) translateY(12px)';
+        hideEl(s);
       });
     }
   }, []);
 
   useEffect(() => {
     if (shouldReduceMotion()) return;
+    const isMobile = isMobileViewport();
+    const cleanups = [watchSection(), watchGrid()];
+    return () => cleanups.forEach(fn => fn());
 
-    const cleanups: (() => void)[] = [];
-
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-
-    const section = sectionRef.current;
-    const desc = descRef.current;
-
-    if (section) {
-      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
+    function watchSection(): () => void {
+      const section = sectionRef.current;
+      if (!section) return () => {};
+      const desc = descRef.current;
+      return observe(section, isMobile ? 0 : 0.1, () => {
+        afterLayout(() => {
           headerRef.current?.trigger(0);
-          if (desc) {
-            desc.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
-            desc.style.opacity = '1';
-            desc.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION + 160);
-          }
-        }));
-      }, isMobile ? '0px 0px -15% 0px' : '0px'));
+          if (desc) revealEl(desc, 2 * STAGGER);
+        });
+      }, isMobile ? '0px 0px -15% 0px' : '0px');
     }
 
-    // ── Steps grid ──
-    const grid = gridRef.current;
-    if (grid) {
+    function watchGrid(): () => void {
+      const grid = gridRef.current;
+      if (!grid) return () => {};
       const steps = Array.from(grid.children as HTMLCollectionOf<HTMLElement>);
       if (isMobile) {
-        cleanups.push(observe(grid, 0, () => {
+        const gridCleanup = observe(grid, 0, () => {
           grid.style.transition = 'none';
           grid.style.opacity = '1';
-        }));
-        steps.forEach(s => {
-          cleanups.push(observe(s, 0.2, () => {
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-              s.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-              s.style.opacity = '1';
-              s.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { s.style.transform = ''; s.style.transition = ''; }, DURATION);
-            }));
-          }));
         });
-      } else {
-        cleanups.push(observe(grid, 0.1, () => {
-          grid.style.transition = 'none';
-          grid.style.opacity = '1';
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            steps.forEach((s, i) => {
-              s.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 80}ms, transform ${DURATION}ms ${EASE} ${i * 80}ms`;
-              s.style.opacity = '1';
-              s.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { s.style.transform = ''; s.style.transition = ''; }, DURATION + i * 80);
-            });
-          }));
-        }));
+        const stepCleanups = steps.map(s =>
+          observe(s, 0.2, () => {
+            afterLayout(() => revealEl(s));
+          })
+        );
+        return () => { gridCleanup(); stepCleanups.forEach(fn => fn()); };
       }
+      return observe(grid, 0.1, () => {
+        grid.style.transition = 'none';
+        grid.style.opacity = '1';
+        afterLayout(() => {
+          steps.forEach((s, i) => revealEl(s, i * STAGGER));
+        });
+      });
     }
-
-    return () => cleanups.forEach(fn => fn());
   }, []);
 
   return (

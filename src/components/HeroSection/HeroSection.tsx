@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Button from "@/components/Button/Button";
-import { shouldReduceMotion } from "@/lib/animation";
+import { shouldReduceMotion, NAV_SCROLL_OFFSET } from "@/lib/animation";
 import { useDict } from "@/lib/dict-context";
 import styles from "./HeroSection.module.css";
 
@@ -275,7 +275,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <a href="#projets" className={styles.scrollIndicator} aria-label={h.ctaPrimary} onClick={(e) => { e.preventDefault(); const el = document.getElementById("projets"); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" }); }}>
+        <a href="#projets" className={styles.scrollIndicator} aria-label={h.ctaPrimary} onClick={(e) => { e.preventDefault(); const el = document.getElementById("projets"); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_SCROLL_OFFSET, behavior: "smooth" }); }}>
           <span className={styles.scrollLabel}>{h.scroll}</span>
           <div className={styles.scrollLine} />
         </a>

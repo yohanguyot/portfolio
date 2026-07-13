@@ -16,7 +16,6 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-xs);
-  flex: 1;
   text-decoration: none;
   transition: transform var(--duration-fast) var(--ease);
   opacity: 0;
@@ -39,7 +38,8 @@
 .icon {
   flex-shrink: 0;
   color: var(--color-text-secondary);
-  transition: transform var(--duration-fast) var(--ease);
+  transition: transform var(--duration-fast) var(--ease),
+              color var(--duration-fast) var(--ease);
 }
 
 @media (hover: hover) {
@@ -50,7 +50,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2xs);
+  gap: var(--space-xs);
 }
 
 .direction {

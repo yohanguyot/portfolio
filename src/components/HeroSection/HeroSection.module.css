@@ -215,7 +215,7 @@
   height: 40px;
   position: relative;
   overflow: hidden;
-  background: rgba(163, 162, 165, 0.15);
+  background: color-mix(in srgb, var(--color-text-secondary) 15%, transparent);
 }
 
 .scrollLine::after {
@@ -228,7 +228,7 @@
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(163, 162, 165, 0.7) 50%,
+    color-mix(in srgb, var(--color-text-secondary) 70%, transparent) 50%,
     transparent 100%
   );
   animation: scroll-drip 2s ease-in-out infinite;

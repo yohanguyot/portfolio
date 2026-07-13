@@ -7,7 +7,7 @@ import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHea
 import FeatureCard from "@/components/Project/FeatureCard/FeatureCard";
 import FeatureItem from "@/components/Project/FeatureItem/FeatureItem";
 import type { Dictionary } from "@/lib/getDictionary";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, revealEl, STAGGER, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import styles from "./AboutSection.module.css";
 
 const SKILL_ICONS = [Component, Route, CodeXml] as const;
@@ -66,77 +66,57 @@ export default function AboutSection({ dict, lang = "fr" }: { dict: Dictionary["
     const items = wrapper?.firstElementChild
       ? Array.from((wrapper.firstElementChild as HTMLElement).children as HTMLCollectionOf<HTMLElement>)
       : [];
-    bodyPs.forEach(p => { p.style.opacity = '0'; p.style.transform = 'scale(0.98) translateY(12px)'; });
+    bodyPs.forEach(p => { hideEl(p); });
     if (wrapper) wrapper.style.opacity = '0';
-    items.forEach(item => { item.style.opacity = '0'; item.style.transform = 'scale(0.98) translateY(12px)'; });
+    items.forEach(item => { hideEl(item); });
   }, []);
 
   useEffect(() => {
     if (shouldReduceMotion()) return;
-
-    const cleanups: (() => void)[] = [];
-
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-
-    const section = sectionRef.current;
-    const bodyDiv = bodyRef.current;
-    const bodyPs = bodyDiv ? Array.from(bodyDiv.children as HTMLCollectionOf<HTMLElement>) : [];
-
-    if (section) {
-      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          headerRef.current?.trigger(0);
-          bodyPs.forEach((p, i) => {
-            const delay = 160 + i * 80;
-            p.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-            p.style.opacity = '1';
-            p.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { p.style.transform = ''; p.style.transition = ''; }, DURATION + delay);
-          });
-        }));
-      }, isMobile ? '0px 0px -15% 0px' : '0px'));
-    }
-
-    // ── Skill card: surface instant + items stagger ──
-    const wrapper = cardRef.current;
-    if (wrapper) {
-      const featureCard = wrapper.firstElementChild as HTMLElement | null;
-      const items = featureCard
-        ? Array.from(featureCard.children as HTMLCollectionOf<HTMLElement>)
-        : [];
-
-      if (isMobile) {
-        cleanups.push(observe(wrapper, 0, () => {
-          wrapper.style.transition = 'none';
-          wrapper.style.opacity = '1';
-        }));
-        items.forEach(item => {
-          cleanups.push(observe(item, 0.2, () => {
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-              item.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-              item.style.opacity = '1';
-              item.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION);
-            }));
-          }));
-        });
-      } else {
-        cleanups.push(observe(wrapper, 0.1, () => {
-          wrapper.style.transition = 'none';
-          wrapper.style.opacity = '1';
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            items.forEach((item, i) => {
-              item.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 80}ms, transform ${DURATION}ms ${EASE} ${i * 80}ms`;
-              item.style.opacity = '1';
-              item.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { item.style.transform = ''; item.style.transition = ''; }, DURATION + i * 80);
-            });
-          }));
-        }));
-      }
-    }
-
+    const isMobile = isMobileViewport();
+    const cleanups = [watchSection(), watchCard()];
     return () => cleanups.forEach(fn => fn());
+
+    function watchSection(): () => void {
+      const section = sectionRef.current;
+      if (!section) return () => {};
+      const bodyDiv = bodyRef.current;
+      const bodyPs = bodyDiv ? Array.from(bodyDiv.children as HTMLCollectionOf<HTMLElement>) : [];
+      return observe(section, isMobile ? 0 : 0.1, () => {
+        afterLayout(() => {
+          headerRef.current?.trigger(0);
+          bodyPs.forEach((p, i) => revealEl(p, 2 * STAGGER + i * STAGGER));
+        });
+      }, isMobile ? '0px 0px -15% 0px' : '0px');
+    }
+
+    function watchCard(): () => void {
+      const wrapper = cardRef.current;
+      if (!wrapper) return () => {};
+      const featureCard = wrapper.firstElementChild as HTMLElement | null;
+      if (!featureCard) return () => {};
+      const items = Array.from(featureCard.children as HTMLCollectionOf<HTMLElement>);
+      if (!items.length) return () => {};
+      if (isMobile) {
+        const cardCleanup = observe(wrapper, 0, () => {
+          wrapper.style.transition = 'none';
+          wrapper.style.opacity = '1';
+        });
+        const itemCleanups = items.map(item =>
+          observe(item, 0.2, () => {
+            afterLayout(() => revealEl(item));
+          })
+        );
+        return () => { cardCleanup(); itemCleanups.forEach(fn => fn()); };
+      }
+      return observe(wrapper, 0.1, () => {
+        wrapper.style.transition = 'none';
+        wrapper.style.opacity = '1';
+        afterLayout(() => {
+          items.forEach((item, i) => revealEl(item, i * STAGGER));
+        });
+      });
+    }
   }, []);
 
   return (

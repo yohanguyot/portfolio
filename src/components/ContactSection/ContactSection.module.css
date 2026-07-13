@@ -51,7 +51,7 @@
 .links {
   display: flex;
   flex-direction: column;
-  max-width: 486px;
+  max-width: 480px;
 }
 
 .contactLink {

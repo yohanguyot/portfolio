@@ -117,7 +117,7 @@
   "contact": {
     "label": "Contact",
     "heading": "Concevons votre projet.",
-    "description": "Décrivez votre projet, je réponds vite.",
+    "description": "Décrivez votre projet en quelques mots, je réponds vite.",
     "needs": [
       "Product Design",
       "Refonte UX/UI",
@@ -132,7 +132,7 @@
       "briefLabel": "Brief ou idée du projet",
       "briefPlaceholder": "Quel est l'objectif principal de votre produit et vos contraintes actuelles (timing, technique, design system...) ?",
       "submit": "Envoyer le message",
-      "sending": "Envoi…",
+      "sending": "Envoi en cours",
       "errors": {
         "emailRequired": "L'email est requis.",
         "emailInvalid": "Adresse email invalide.",
@@ -609,5 +609,10 @@
     "keepro": "Product Designer sur un SaaS B2B de certification blockchain. La preuve cryptographique rendue lisible pour des équipes non techniques.",
     "lecoffre": "Product Designer sur une plateforme notariale B2B2C. Trois espaces distincts, zéro relance manuelle, ancrage blockchain intégré.",
     "wenimmo": "Product Designer sur un SaaS de distribution financière. Une interface unique conçue pour CGP et Middle Office aux besoins opposés."
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "Désolé, la page que vous recherchez n'existe pas ou a été déplacée.",
+    "cta": "Retour à l'accueil"
   }
 }

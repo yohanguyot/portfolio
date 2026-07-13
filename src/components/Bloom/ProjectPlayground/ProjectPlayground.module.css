@@ -344,21 +344,21 @@
 }
 
 .cardCollection {
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.55;
-  letter-spacing: 0.39px;
+  letter-spacing: 0.03em;
   color: var(--card-text-secondary);
 }
 
 .cardTitle {
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.5;
   font-weight: 600;
   color: var(--card-text-primary);
 }
 
 .cardPrice {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 700;
   line-height: 1.35;
   color: var(--card-text-primary);
@@ -372,7 +372,7 @@
   transition: transform var(--duration-fast) var(--ease);
   padding: 8px 16px;
   min-height: 40px;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1;
   font-weight: 600;
   display: flex;
@@ -434,7 +434,7 @@
 
 .tokenName {
   composes: headingSm from '@/styles/typography.module.css';
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 .tokenCategory {

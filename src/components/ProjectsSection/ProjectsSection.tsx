@@ -9,7 +9,7 @@ import ProjectImage from "@/components/ProjectImage/ProjectImage";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
-import { shouldReduceMotion, reveal, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, prepareReveal, observe, STAGGER, revealEl, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import styles from "./ProjectsSection.module.css";
 
 type Project = {
@@ -19,7 +19,7 @@ type Project = {
   tags: string[];
 };
 
-const PROJECTS_DATA = [
+const GRID_PROJECTS = [
   { slug: "keepro" as const, title: "Keepro" },
   { slug: "lecoffre" as const, title: "LeCoffre" },
   { slug: "wenimmo" as const, title: "Wenimmo" },
@@ -39,7 +39,7 @@ function Tags({ tags }: { tags: string[] }) {
 
 export default function ProjectsSection() {
   const dict = useDict();
-  const p = dict.projects;
+  const projects = dict.projects;
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const router = useTransitionRouter();
 
@@ -58,18 +58,16 @@ export default function ProjectsSection() {
     if (shouldReduceMotion()) return;
     const bloom = bloomRef.current;
     const grid = gridRef.current;
-    if (bloom) { bloom.style.opacity = '0'; bloom.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (bloom) hideEl(bloom);
     if (grid) Array.from(grid.querySelectorAll<HTMLElement>(':scope > a')).forEach(c => {
-      c.style.opacity = '0'; c.style.transform = 'scale(0.98) translateY(12px)';
+      hideEl(c);
     });
   }, []);
 
   useEffect(() => {
     if (shouldReduceMotion()) return;
 
-    const cleanups: (() => void)[] = [];
-
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    const isMobile = isMobileViewport();
 
     const section = sectionRef.current;
     const bloom = bloomRef.current;
@@ -77,94 +75,82 @@ export default function ProjectsSection() {
 
     // Back-navigation: section already in viewport → fire cascade immediately
     if (section && section.getBoundingClientRect().top < window.innerHeight) {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
+      afterLayout(() => {
         headerRef.current?.trigger(0);
         if (bloom) {
-          bloom.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-          bloom.style.opacity = '1';
-          bloom.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { bloom.style.transform = ''; bloom.style.transition = ''; }, DURATION);
+          revealEl(bloom);
         }
         if (grid) {
           const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
           cards.forEach((c, i) => {
-            c.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 80}ms, transform ${DURATION}ms ${EASE} ${i * 80}ms`;
-            c.style.opacity = '1';
-            c.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION + i * 80);
+            revealEl(c, i * STAGGER);
           });
           setTimeout(() => { grid.dataset.ready = 'true'; }, (cards.length - 1) * 120);
         }
-      }));
-      return () => cleanups.forEach(fn => fn());
+      });
+      return;
     }
 
-    if (section) {
-      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          headerRef.current?.trigger(0);
-        }));
-      }, isMobile ? '0px 0px -15% 0px' : '0px'));
-    }
-
-    // ── Bloom card ──
-    cleanups.push(observe(bloomRef.current, isMobile ? 0 : 0.2, reveal(bloomRef.current!, 0)));
-
-    // ── Small cards grid ──
-    if (grid) {
-      const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
-
-      if (isMobile) {
-        cards.forEach((c, i) => {
-          const isFirst = i === 0;
-          cleanups.push(observe(c, 0.2, () => {
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-              c.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-              c.style.opacity = '1';
-              c.style.transform = 'scale(1) translateY(0)';
-              if (isFirst) grid.dataset.ready = 'true';
-              setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION);
-            }));
-          }));
-        });
-      } else {
-        cleanups.push(observe(grid, 0.1, () => {
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            cards.forEach((c, i) => {
-              c.style.transition = `opacity ${DURATION}ms ${EASE} ${i * 80}ms, transform ${DURATION}ms ${EASE} ${i * 80}ms`;
-              c.style.opacity = '1';
-              c.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { c.style.transform = ''; c.style.transition = ''; }, DURATION + i * 80);
-            });
-            setTimeout(() => { grid.dataset.ready = 'true'; }, (cards.length - 1) * 120);
-          }));
-        }));
-      }
-    }
-
+    const cleanups = [watchHeader(), watchBloom(), watchGrid()];
     return () => cleanups.forEach(fn => fn());
+
+    function watchHeader(): () => void {
+      if (!section) return () => {};
+      return observe(section, isMobile ? 0 : 0.1, () => {
+        afterLayout(() => {
+          headerRef.current?.trigger(0);
+        });
+      }, isMobile ? '0px 0px -15% 0px' : '0px');
+    }
+
+    function watchBloom(): () => void {
+      if (!bloom) return () => {};
+      return observe(bloom, isMobile ? 0 : 0.2, prepareReveal(bloom, 0));
+    }
+
+    function watchGrid(): () => void {
+      if (!grid) return () => {};
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
+      if (isMobile) {
+        const cardCleanups = cards.map((c, i) =>
+          observe(c, 0.2, () => {
+            afterLayout(() => {
+              revealEl(c);
+              if (i === 0) grid!.dataset.ready = 'true';
+            });
+          })
+        );
+        return () => cardCleanups.forEach(fn => fn());
+      }
+      return observe(grid, 0.1, () => {
+        afterLayout(() => {
+          cards.forEach((c, i) => revealEl(c, i * STAGGER));
+          setTimeout(() => { grid!.dataset.ready = 'true'; }, (cards.length - 1) * 120);
+        });
+      });
+    }
   }, []);
 
   const lang = pathname.split("/")[1] ?? "fr";
-  const t = dict.tags;
+  const tags = dict.tags;
 
   const FEATURED: Project = {
     slug: "bloom",
     title: "Bloom",
-    description: p.featured.description,
-    tags: t.bloom,
+    description: projects.featured.description,
+    tags: tags.bloom,
   };
 
-  const PROJECTS: Project[] = PROJECTS_DATA.map((item, i) => ({
+  const PROJECTS: Project[] = GRID_PROJECTS.map((item, i) => ({
     ...item,
-    description: p.items[i]?.description ?? "",
-    tags: t[item.slug],
+    description: projects.items[i]?.description ?? "",
+    tags: tags[item.slug],
   }));
 
   return (
     <section ref={sectionRef} className={styles.section} id="projets">
       <div className={styles.container}>
-        <SectionHeader ref={headerRef} label={p.label} heading={p.heading} className={styles.sectionHeader} skipObserver />
+        <SectionHeader ref={headerRef} label={projects.label} heading={projects.heading} className={styles.sectionHeader} skipObserver />
 
         <div className={styles.projectItems}>
           <a
@@ -192,7 +178,7 @@ export default function ProjectsSection() {
                 </div>
               </div>
               <Button
-                label={p.cta}
+                label={projects.cta}
                 type="text"
                 showArrowRight
                 forceHover={hoveredSlug === FEATURED.slug}
@@ -228,7 +214,7 @@ export default function ProjectsSection() {
                       </div>
                     </div>
                     <Button
-                      label={p.cta}
+                      label={projects.cta}
                       type="text"
                       showArrowRight
                       forceHover={hoveredSlug === proj.slug}

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Inter, Poppins, Josefin_Sans, Archivo } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
+import NoDrag from "@/components/NoDrag/NoDrag";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -60,40 +62,26 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${geistSans.variable} ${jetbrainsMono.variable} ${inter.variable} ${poppins.variable} ${josefinSans.variable} ${archivo.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&display=swap"
-          rel="stylesheet"
-        />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WBDEXJZQKV" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-WBDEXJZQKV');
-            `,
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "xjgtm64bka");
-            `,
-          }}
-        />
+        <link rel="preload" href="/fonts/cabinet-grotesk-700-v1.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/cabinet-grotesk-800-v1.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body>
         <ViewTransitions>
           {children}
         </ViewTransitions>
+        <NoDrag />
         <Analytics />
         <SpeedInsights />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WBDEXJZQKV"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WBDEXJZQKV');
+        `}</Script>
       </body>
     </html>
   );

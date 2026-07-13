@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, ReactNode } from "react";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, EASE, DURATION, revealEl, STAGGER, afterLayout, hideEl, isMobileViewport } from "@/lib/animation";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./CardSection.module.css";
 
@@ -24,7 +24,7 @@ export default function CardSection({ label, heading, children }: Props) {
     if (!card) return;
     card.style.opacity = '1'; // override CSS opacity:0 — parent visible, seuls les enfants portent l'animation
     card.style.transform = 'scale(0.97) translateY(24px)';
-    if (body) { body.style.opacity = '0'; body.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (body) hideEl(body);
   }, []);
 
   useEffect(() => {
@@ -33,8 +33,9 @@ export default function CardSection({ label, heading, children }: Props) {
     const body = bodyRef.current;
     if (!card) return;
 
-    const cleanup = observe(card, 0.1, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
+    const isMobile = isMobileViewport();
+    const cleanup = observe(card, isMobile ? 0 : 0.1, () => {
+      afterLayout(() => {
         headerRef.current?.trigger(0);
 
         card.style.transition = `transform ${DURATION}ms ${EASE}`;
@@ -42,14 +43,11 @@ export default function CardSection({ label, heading, children }: Props) {
         setTimeout(() => { card.style.transform = ''; card.style.transition = ''; }, DURATION);
 
         if (body) {
-          const delay = 160;
-          body.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-          body.style.opacity = '1';
-          body.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { body.style.transform = ''; body.style.transition = ''; }, DURATION + delay);
+          const delay = 2 * STAGGER;
+          revealEl(body, delay);
         }
-      }));
-    }, '0px 0px -5% 0px');
+      });
+    }, isMobile ? '0px' : '0px 0px -5% 0px');
 
     return cleanup;
   }, []);

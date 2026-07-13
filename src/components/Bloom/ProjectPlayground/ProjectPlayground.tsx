@@ -7,7 +7,7 @@ import Image from "next/image";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import ProjectNav from "@/components/Project/Nav/Nav";
 import type { Dictionary } from "@/lib/getDictionary";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, revealEl, STAGGER, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import styles from "./ProjectPlayground.module.css";
 
 type ClientId = "bloom" | "erable" | "the-elements-nation" | "lqr-house" | "repetto" | "versity";
@@ -340,9 +340,9 @@ export default function ProjectPlayground({ dict }: Props) {
     const leadEl = leadRef.current;
     const tabsRowEl = tabsRowRef.current;
     const viewerEl = viewerRef.current;
-    if (leadEl) { leadEl.style.opacity = '0'; leadEl.style.transform = 'scale(0.98) translateY(12px)'; }
-    if (tabsRowEl) { tabsRowEl.style.opacity = '0'; tabsRowEl.style.transform = 'scale(0.98) translateY(12px)'; }
-    if (viewerEl) { viewerEl.style.opacity = '0'; viewerEl.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (leadEl) hideEl(leadEl);
+    if (tabsRowEl) hideEl(tabsRowEl);
+    if (viewerEl) hideEl(viewerEl);
   }, []);
 
   useEffect(() => {
@@ -354,35 +354,28 @@ export default function ProjectPlayground({ dict }: Props) {
     if (!section) return;
 
     const cleanups: (() => void)[] = [];
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-
-    function revealEl(el: HTMLElement, delay: number) {
-      el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-      el.style.opacity = '1';
-      el.style.transform = 'scale(1) translateY(0)';
-      setTimeout(() => { el.style.transform = ''; el.style.transition = ''; }, DURATION + delay);
-    }
+    const isMobile = isMobileViewport();
 
     if (isMobile) {
       // Section: header + lead cascade
       cleanups.push(observe(section, 0, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
+        afterLayout(() => {
           headerRef.current?.trigger(0);
-          if (leadEl) revealEl(leadEl, 160);
-        }));
-      }, isMobile ? '0px 0px -15% 0px' : '0px'));
+          if (leadEl) revealEl(leadEl, 2 * STAGGER);
+        });
+      }, '0px 0px -15% 0px'));
       // tabsRow + viewer each fire when they scroll into view
-      if (tabsRowEl) cleanups.push(observe(tabsRowEl, 0.2, () => requestAnimationFrame(() => requestAnimationFrame(() => revealEl(tabsRowEl, 0)))));
-      if (viewerEl) cleanups.push(observe(viewerEl, 0.1, () => requestAnimationFrame(() => requestAnimationFrame(() => revealEl(viewerEl, 0)))));
+      if (tabsRowEl) cleanups.push(observe(tabsRowEl, 0.2, () => afterLayout(() => revealEl(tabsRowEl, 0))));
+      if (viewerEl) cleanups.push(observe(viewerEl, 0.1, () => afterLayout(() => revealEl(viewerEl, 0))));
     } else {
       // Desktop: single observer, staggered cascade
       cleanups.push(observe(section, 0.1, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
+        afterLayout(() => {
           headerRef.current?.trigger(0);
-          if (leadEl) revealEl(leadEl, 160);
-          if (tabsRowEl) revealEl(tabsRowEl, 240);
-          if (viewerEl) revealEl(viewerEl, 320);
-        }));
+          if (leadEl) revealEl(leadEl, 2 * STAGGER);
+          if (tabsRowEl) revealEl(tabsRowEl, 3 * STAGGER);
+          if (viewerEl) revealEl(viewerEl, 4 * STAGGER);
+        });
       }));
     }
 

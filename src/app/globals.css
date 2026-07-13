@@ -1,4 +1,22 @@
 /* ─────────────────────────────────────────────
+   FONTS — Cabinet Grotesk (self-hosted)
+───────────────────────────────────────────── */
+@font-face {
+  font-family: 'Cabinet Grotesk';
+  src: url('/fonts/cabinet-grotesk-700-v1.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Cabinet Grotesk';
+  src: url('/fonts/cabinet-grotesk-800-v1.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+  font-style: normal;
+}
+
+/* ─────────────────────────────────────────────
    LAYER 1 — Primitives
    Usage : uniquement pour définir les sémantiques
    ci-dessous. Ne jamais les référencer dans les
@@ -129,7 +147,7 @@
   --radius-full: var(--radius-9999);
 
   /* Typography */
-  --font-family-display: 'Cabinet Grotesk Variable', 'Cabinet Grotesk', sans-serif;
+  --font-family-display: 'Cabinet Grotesk', sans-serif;
   --font-family-body:    var(--font-geist-sans), 'Geist', sans-serif;
   --font-family-label:   var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
   --font-weight-regular: 400;
@@ -175,6 +193,7 @@ body {
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-user-drag: none;
 }
 
 a {

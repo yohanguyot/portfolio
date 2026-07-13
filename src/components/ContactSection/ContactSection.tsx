@@ -6,7 +6,7 @@ import Button from "@/components/Button/Button";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, STAGGER, revealEl, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./ContactSection.module.css";
 
@@ -39,8 +39,8 @@ type Errors = { email?: string; brief?: string };
 
 export default function ContactSection({ noMarginTop = false }: { noMarginTop?: boolean }) {
   const dict = useDict();
-  const c = dict.contact;
-  const NEEDS = c.needs;
+  const contact = dict.contact;
+  const NEEDS = contact.needs;
   const [selectedNeed, setSelectedNeed] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
@@ -62,89 +62,63 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
     if (!section) return;
     section.style.opacity = '0';
     section.style.transform = 'scale(0.97) translateY(24px)';
-    if (desc) { desc.style.opacity = '0'; desc.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (desc) hideEl(desc);
     if (linksEl) Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach(l => {
-      l.style.opacity = '0'; l.style.transform = 'scale(0.98) translateY(12px)';
+      hideEl(l);
     });
-    if (form) { form.style.opacity = '0'; form.style.transform = 'scale(0.98) translateY(12px)'; }
+    if (form) hideEl(form);
   }, []);
 
   useEffect(() => {
     if (shouldReduceMotion()) return;
-
     const section = sectionRef.current;
-    const desc = descRef.current;
-    const linksEl = linksRef.current;
-    const form = formRef.current;
     if (!section) return;
-
-    const cleanups: (() => void)[] = [];
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-
-    // ── Card — révélation dès que la section entre dans le viewport ──
-    cleanups.push(observe(section, 0.05, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        section.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-        section.style.opacity = '1';
-        section.style.transform = 'scale(1) translateY(0)';
-        setTimeout(() => { section.style.transform = ''; section.style.transition = ''; }, DURATION);
-      }));
-    }, '0px'));
-
-    // ── Contenu texte — cascade quand le SectionHeader est réellement visible ──
-    const textTrigger = headerRef.current?.element ?? section;
-    cleanups.push(observe(textTrigger, 0.1, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        headerRef.current?.trigger(0);
-
-        if (desc) {
-          desc.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
-          desc.style.opacity = '1';
-          desc.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { desc.style.transform = ''; desc.style.transition = ''; }, DURATION + 160);
-        }
-
-        if (linksEl && !isMobile) {
-          Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach((l, i) => {
-            const delay = 240 + i * 80;
-            l.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-            l.style.opacity = '1';
-            l.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { l.style.transform = ''; l.style.transition = ''; }, DURATION + delay);
-          });
-        }
-      }));
-    }));
-
-    // ── Formulaire — observer indépendant ──
-    if (form) {
-      cleanups.push(observe(form, 0.2, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          form.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-          form.style.opacity = '1';
-          form.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { form.style.transform = ''; form.style.transition = ''; }, DURATION);
-        }));
-      }));
-    }
-
-    // ── Liens mobile — observer indépendant ──
-    if (linksEl && isMobile) {
-      const links = Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>);
-      cleanups.push(observe(linksEl, 0.3, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          links.forEach((l, i) => {
-            const delay = i * 80;
-            l.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-            l.style.opacity = '1';
-            l.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { l.style.transform = ''; l.style.transition = ''; }, DURATION + delay);
-          });
-        }));
-      }));
-    }
-
+    const isMobile = isMobileViewport();
+    const cleanups = [watchCard(), watchText(), watchForm(), watchLinksMobile()];
     return () => cleanups.forEach(fn => fn());
+
+    function watchCard(): () => void {
+      return observe(section!, 0.05, () => {
+        afterLayout(() => revealEl(section!));
+      }, '0px');
+    }
+
+    function watchText(): () => void {
+      const desc = descRef.current;
+      const linksEl = linksRef.current;
+      const textTrigger = headerRef.current?.element ?? section!;
+      return observe(textTrigger, 0.1, () => {
+        afterLayout(() => {
+          headerRef.current?.trigger(0);
+          if (desc) revealEl(desc, 2 * STAGGER);
+          if (linksEl && !isMobile) {
+            Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>).forEach((l, i) => {
+              revealEl(l, 3 * STAGGER + i * STAGGER);
+            });
+          }
+        });
+      });
+    }
+
+    function watchForm(): () => void {
+      const form = formRef.current;
+      if (!form) return () => {};
+      return observe(form, 0.1, () => {
+        afterLayout(() => revealEl(form));
+      }, isMobile ? '0px' : '0px 0px -5% 0px');
+    }
+
+    function watchLinksMobile(): () => void {
+      if (!isMobile) return () => {};
+      const linksEl = linksRef.current;
+      if (!linksEl) return () => {};
+      const links = Array.from(linksEl.children as HTMLCollectionOf<HTMLElement>);
+      return observe(linksEl, 0.1, () => {
+        afterLayout(() => {
+          links.forEach((l, i) => revealEl(l, i * STAGGER));
+        });
+      });
+    }
   }, []);
 
   function selectNeed(need: string) {
@@ -159,9 +133,9 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
     const brief = (form.elements.namedItem("brief") as HTMLTextAreaElement).value;
 
     const nextErrors: Errors = {};
-    if (!email.trim()) nextErrors.email = c.form.errors.emailRequired;
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = c.form.errors.emailInvalid;
-    if (!brief.trim()) nextErrors.brief = c.form.errors.briefRequired;
+    if (!email.trim()) nextErrors.email = contact.form.errors.emailRequired;
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = contact.form.errors.emailInvalid;
+    if (!brief.trim()) nextErrors.brief = contact.form.errors.briefRequired;
 
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
@@ -189,8 +163,8 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
         <div className={styles.leftCol}>
           {/* title + description */}
           <div className={styles.infoContent}>
-            <SectionHeader ref={headerRef} label={c.label} heading={c.heading} skipObserver />
-            <p ref={descRef} className={styles.description}>{c.description}</p>
+            <SectionHeader ref={headerRef} label={contact.label} heading={contact.heading} skipObserver />
+            <p ref={descRef} className={styles.description}>{contact.description}</p>
           </div>
 
           {/* links */}
@@ -214,26 +188,26 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
               <div className={styles.successIconWrap} aria-hidden>
                 <Check size={16} strokeWidth={2.5} />
               </div>
-              <p className={styles.successTitle}>{c.form.successTitle}</p>
+              <p className={styles.successTitle}>{contact.form.successTitle}</p>
             </div>
           ) : (
             <>
               <div className={styles.formRow}>
                 <div className={styles.fieldGroup}>
                   <label className={styles.fieldLabel} htmlFor="contact-nom">
-                    {c.form.nameLabel}
+                    {contact.form.nameLabel}
                   </label>
                   <input
                     id="contact-nom"
                     name="nom"
                     className={styles.input}
-                    placeholder={c.form.namePlaceholder}
+                    placeholder={contact.form.namePlaceholder}
                     autoComplete="name"
                   />
                 </div>
                 <div className={styles.fieldGroup}>
                   <label className={styles.fieldLabel} htmlFor="contact-email">
-                    {c.form.emailLabel}
+                    {contact.form.emailLabel}
                   </label>
                   <input
                     id="contact-email"
@@ -250,7 +224,7 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
               </div>
 
               <div className={styles.needsGroup}>
-                <span className={styles.fieldLabel}>{c.form.needLabel}</span>
+                <span className={styles.fieldLabel}>{contact.form.needLabel}</span>
                 <div className={styles.chips}>
                   {NEEDS.map((need) => (
                     <button
@@ -268,13 +242,13 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
 
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldLabel} htmlFor="contact-brief">
-                  {c.form.briefLabel}
+                  {contact.form.briefLabel}
                 </label>
                 <textarea
                   id="contact-brief"
                   name="brief"
                   className={`${styles.textarea} ${errors.brief ? styles.inputError : ""}`}
-                  placeholder={c.form.briefPlaceholder}
+                  placeholder={contact.form.briefPlaceholder}
                   aria-invalid={!!errors.brief}
                   aria-describedby={errors.brief ? "error-brief" : undefined}
                 />
@@ -283,14 +257,15 @@ export default function ContactSection({ noMarginTop = false }: { noMarginTop?: 
 
               {sendError && (
                 <p className={styles.sendError}>
-                  {c.form.sendError}{" "}
+                  {contact.form.sendError}{" "}
                   <a href="mailto:yohanguyot.contact@gmail.com">yohanguyot.contact@gmail.com</a>.
                 </p>
               )}
 
               <Button
-                label={sending ? c.form.sending : c.form.submit}
+                label={sending ? contact.form.sending : contact.form.submit}
                 showArrowRight={!sending}
+                loading={sending}
                 className={styles.submitBtn}
               />
             </>

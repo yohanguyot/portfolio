@@ -3,7 +3,7 @@
 import { Children, cloneElement, isValidElement, useRef, useEffect, type ReactNode, type Ref } from "react";
 import Image from "next/image";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, revealEl, STAGGER, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./SplitSection.module.css";
 
@@ -51,11 +51,9 @@ export default function SplitSection({
     // Hide body (last child) separately so it can cascade after heading
     const bodyDiv = textCol.lastElementChild as HTMLElement | null;
     if (bodyDiv) {
-      bodyDiv.style.opacity = '0';
-      bodyDiv.style.transform = 'scale(0.98) translateY(12px)';
+            hideEl(bodyDiv);
     }
-    imageWrap.style.opacity = '0';
-    imageWrap.style.transform = 'scale(0.98) translateY(12px)';
+        hideEl(imageWrap);
     void imageWrap.offsetHeight;
   }, []);
 
@@ -66,61 +64,38 @@ export default function SplitSection({
     const imageWrap = imageWrapRef.current;
     if (!section || !textCol || !imageWrap) return;
 
-    const cleanups: (() => void)[] = [];
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    const isMobile = isMobileViewport();
     const bodyDiv = textCol.lastElementChild as HTMLElement | null;
+    const cleanups = isMobile ? watchMobile() : [watchDesktop()];
+    return () => cleanups.forEach(fn => fn());
 
-    if (isMobile) {
-      // Stacked: text cascade on section entry, image when it scrolls into view
-      cleanups.push(observe(section, 0, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          internalHeaderRef.current?.trigger(0);
-          if (bodyDiv) {
-            bodyDiv.style.transition = `opacity ${DURATION}ms ${EASE} 160ms, transform ${DURATION}ms ${EASE} 160ms`;
-            bodyDiv.style.opacity = '1';
-            bodyDiv.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { bodyDiv.style.transform = ''; bodyDiv.style.transition = ''; }, DURATION + 160);
-          }
-        }));
-      }, '0px 0px -15% 0px'));
+    function watchMobile(): (() => void)[] {
+      return [
+        observe(section!, 0, () => {
+          afterLayout(() => {
+            internalHeaderRef.current?.trigger(0);
+            if (bodyDiv) revealEl(bodyDiv, 2 * STAGGER);
+          });
+        }, '0px 0px -15% 0px'),
+        observe(imageWrap!, 0.2, () => {
+          afterLayout(() => revealEl(imageWrap!));
+        }),
+      ];
+    }
 
-      cleanups.push(observe(imageWrap, 0.2, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          imageWrap.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-          imageWrap.style.opacity = '1';
-          imageWrap.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION);
-        }));
-      }));
-    } else {
-      // Desktop: side-by-side → single observer + stagger
-      // imageLeft : image(0ms) → label(80ms) → heading(160ms) → body(240ms)
-      // imageRight: label(0ms) → [image(80ms) + heading(80ms)] → body(160ms)
+    function watchDesktop(): () => void {
       const imageFirst = imagePosition === 'left';
       const headerDelay = imageFirst ? 80 : 0;
       const imgDelay = imageFirst ? 0 : 80;
-      const bodyDelay = headerDelay + 160;
-
-      cleanups.push(observe(section, 0.1, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
+      const bodyDelay = headerDelay + 2 * STAGGER;
+      return observe(section!, 0.1, () => {
+        afterLayout(() => {
           internalHeaderRef.current?.trigger(headerDelay);
-
-          imageWrap.style.transition = `opacity ${DURATION}ms ${EASE} ${imgDelay}ms, transform ${DURATION}ms ${EASE} ${imgDelay}ms`;
-          imageWrap.style.opacity = '1';
-          imageWrap.style.transform = 'scale(1) translateY(0)';
-          setTimeout(() => { imageWrap.style.transform = ''; imageWrap.style.transition = ''; }, DURATION + imgDelay);
-
-          if (bodyDiv) {
-            bodyDiv.style.transition = `opacity ${DURATION}ms ${EASE} ${bodyDelay}ms, transform ${DURATION}ms ${EASE} ${bodyDelay}ms`;
-            bodyDiv.style.opacity = '1';
-            bodyDiv.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { bodyDiv.style.transform = ''; bodyDiv.style.transition = ''; }, DURATION + bodyDelay);
-          }
-        }));
-      }, '0px'));
+          revealEl(imageWrap!, imgDelay);
+          if (bodyDiv) revealEl(bodyDiv, bodyDelay);
+        });
+      }, '0px');
     }
-
-    return () => cleanups.forEach(fn => fn());
   }, [imagePosition]);
 
   return (

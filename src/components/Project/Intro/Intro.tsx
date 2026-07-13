@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTransitionRouter } from "next-view-transitions";
 import Button from "@/components/Button/Button";
 import { useDict } from "@/lib/dict-context";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, revealEl, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./Intro.module.css";
 
@@ -49,11 +49,11 @@ export default function ProjectIntro({ tags, title, description, meta, stats }: 
 
     if (backEl) { backEl.style.opacity = '0'; backEl.style.transform = 'scale(0.98) translateY(8px)'; }
     tagItems.forEach(t => { t.style.opacity = '0'; t.style.transform = 'scale(0.98) translateY(8px)'; });
-    if (titleEl) { titleEl.style.opacity = '0'; titleEl.style.transform = 'scale(0.98) translateY(12px)'; }
-    if (descEl) { descEl.style.opacity = '0'; descEl.style.transform = 'scale(0.98) translateY(12px)'; }
-    metaItems.forEach(m => { m.style.opacity = '0'; m.style.transform = 'scale(0.98) translateY(12px)'; });
+    if (titleEl) hideEl(titleEl);
+    if (descEl) hideEl(descEl);
+    metaItems.forEach(m => { hideEl(m); });
     if (statsEl) { statsEl.style.opacity = '0'; }
-    statItems.forEach(s => { s.style.opacity = '0'; s.style.transform = 'scale(0.98) translateY(12px)'; });
+    statItems.forEach(s => { hideEl(s); });
   }, []);
 
   useEffect(() => {
@@ -70,17 +70,10 @@ export default function ProjectIntro({ tags, title, description, meta, stats }: 
     const statItems = statsEl ? Array.from(statsEl.children as HTMLCollectionOf<HTMLElement>) : [];
 
     const cleanups: (() => void)[] = [];
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-
-    function revealEl(el: HTMLElement, delay: number) {
-      el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-      el.style.opacity = '1';
-      el.style.transform = 'scale(1) translateY(0)';
-      setTimeout(() => { el.style.transform = ''; el.style.transition = ''; }, DURATION + delay);
-    }
+    const isMobile = isMobileViewport();
 
     cleanups.push(observe(section, isMobile ? 0 : 0.05, () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
+      afterLayout(() => {
         const vh = window.innerHeight;
         let delay = 0;
 
@@ -98,9 +91,9 @@ export default function ProjectIntro({ tags, title, description, meta, stats }: 
             delay += metaItems.length * 40;
           } else {
             cleanups.push(observe(metaEl, 0, () => {
-              requestAnimationFrame(() => requestAnimationFrame(() => {
+              afterLayout(() => {
                 metaItems.forEach((m, i) => revealEl(m, i * 40));
-              }));
+              });
             }));
             delay += metaItems.length * 40;
           }
@@ -113,14 +106,14 @@ export default function ProjectIntro({ tags, title, description, meta, stats }: 
             statItems.forEach((s, i) => revealEl(s, delay + i * 40));
           } else {
             cleanups.push(observe(statsEl, 0, () => {
-              requestAnimationFrame(() => requestAnimationFrame(() => {
+              afterLayout(() => {
                 revealEl(statsEl, 0);
                 statItems.forEach((s, i) => revealEl(s, i * 40));
-              }));
+              });
             }));
           }
         }
-      }));
+      });
     }, '0px'));
 
     return () => cleanups.forEach(fn => fn());

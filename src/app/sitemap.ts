@@ -1,25 +1,21 @@
 import type { MetadataRoute } from "next";
 
 const BASE_URL = "https://yohanguyot.com";
-const LOCALES = ["fr", "en", "es"];
-const PROJECTS = ["bloom", "keepro", "lecoffre", "wenimmo"];
+const LOCALES = ["fr", "en", "es"] as const;
+const PATHS = ["", "/bloom", "/keepro", "/lecoffre", "/wenimmo"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const homepages = LOCALES.map((lang) => ({
-    url: `${BASE_URL}/${lang}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 1,
-  }));
-
-  const projects = LOCALES.flatMap((lang) =>
-    PROJECTS.map((project) => ({
-      url: `${BASE_URL}/${lang}/${project}`,
+  return LOCALES.flatMap((lang) =>
+    PATHS.map((path) => ({
+      url: `${BASE_URL}/${lang}${path}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
-      priority: 0.8,
+      priority: path === "" ? 1 : 0.8,
+      alternates: {
+        languages: Object.fromEntries(
+          LOCALES.map((l) => [l, `${BASE_URL}/${l}${path}`])
+        ),
+      },
     }))
   );
-
-  return [...homepages, ...projects];
 }

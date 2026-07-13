@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import Image from "next/image";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import type { Dictionary } from "@/lib/getDictionary";
-import { shouldReduceMotion, observe, EASE, DURATION } from "@/lib/animation";
+import { shouldReduceMotion, observe, revealEl, STAGGER, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./ProjectIdentities.module.css";
 
@@ -22,66 +22,48 @@ export default function ProjectIdentities({ dict }: Props) {
     const imagesEl = imagesRef.current;
     const bodyPs = bodyEl ? Array.from(bodyEl.children as HTMLCollectionOf<HTMLElement>) : [];
     const imageWraps = imagesEl ? Array.from(imagesEl.children as HTMLCollectionOf<HTMLElement>) : [];
-    bodyPs.forEach(p => { p.style.opacity = '0'; p.style.transform = 'scale(0.98) translateY(12px)'; });
-    imageWraps.forEach(img => { img.style.opacity = '0'; img.style.transform = 'scale(0.98) translateY(12px)'; });
+    bodyPs.forEach(p => { hideEl(p); });
+    imageWraps.forEach(img => { hideEl(img); });
   }, []);
 
   useEffect(() => {
     if (shouldReduceMotion()) return;
-
-    const bodyEl = bodyRef.current;
-    const imagesEl = imagesRef.current;
-    const bodyPs = bodyEl ? Array.from(bodyEl.children as HTMLCollectionOf<HTMLElement>) : [];
-    const imageWraps = imagesEl ? Array.from(imagesEl.children as HTMLCollectionOf<HTMLElement>) : [];
-
-    const section = sectionRef.current;
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-    const cleanups: (() => void)[] = [];
-
-    // Cascade coordonnée : label(0) → heading(80ms) → bodyPs(160ms, 240ms)
-    if (section) {
-      cleanups.push(observe(section, isMobile ? 0 : 0.1, () => {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          headerRef.current?.trigger(0);
-          bodyPs.forEach((p, i) => {
-            const delay = 160 + i * 80;
-            p.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-            p.style.opacity = '1';
-            p.style.transform = 'scale(1) translateY(0)';
-            setTimeout(() => { p.style.transform = ''; p.style.transition = ''; }, DURATION + delay);
-          });
-        }));
-      }, isMobile ? '0px 0px -15% 0px' : '0px'));
-    }
-
-    if (imagesEl && imageWraps.length) {
-      if (isMobile) {
-        imageWraps.forEach((img) => {
-          cleanups.push(observe(img, 0.2, () => {
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-              img.style.transition = `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`;
-              img.style.opacity = '1';
-              img.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { img.style.transform = ''; img.style.transition = ''; }, DURATION);
-            }));
-          }));
-        });
-      } else {
-        cleanups.push(observe(imagesEl, 0.1, () => {
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            imageWraps.forEach((img, i) => {
-              const delay = i * 80;
-              img.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-              img.style.opacity = '1';
-              img.style.transform = 'scale(1) translateY(0)';
-              setTimeout(() => { img.style.transform = ''; img.style.transition = ''; }, DURATION + delay);
-            });
-          }));
-        }));
-      }
-    }
-
+    const isMobile = isMobileViewport();
+    const cleanups = [watchSection(), watchImages()];
     return () => cleanups.forEach(fn => fn());
+
+    function watchSection(): () => void {
+      const section = sectionRef.current;
+      if (!section) return () => {};
+      const bodyEl = bodyRef.current;
+      const bodyPs = bodyEl ? Array.from(bodyEl.children as HTMLCollectionOf<HTMLElement>) : [];
+      return observe(section, isMobile ? 0 : 0.1, () => {
+        afterLayout(() => {
+          headerRef.current?.trigger(0);
+          bodyPs.forEach((p, i) => revealEl(p, 2 * STAGGER + i * STAGGER));
+        });
+      }, isMobile ? '0px 0px -15% 0px' : '0px');
+    }
+
+    function watchImages(): () => void {
+      const imagesEl = imagesRef.current;
+      if (!imagesEl) return () => {};
+      const imageWraps = Array.from(imagesEl.children as HTMLCollectionOf<HTMLElement>);
+      if (!imageWraps.length) return () => {};
+      if (isMobile) {
+        const imgCleanups = imageWraps.map(img =>
+          observe(img, 0.2, () => {
+            afterLayout(() => revealEl(img));
+          })
+        );
+        return () => imgCleanups.forEach(fn => fn());
+      }
+      return observe(imagesEl, 0.1, () => {
+        afterLayout(() => {
+          imageWraps.forEach((img, i) => revealEl(img, i * STAGGER));
+        });
+      });
+    }
   }, []);
 
   return (
