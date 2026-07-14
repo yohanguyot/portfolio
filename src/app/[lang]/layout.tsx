@@ -26,9 +26,10 @@ export async function generateMetadata({
     metadataBase: new URL(BASE_URL),
     icons: {
       icon: [
-        { url: "/favicon.ico", type: "image/x-icon", sizes: "32x32 48x48 64x64" },
         { url: "/icon.png", type: "image/png", sizes: "512x512" },
+        { url: "/favicon.ico", type: "image/x-icon", sizes: "32x32 48x48 64x64" },
       ],
+      apple: "/apple-icon.png",
     },
     openGraph: {
       siteName: "Yohan Guyot",
