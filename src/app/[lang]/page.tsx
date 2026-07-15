@@ -7,14 +7,14 @@ export async function generateMetadata({ params }: PageProps<"/[lang]">): Promis
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
   return {
-    title: "Yohan Guyot · Product Builder",
+    title: "Yohan Guyot · Product Designer",
     description: dict.meta.home,
     alternates: {
       canonical: `${BASE_URL}/${lang}`,
       languages: Object.fromEntries(LOCALES.map((l) => [l, `${BASE_URL}/${l}`])),
     },
     openGraph: {
-      title: "Yohan Guyot · Product Builder",
+      title: "Yohan Guyot · Product Designer",
       description: dict.meta.home,
       url: `${BASE_URL}/${lang}`,
       images: [{ url: "/og.png", width: 1200, height: 630 }],
@@ -30,7 +30,7 @@ const jsonLd = {
       "@id": `${BASE_URL}/#person`,
       name: "Yohan Guyot",
       url: BASE_URL,
-      jobTitle: "Product Builder",
+      jobTitle: "Product Designer",
       description: "Product designer with a technical culture — design to production, no friction.",
       sameAs: [
         "https://www.linkedin.com/in/yohan-guyot/",

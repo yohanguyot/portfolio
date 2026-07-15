@@ -45,7 +45,7 @@ const archivo = Archivo({
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: "Yohan Guyot · Product Builder",
+  title: "Yohan Guyot · Product Designer",
   icons: {
     icon: "/icon.png",
     apple: "/apple-icon.png",

@@ -13,7 +13,7 @@
     "langLabel": "Langue"
   },
   "hero": {
-    "eyebrow": "Yohan Guyot · Product Builder",
+    "eyebrow": "Yohan Guyot · Product Designer",
     "titleLine1": "Design to prod.",
     "titleLine2": "Sans friction.",
     "subtitlePre1": "Je design pour les ",
@@ -83,8 +83,9 @@
       }
     ],
     "body": [
-      "Depuis plusieurs années, je crée des interfaces pour des produits complexes aux enjeux critiques : fintech, gestion de patrimoine et sécurité documentaire.",
-      "Grâce à ma double compétence design & front-end, j'intègre les contraintes techniques dès la conception pour livrer des fichiers Figma rigoureux, directement exploitables par les développeurs, et garantir une transition fluide en prod sans perte de qualité."
+      "Je conçois des interfaces web et produit pour des environnements exigeants, à l'image de la fintech, de la gestion de patrimoine ou de la sécurité.",
+      "Ma double culture design & front-end change concrètement la dynamique de projet : les contraintes techniques sont intégrées dès les premières maquettes pour livrer des fichiers Figma directement exploitables, sans perte en prod.",
+      "Selon les besoins, j'interviens sur la conception globale de produits et de Design Systems, ou sur la création et la mise en ligne complète de sites vitrines et landing pages."
     ]
   },
   "process": {
@@ -145,7 +146,7 @@
     }
   },
   "footer": {
-    "copyright": "Product Builder"
+    "copyright": "Product Designer"
   },
   "projectNav": {
     "back": "Retour",
@@ -605,7 +606,7 @@
     }
   },
   "meta": {
-    "home": "Portfolio de Yohan Guyot, Product Designer. Projets SaaS B2B, design system et interfaces produit livrées en production.",
+    "home": "Design d'interfaces web et produit (fintech, SaaS, vitrines). Une rigueur design & front-end pour des fichiers Figma exploitables et sans perte en prod.",
     "bloom": "Lead Product Designer sur une marketplace Web3 white-label. Architecture modulaire, design system multi-clients, livraison production.",
     "keepro": "Product Designer sur un SaaS B2B de certification blockchain. La preuve cryptographique rendue lisible pour des équipes non techniques.",
     "lecoffre": "Product Designer sur une plateforme notariale B2B2C. Trois espaces distincts, zéro relance manuelle, ancrage blockchain intégré.",

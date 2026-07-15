@@ -13,7 +13,7 @@
     "langLabel": "Idioma"
   },
   "hero": {
-    "eyebrow": "Yohan Guyot · Product Builder",
+    "eyebrow": "Yohan Guyot · Product Designer",
     "titleLine1": "Design to prod.",
     "titleLine2": "Sin fricción.",
     "subtitlePre1": "Diseño para ",
@@ -83,8 +83,9 @@
       }
     ],
     "body": [
-      "Desde hace varios años creo interfaces para productos complejos con altas exigencias: fintech, gestión patrimonial y seguridad documental.",
-      "Gracias a mi doble competencia en diseño y front-end, integro las restricciones técnicas desde la concepción para entregar archivos Figma rigurosos, directamente utilizables por los desarrolladores, y garantizar una transición fluida a producción sin pérdida de calidad."
+      "Diseño interfaces web y de producto para entornos exigentes, como fintech, gestión patrimonial o seguridad.",
+      "Mi doble cultura design & front-end cambia concretamente la dinámica del proyecto: las restricciones técnicas se integran desde las primeras maquetas para entregar archivos Figma directamente utilizables, sin pérdida en producción.",
+      "Según las necesidades, trabajo en el diseño global de productos y Design Systems, o en la creación y publicación completa de sitios web y landing pages."
     ]
   },
   "process": {
@@ -145,7 +146,7 @@
     }
   },
   "footer": {
-    "copyright": "Product Builder"
+    "copyright": "Product Designer"
   },
   "projectNav": {
     "back": "Volver",
@@ -605,7 +606,7 @@
     }
   },
   "meta": {
-    "home": "Portfolio de Yohan Guyot, Product Designer. Proyectos SaaS B2B, design system e interfaces de producto entregadas en producción.",
+    "home": "Diseño de interfaces web y producto (fintech, SaaS, webs corporativas). Rigor design & front-end para archivos Figma listos para implementar y sin pérdida en producción.",
     "bloom": "Lead Product Designer en un marketplace Web3 white-label. Arquitectura modular, design system multi-cliente, entrega en producción.",
     "keepro": "Product Designer en un SaaS B2B de certificación blockchain. La prueba criptográfica hecha legible para equipos no técnicos.",
     "lecoffre": "Product Designer en una plataforma notarial B2B2C. Tres espacios distintos, cero seguimiento manual, anclaje blockchain integrado.",
