@@ -31,7 +31,7 @@ const jsonLd = {
       name: "Yohan Guyot",
       url: BASE_URL,
       jobTitle: "Product Designer",
-      description: "Product designer with a technical culture — design to production, no friction.",
+      description: "Product designer with dual design and front-end expertise. Figma files ready to implement, no loss in production.",
       sameAs: [
         "https://www.linkedin.com/in/yohan-guyot/",
       ],
