@@ -183,13 +183,13 @@
         },
         {
           "value": "32",
-          "suffix": "M€",
-          "label": "Volume subscribed"
+          "label": "Total volume subscribed",
+          "unit": "M€"
         },
         {
           "value": "15",
-          "suffix": " min",
-          "label": "Per multi-product subscription"
+          "label": "Per subscription",
+          "unit": " min"
         }
       ]
     },

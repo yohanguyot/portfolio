@@ -10,7 +10,7 @@ import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import styles from "./Intro.module.css";
 
 export type IntroMetaItem = { label: string; value: string };
-export type IntroStatItem = { value: string; suffix?: string; label: string };
+export type IntroStatItem = { value: string; suffix?: string; unit?: string; label: string };
 
 type Props = {
   tags: string[];
@@ -164,6 +164,7 @@ export default function ProjectIntro({ tags, title, description, meta, stats }: 
                 <p className={styles.statNumber}>
                   {stat.value}
                   {stat.suffix && <span className={styles.statSuffix}>{stat.suffix}</span>}
+                  {stat.unit && <span className={styles.statUnit}>{stat.unit}</span>}
                 </p>
                 <p className={styles.statLabel}>{stat.label}</p>
               </div>

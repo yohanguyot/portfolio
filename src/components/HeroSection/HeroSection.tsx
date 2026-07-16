@@ -225,6 +225,23 @@ export default function HeroSection() {
   const dict = useDict();
   const h = dict.hero;
   const gradientRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+    const update = () => {
+      const w = window.innerWidth;
+      const isMob = w <= 600;
+      const pad = isMob ? 32 : 64;
+      const min = isMob ? 16 : 44;
+      const size = Math.min(Math.max((w - pad) / 6.5, min), 112);
+      el.style.fontSize = `${size}px`;
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   useEffect(() => {
     const el = gradientRef.current;
@@ -251,7 +268,7 @@ export default function HeroSection() {
           <div className={styles.textContainer}>
             <div className={styles.titleContainer}>
               <p className={styles.eyebrow}>{h.eyebrow}</p>
-              <h1 className={styles.displayTitle} style={{ whiteSpace: "nowrap" }}>
+              <h1 ref={titleRef} className={styles.displayTitle} style={{ whiteSpace: "nowrap" }}>
                 {h.titleLine1}
                 <br />
                 {h.titleLine2}

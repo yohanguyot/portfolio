@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
+import NextLink from "next/link";
 import { Link, useTransitionRouter } from "next-view-transitions";
 import { useDict } from "@/lib/dict-context";
 import { NAV_SCROLL_OFFSET } from "@/lib/animation";
@@ -314,7 +315,7 @@ export default function Navigation() {
             {isHome ? (
               <a href="#" className={styles.logo} onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Yohan Guyot</a>
             ) : (
-              <Link href={`/${lang}`} className={styles.logo}>Yohan Guyot</Link>
+              <NextLink href={`/${lang}`} className={styles.logo}>Yohan Guyot</NextLink>
             )}
           </div>
 
