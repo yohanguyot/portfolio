@@ -25,19 +25,24 @@ export function hideEl(el: HTMLElement): void {
 }
 
 export function revealEl(el: HTMLElement, delay = 0): () => void {
-  const anim = el.animate(
-    [
-      { opacity: 0, transform: 'scale(0.98) translateY(12px)' },
-      { opacity: 1, transform: 'scale(1) translateY(0)' },
-    ],
-    { duration: DURATION, delay, easing: EASE, fill: 'forwards' }
-  );
-  anim.onfinish = () => {
+  el.style.transition = '';
+  el.style.animationName = 'revealEl';
+  el.style.animationDuration = `${DURATION}ms`;
+  el.style.animationTimingFunction = EASE;
+  el.style.animationDelay = `${delay}ms`;
+  el.style.animationFillMode = 'both';
+
+  const onEnd = () => {
     el.style.opacity = '1';
     el.style.transform = '';
-    anim.cancel();
+    el.style.animation = '';
   };
-  return () => anim.cancel();
+  el.addEventListener('animationend', onEnd, { once: true });
+
+  return () => {
+    el.removeEventListener('animationend', onEnd);
+    el.style.animation = '';
+  };
 }
 
 export function prepareReveal(el: HTMLElement, delay = 0): () => void {
