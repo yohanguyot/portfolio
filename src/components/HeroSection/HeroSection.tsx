@@ -67,8 +67,8 @@ function HeroArcCanvas() {
     const INTRO_DELAY = isMobileDevice ? 0 : 100;
     const INTRO_DURATION = 900;
 
-    // Détection pixel-based : vérifie si ctx.filter blur étale réellement les pixels
-    const useCtxFilter = (() => {
+    // ctx.filter uniquement sur desktop (mobile Safari rend le blur trop faible même sur iOS 18)
+    const useCtxFilter = !isMobileDevice && (() => {
       const tc = document.createElement('canvas');
       tc.width = 20; tc.height = 20;
       const tx = tc.getContext('2d');
@@ -141,17 +141,17 @@ function HeroArcCanvas() {
         glowColor = 'rgba(200,80,30,0.8)'
       ) {
         if (blur > 0 && !useCtxFilter) {
-          // Multi-pass : étale le trait en plusieurs couches de plus en plus larges
-          const passes = 5;
+          // Multi-pass : simule un blur gaussien en étalant le trait sur 7 couches
+          const passes = 7;
           for (let p = 0; p < passes; p++) {
             const ratio = p / (passes - 1);
             ctx.save();
-            ctx.globalAlpha = (0.08 + 0.18 * ratio);
+            ctx.globalAlpha = (0.05 + 0.22 * ratio);
             ctx.beginPath();
             ctx.moveTo(x0, y0);
             ctx.quadraticCurveTo(cpx, cpy + cpyOffset, x2, y2);
             ctx.strokeStyle = glowColor;
-            ctx.lineWidth = lineWidth + blur * 2.5 * (1 - ratio);
+            ctx.lineWidth = lineWidth + blur * 4 * (1 - ratio);
             ctx.stroke();
             ctx.restore();
           }
@@ -193,7 +193,7 @@ function HeroArcCanvas() {
       // lineWidth du halo réduit quand le pic est vers les bords
       const edgeDist = Math.abs(peak - 0.5) * 2; // 0 au centre, 1 au bord
       const edgeScale = Math.max(0.22, 1 - Math.pow(edgeDist, 2.5) * 0.78);
-      drawArc(20, (isMobile ? 110 : 120) * edgeScale, gDeep, isMobile ? 22 : 26, `rgba(180,60,12,0.9)`);
+      drawArc(20, (isMobile ? 120 : 120) * edgeScale, gDeep, isMobile ? 28 : 26, `rgba(180,60,12,0.9)`);
 
       // 2. Corona principale — orange vif, floor ~0.28 partout
       const gBody = ctx.createLinearGradient(0, 0, w, 0);
@@ -204,7 +204,7 @@ function HeroArcCanvas() {
       gBody.addColorStop(peak,                                           `rgba(215,94,46,${0.98 * gi})`);
       gBody.addColorStop(Math.min(1,   peak + bR),                      `rgba(168,60,24,${(0.28 + 0.18) * gi})`);
       gBody.addColorStop(1,                                              `rgba(145,48,16,${bfR})`);
-      drawArc(6, isMobile ? 56 : 62, gBody, isMobile ? 20 : 11, `rgba(220,95,45,0.9)`);
+      drawArc(6, isMobile ? 62 : 62, gBody, isMobile ? 22 : 11, `rgba(220,95,45,0.9)`);
 
       // 3. Anneau interne — jaune-orange, floor ~0.12 partout
       const gInner = ctx.createLinearGradient(0, 0, w, 0);
