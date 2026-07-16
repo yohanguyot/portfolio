@@ -52,7 +52,9 @@
   cursor: pointer;
   transition: transform var(--duration-fast) var(--ease);
   opacity: 0;
-  transform: scale(0.98) translateY(12px);
+  /* NO transform here — static transform creates a GPU compositing layer on Safari
+     that conflicts with child compositing contexts (isolation:isolate, SVG filters,
+     opacity<1 elements). Transform lives only in @keyframes cardIn below. */
 }
 
 .cardLargeImageWrap {
@@ -152,27 +154,27 @@
   cursor: pointer;
   overflow: hidden;
   opacity: 0;
-  transform: scale(0.98) translateY(12px);
+  /* NO transform here — same reason as .cardLarge above */
 }
 
-/* Step 1 — added first (with reflow after) to define transition on the "before" state */
-.cardTransition {
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+/* ── Reveal animation — local keyframes, triggered by JS adding .cardAnimate ── */
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(0.98) translateY(12px); }
+  to   { opacity: 1; transform: none; }
 }
 
-/* Step 2 — added after reflow to trigger the transition */
-.cardReveal {
+.cardAnimate {
+  animation: cardIn 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Persistent visible state — added by JS after animation, replaces .cardAnimate */
+.cardVisible {
   opacity: 1;
   transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cardLarge, .card {
-    opacity: 1;
-    transform: none;
-    will-change: auto;
-  }
+  .cardLarge, .card { opacity: 1; }
 }
 
 .cardContent::before {
