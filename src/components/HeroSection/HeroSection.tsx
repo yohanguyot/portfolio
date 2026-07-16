@@ -15,7 +15,7 @@ function HeroArcCanvas() {
     const ctx = canvas.getContext("2d", { alpha: false }) as CanvasRenderingContext2D;
     if (!ctx) return;
 
-    let w = 0, h = 0;
+    let w = 0, h = 0, canvasLeft = 0;
 
     function resize() {
       if (!canvas) return;
@@ -25,6 +25,7 @@ function HeroArcCanvas() {
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      canvasLeft = canvas.getBoundingClientRect().left;
     }
     resize();
 
@@ -51,12 +52,23 @@ function HeroArcCanvas() {
     window.addEventListener("scroll", onScroll, { passive: true });
 
     let animId: number;
+    let visible = true;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) animId = requestAnimationFrame(draw);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
 
     const isMobileDevice = window.innerWidth < 1024;
     const INTRO_DELAY = isMobileDevice ? 0 : 100;
-    const INTRO_DURATION = 650;
+    const INTRO_DURATION = 900;
 
     function draw() {
+      if (!visible) return;
       animId = requestAnimationFrame(draw);
       const now = performance.now();
       const t = (now - t0) * 0.001;
@@ -69,9 +81,9 @@ function HeroArcCanvas() {
       const isMobile = window.innerWidth < 1024;
 
       // Mobile: arc centré ; desktop: suit la souris
-      const targetMx = isMobile ? w * 0.5 : clientX - canvas!.getBoundingClientRect().left;
+      const targetMx = isMobile ? w * 0.5 : clientX - canvasLeft;
       const oldMx = mx;
-      mx += (targetMx - mx) * (isMobile ? 0.09 : 0.015);
+      mx += (targetMx - mx) * (isMobile ? 0.09 : 0.007);
       vx = vx * 0.85 + (mx - oldMx) * 0.15;
       smoothVx = smoothVx * 0.92 + vx * 0.08;
 
@@ -93,7 +105,7 @@ function HeroArcCanvas() {
       // sf : spread part de 0.15 (compact) et s'étend à ~2.5x au scroll
       // gi : intensité part de 0.35 et monte à 1.0 — contraste visible
       const sf = isMobile ? (0.55 + scrollProgress * 2.3) : 1.0;
-      const gi = isMobile ? (0.45 + scrollProgress * 0.55) : 1.0;
+      const gi = isMobile ? (0.75 + scrollProgress * 0.25) : 1.0;
       // Math.max évite l'artefact "point" quand sf est petit
       const dL = isMobile ? Math.max(0.12, sf * 0.38) : 0.15;
       const dR = isMobile ? Math.max(0.12, sf * 0.38) : 0.25;
@@ -104,26 +116,30 @@ function HeroArcCanvas() {
       const eL = isMobile ? Math.max(0.04, sf * 0.10) : 0.04;
       const eR = isMobile ? Math.max(0.04, sf * 0.10) : 0.06;
 
+      // blur réel (Gaussian) par couche — ctx.filter ignoré gracieusement sur Safari < 18
       function drawArc(
         cpyOffset: number,
         lineWidth: number,
         style: string | CanvasGradient,
-        shadowColor?: string | null,
-        shadowBlur?: number
+        blur = 0
       ) {
         ctx.save();
+        if (blur > 0) ctx.filter = `blur(${blur}px)`;
         ctx.beginPath();
         ctx.moveTo(x0, y0);
         ctx.quadraticCurveTo(cpx, cpy + cpyOffset, x2, y2);
         ctx.strokeStyle = style;
         ctx.lineWidth = lineWidth;
-        if (shadowColor) {
-          ctx.shadowColor = shadowColor;
-          ctx.shadowBlur = shadowBlur ?? 0;
-        }
         ctx.stroke();
         ctx.restore();
       }
+
+      // Position exacte sur la courbe au niveau du pic (paramètre t de Bézier)
+      const tPeak = Math.max(0, Math.min(1, (peak * w - x0) / (x2 - x0)));
+      const xPeak = peak * w;
+      const yPeak = (1 - tPeak) * (1 - tPeak) * y0
+                  + 2 * tPeak * (1 - tPeak) * cpy
+                  + tPeak * tPeak * y2;
 
       // Clip centre→bords pour l'intro
       ctx.save();
@@ -132,43 +148,56 @@ function HeroArcCanvas() {
       ctx.rect(w * 0.5 - halfReveal, 0, halfReveal * 2, h);
       ctx.clip();
 
-      // 1. Halo profond
+      // 1. Halo profond — floor visible sur tout l'arc (effet éclipse global)
       const gDeep = ctx.createLinearGradient(0, 0, w, 0);
-      gDeep.addColorStop(0, "rgba(80,18,4,0.0)");
-      gDeep.addColorStop(Math.max(0, Math.min(1, peak - dL)), `rgba(100,24,6,${0.12 * gi})`);
-      gDeep.addColorStop(peak, `rgba(126,34,7,${0.22 * gi})`);
-      gDeep.addColorStop(Math.min(1, peak + dR), `rgba(80,18,4,${0.06 * gi})`);
-      gDeep.addColorStop(1, "rgba(80,18,4,0.0)");
-      drawArc(18, isMobile ? 90 : 130, gDeep);
+      const dfL = 0.05 * gi; // floor bord gauche
+      const dfR = 0.04 * gi; // floor bord droit (légère asymétrie naturelle)
+      gDeep.addColorStop(0,                                              `rgba(88,20,5,${dfL})`);
+      gDeep.addColorStop(Math.max(0,   Math.min(1, peak - dL)),         `rgba(118,34,8,${(0.20 + 0.16) * gi})`);
+      gDeep.addColorStop(peak,                                           `rgba(148,46,10,${0.50 * gi})`);
+      gDeep.addColorStop(Math.min(1,   peak + dR),                      `rgba(100,26,6,${(0.20 + 0.10) * gi})`);
+      gDeep.addColorStop(1,                                              `rgba(82,18,4,${dfR})`);
+      // lineWidth du halo réduit quand le pic est vers les bords
+      const edgeDist = Math.abs(peak - 0.5) * 2; // 0 au centre, 1 au bord
+      const edgeScale = Math.max(0.22, 1 - Math.pow(edgeDist, 2.5) * 0.78);
+      drawArc(20, (isMobile ? 86 : 120) * edgeScale, gDeep, isMobile ? 16 : 26);
 
-      // 2. Corps du disque
+      // 2. Corona principale — orange vif, floor ~0.28 partout
       const gBody = ctx.createLinearGradient(0, 0, w, 0);
-      gBody.addColorStop(0, "rgba(160,55,20,0.0)");
-      gBody.addColorStop(Math.max(0, Math.min(1, peak - bL)), `rgba(180,65,25,${0.38 * gi})`);
-      gBody.addColorStop(peak, `rgba(198,83,46,${0.85 * gi})`);
-      gBody.addColorStop(Math.min(1, peak + bR), `rgba(160,55,20,${0.22 * gi})`);
-      gBody.addColorStop(1, "rgba(160,55,20,0.0)");
-      drawArc(6, isMobile ? 28 : 38, gBody, "#C6532E", 8);
+      const bfL = 0.06 * gi;
+      const bfR = 0.05 * gi;
+      gBody.addColorStop(0,                                              `rgba(158,54,18,${bfL})`);
+      gBody.addColorStop(Math.max(0,   Math.min(1, peak - bL)),         `rgba(188,72,30,${(0.28 + 0.30) * gi})`);
+      gBody.addColorStop(peak,                                           `rgba(215,94,46,${0.98 * gi})`);
+      gBody.addColorStop(Math.min(1,   peak + bR),                      `rgba(168,60,24,${(0.28 + 0.18) * gi})`);
+      gBody.addColorStop(1,                                              `rgba(145,48,16,${bfR})`);
+      drawArc(6, isMobile ? 42 : 62, gBody, isMobile ? 18 : 11);
 
-      // 3. Tranche interne
+      // 3. Anneau interne — jaune-orange, floor ~0.12 partout
       const gInner = ctx.createLinearGradient(0, 0, w, 0);
-      gInner.addColorStop(0, "rgba(210,100,50,0.0)");
-      gInner.addColorStop(Math.max(0, Math.min(1, peak - iL)), `rgba(220,110,55,${0.50 * gi})`);
-      gInner.addColorStop(peak, `rgba(236,130,70,${0.85 * gi})`);
-      gInner.addColorStop(Math.min(1, peak + iR), `rgba(210,100,50,${0.28 * gi})`);
-      gInner.addColorStop(1, "rgba(210,100,50,0.0)");
-      drawArc(-3, isMobile ? 9 : 12, gInner, "#EC8A43", 6);
+      const ifL = 0.03 * gi;
+      const ifR = 0.02 * gi;
+      gInner.addColorStop(0,                                             `rgba(215,105,44,${ifL})`);
+      gInner.addColorStop(Math.max(0,   Math.min(1, peak - iL)),        `rgba(238,136,64,${(0.12 + 0.52) * gi})`);
+      gInner.addColorStop(peak,                                          `rgba(255,175,80,${0.96 * gi})`);
+      gInner.addColorStop(Math.min(1,   peak + iR),                     `rgba(224,115,54,${(0.12 + 0.32) * gi})`);
+      gInner.addColorStop(1,                                             `rgba(205,92,40,${ifR})`);
+      drawArc(-2, isMobile ? 18 : 18, gInner, isMobile ? 9 : 3.5);
 
-      // 4. Bord chaud (photon edge)
+      // 4. Bord photon — fil lumineux, floor ~0.07 partout
       const gEdge = ctx.createLinearGradient(0, 0, w, 0);
-      gEdge.addColorStop(0, "rgba(236,110,67,0.0)");
-      gEdge.addColorStop(Math.max(0, Math.min(1, peak - eL)), `rgba(236,110,67,${0.10 * gi})`);
-      gEdge.addColorStop(peak, `rgba(255,175,120,${0.35 * gi})`);
-      gEdge.addColorStop(Math.min(1, peak + eR), `rgba(236,110,67,${0.08 * gi})`);
-      gEdge.addColorStop(1, "rgba(236,110,67,0.0)");
-      drawArc(-8, isMobile ? 2 : 2.5, gEdge, "#FFAA88", 6);
+      const efL = 0.07 * gi;
+      const efR = 0.05 * gi;
+      gEdge.addColorStop(0,                                              `rgba(238,162,72,${efL})`);
+      gEdge.addColorStop(Math.max(0,   Math.min(1, peak - eL)),         `rgba(252,204,118,${(0.07 + 0.16) * gi})`);
+      gEdge.addColorStop(peak,                                           `rgba(255,242,198,${0.92 * gi})`);
+      gEdge.addColorStop(Math.min(1,   peak + eR),                      `rgba(250,198,112,${(0.07 + 0.14) * gi})`);
+      gEdge.addColorStop(1,                                              `rgba(230,155,68,${efR})`);
+      drawArc(-7, isMobile ? 2.5 : 3, gEdge, isMobile ? 4 : 0);
 
       ctx.restore(); // fin du clip intro
+
+
 
       // Occlusion — fondu d'absorption au-dessus de la courbe
       const fadeTop = horizonY - 55;
@@ -190,6 +219,9 @@ function HeroArcCanvas() {
       ctx.fill();
       ctx.restore();
 
+
+      // Vignettes déplacées en CSS (.arcFades)
+
       // Masse noire pleine sous la courbe
       ctx.save();
       ctx.beginPath();
@@ -201,12 +233,15 @@ function HeroArcCanvas() {
       ctx.fillStyle = "#09090B";
       ctx.fill();
       ctx.restore();
+
+
     }
 
     animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
+      observer.disconnect();
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("mousemove", onMouseMove);
