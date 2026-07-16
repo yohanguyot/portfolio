@@ -62,13 +62,18 @@ export default function ProjectsSection() {
     const bloom = bloomRef.current;
     const grid = gridRef.current;
 
-    // Reveal a card via CSS class transition — no inline opacity/transform
+    // Reveal a card: define transition first, force reflow, then change state
     function revealCard(el: HTMLElement, delay = 0) {
       if (delay > 0) el.style.transitionDelay = `${delay}ms`;
-      el.classList.add(styles.cardRevealAnimate, styles.cardReveal);
-      // Remove the transition class after animation so hover/active transitions aren't affected
+      // Step 1: add transition class so it's defined on the "before" state
+      el.classList.add(styles.cardTransition);
+      // Step 2: force the browser to commit the style with transition defined
+      void el.offsetHeight;
+      // Step 3: change state → transition fires from opacity:0 to opacity:1
+      el.classList.add(styles.cardReveal);
+      // Cleanup: remove transition class so hover/active use their own fast transition
       setTimeout(() => {
-        el.classList.remove(styles.cardRevealAnimate);
+        el.classList.remove(styles.cardTransition);
         el.style.transitionDelay = '';
       }, delay + 650);
     }

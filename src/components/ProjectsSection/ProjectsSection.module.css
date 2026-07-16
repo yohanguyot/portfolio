@@ -53,7 +53,6 @@
   transition: transform var(--duration-fast) var(--ease);
   opacity: 0;
   transform: scale(0.98) translateY(12px);
-  will-change: opacity, transform;
 }
 
 .cardLargeImageWrap {
@@ -154,19 +153,18 @@
   overflow: hidden;
   opacity: 0;
   transform: scale(0.98) translateY(12px);
-  will-change: opacity, transform;
 }
 
-/* Reveal state — added via JS classList.add, never removed */
+/* Step 1 — added first (with reflow after) to define transition on the "before" state */
+.cardTransition {
+  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Step 2 — added after reflow to trigger the transition */
 .cardReveal {
   opacity: 1;
   transform: none;
-}
-
-/* Reveal transition — added with cardReveal, removed after animation ends */
-.cardRevealAnimate {
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
