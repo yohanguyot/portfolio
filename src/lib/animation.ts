@@ -26,21 +26,16 @@ export function hideEl(el: HTMLElement): void {
 
 export function revealEl(el: HTMLElement, delay = 0): () => void {
   el.style.transition = '';
-  el.style.animationName = 'revealEl';
-  el.style.animationDuration = `${DURATION}ms`;
-  el.style.animationTimingFunction = EASE;
-  el.style.animationDelay = `${delay}ms`;
-  el.style.animationFillMode = 'both';
+  el.style.animation = `revealEl ${DURATION}ms ${EASE} ${delay}ms forwards`;
 
-  const onEnd = () => {
+  const id = setTimeout(() => {
     el.style.opacity = '1';
     el.style.transform = '';
     el.style.animation = '';
-  };
-  el.addEventListener('animationend', onEnd, { once: true });
+  }, DURATION + delay + 50);
 
   return () => {
-    el.removeEventListener('animationend', onEnd);
+    clearTimeout(id);
     el.style.animation = '';
   };
 }
