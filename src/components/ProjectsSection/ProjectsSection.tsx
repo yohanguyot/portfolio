@@ -51,16 +51,18 @@ export default function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<SectionHeaderHandle>(null);
   const bloomRef = useRef<HTMLAnchorElement>(null);
+  const bloomInnerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   useIsomorphicLayoutEffect(() => {
     if (shouldReduceMotion()) return;
-    const bloom = bloomRef.current;
+    const bloomInner = bloomInnerRef.current;
     const grid = gridRef.current;
-    if (bloom) hideEl(bloom);
+    if (bloomInner) hideEl(bloomInner);
     if (grid) Array.from(grid.querySelectorAll<HTMLElement>(':scope > a')).forEach(c => {
-      hideEl(c);
+      const inner = c.firstElementChild as HTMLElement | null;
+      if (inner) hideEl(inner);
     });
   }, []);
 
@@ -71,19 +73,21 @@ export default function ProjectsSection() {
 
     const section = sectionRef.current;
     const bloom = bloomRef.current;
+    const bloomInner = bloomInnerRef.current;
     const grid = gridRef.current;
 
     // Back-navigation: section already in viewport → fire cascade immediately
     if (section && section.getBoundingClientRect().top < window.innerHeight) {
       afterLayout(() => {
         headerRef.current?.trigger(0);
-        if (bloom) {
-          revealEl(bloom);
+        if (bloomInner) {
+          revealEl(bloomInner);
         }
         if (grid) {
           const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
           cards.forEach((c, i) => {
-            revealEl(c, i * STAGGER);
+            const inner = c.firstElementChild as HTMLElement | null;
+            if (inner) revealEl(inner, i * STAGGER);
           });
           setTimeout(() => { grid.dataset.ready = 'true'; }, (cards.length - 1) * 120);
         }
@@ -104,8 +108,8 @@ export default function ProjectsSection() {
     }
 
     function watchBloom(): () => void {
-      if (!bloom) return () => {};
-      return observe(bloom, isMobile ? 0 : 0.2, prepareReveal(bloom, 0));
+      if (!bloom || !bloomInner) return () => {};
+      return observe(bloom, isMobile ? 0 : 0.2, prepareReveal(bloomInner, 0));
     }
 
     function watchGrid(): () => void {
@@ -114,8 +118,10 @@ export default function ProjectsSection() {
       if (isMobile) {
         const cardCleanups = cards.map((c, i) =>
           observe(c, 0.2, () => {
+            const inner = c.firstElementChild as HTMLElement | null;
+            if (!inner) return;
             afterLayout(() => {
-              revealEl(c);
+              revealEl(inner);
               if (i === 0) grid!.dataset.ready = 'true';
             });
           })
@@ -124,7 +130,10 @@ export default function ProjectsSection() {
       }
       return observe(grid, 0.1, () => {
         afterLayout(() => {
-          cards.forEach((c, i) => revealEl(c, i * STAGGER));
+          cards.forEach((c, i) => {
+            const inner = c.firstElementChild as HTMLElement | null;
+            if (inner) revealEl(inner, i * STAGGER);
+          });
           setTimeout(() => { grid!.dataset.ready = 'true'; }, (cards.length - 1) * 120);
         });
       });
@@ -161,30 +170,32 @@ export default function ProjectsSection() {
             onMouseLeave={() => setHoveredSlug(null)}
             onClick={(e) => { navigate(e, `/${lang}/bloom`); trackEvent("project_click", { project: FEATURED.slug }); }}
           >
-            <div className={styles.cardLargeImageWrap}>
-              <ProjectImage
-                project={FEATURED.slug}
-                hovered={hoveredSlug === FEATURED.slug}
-                noActiveEffect
-                eager
-              />
-            </div>
-            <div className={styles.cardLargeContent}>
-              <div className={styles.cardLargeBody}>
-                <Tags tags={FEATURED.tags} />
-                <div className={styles.cardText}>
-                  <h3 className={styles.cardTitleLg}>{FEATURED.title}</h3>
-                  <p className={styles.cardDesc}>{FEATURED.description}</p>
-                </div>
+            <div ref={bloomInnerRef} className={styles.cardLargeInner}>
+              <div className={styles.cardLargeImageWrap}>
+                <ProjectImage
+                  project={FEATURED.slug}
+                  hovered={hoveredSlug === FEATURED.slug}
+                  noActiveEffect
+                  eager
+                />
               </div>
-              <Button
-                label={projects.cta}
-                type="text"
-                showArrowRight
-                as="span"
-                forceHover={hoveredSlug === FEATURED.slug}
-                className={styles.cardCta}
-              />
+              <div className={styles.cardLargeContent}>
+                <div className={styles.cardLargeBody}>
+                  <Tags tags={FEATURED.tags} />
+                  <div className={styles.cardText}>
+                    <h3 className={styles.cardTitleLg}>{FEATURED.title}</h3>
+                    <p className={styles.cardDesc}>{FEATURED.description}</p>
+                  </div>
+                </div>
+                <Button
+                  label={projects.cta}
+                  type="text"
+                  showArrowRight
+                  as="span"
+                  forceHover={hoveredSlug === FEATURED.slug}
+                  className={styles.cardCta}
+                />
+              </div>
             </div>
           </a>
 

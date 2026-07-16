@@ -51,11 +51,14 @@
   text-decoration: none;
   cursor: pointer;
   transition: transform var(--duration-fast) var(--ease);
-  opacity: 0;
 }
 
-
-
+.cardLargeInner {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  opacity: 0;
+}
 
 .cardLargeImageWrap {
   width: 640px;
@@ -153,11 +156,10 @@
   text-decoration: none;
   cursor: pointer;
   overflow: hidden;
-  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cardLarge, .card { opacity: 1; }
+  .cardLargeInner, .cardInner { opacity: 1; }
 }
 
 .cardContent::before {
@@ -186,6 +188,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  opacity: 0;
 }
 
 .cardImageWrap {
@@ -239,6 +242,10 @@
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .cardLarge {
+    flex-direction: column;
+  }
+
+  .cardLargeInner {
     flex-direction: column;
   }
 
