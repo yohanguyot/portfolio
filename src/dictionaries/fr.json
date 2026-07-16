@@ -169,6 +169,28 @@
           "label": "Contexte",
           "value": "Smart-Chain · Projet client"
         }
+      ],
+      "stats": [
+        {
+          "value": "300",
+          "suffix": "+",
+          "label": "Cabinets CGP onboardés"
+        },
+        {
+          "value": "1 000",
+          "suffix": "+",
+          "label": "Produits souscrits"
+        },
+        {
+          "value": "32",
+          "suffix": "M€",
+          "label": "Volume souscrit"
+        },
+        {
+          "value": "15",
+          "suffix": " min",
+          "label": "Par souscription multi-produits"
+        }
       ]
     },
     "context": {

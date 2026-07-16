@@ -169,6 +169,28 @@
           "label": "Contexto",
           "value": "Smart-Chain · Proyecto cliente"
         }
+      ],
+      "stats": [
+        {
+          "value": "300",
+          "suffix": "+",
+          "label": "Despachos CGP incorporados"
+        },
+        {
+          "value": "1.000",
+          "suffix": "+",
+          "label": "Productos suscritos"
+        },
+        {
+          "value": "32",
+          "suffix": "M€",
+          "label": "Volumen suscrito"
+        },
+        {
+          "value": "15",
+          "suffix": " min",
+          "label": "Por suscripción multiproducto"
+        }
       ]
     },
     "context": {

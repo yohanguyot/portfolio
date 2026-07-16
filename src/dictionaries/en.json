@@ -169,6 +169,28 @@
           "label": "Context",
           "value": "Smart-Chain · Client project"
         }
+      ],
+      "stats": [
+        {
+          "value": "300",
+          "suffix": "+",
+          "label": "CGP firms onboarded"
+        },
+        {
+          "value": "1,000",
+          "suffix": "+",
+          "label": "Products subscribed"
+        },
+        {
+          "value": "32",
+          "suffix": "M€",
+          "label": "Volume subscribed"
+        },
+        {
+          "value": "15",
+          "suffix": " min",
+          "label": "Per multi-product subscription"
+        }
       ]
     },
     "context": {

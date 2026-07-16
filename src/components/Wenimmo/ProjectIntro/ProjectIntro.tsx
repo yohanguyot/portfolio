@@ -15,6 +15,7 @@ export default function WenimmoIntro({ tags = DEFAULT_TAGS, dict }: Props) {
       title="Wenimmo"
       description={dict.description}
       meta={dict.meta}
+      stats={dict.stats}
     />
   );
 }
