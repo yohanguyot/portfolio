@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { usePathname } from "next/navigation";
 import { useTransitionRouter } from "next-view-transitions";
 import Button from "@/components/Button/Button";
@@ -9,7 +8,7 @@ import ProjectImage from "@/components/ProjectImage/ProjectImage";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
-import { shouldReduceMotion, prepareReveal, observe, STAGGER, revealEl, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
+import { shouldReduceMotion, observe, STAGGER, afterLayout, isMobileViewport } from "@/lib/animation";
 import styles from "./ProjectsSection.module.css";
 
 type Project = {
@@ -54,16 +53,6 @@ export default function ProjectsSection() {
   const gridRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  useIsomorphicLayoutEffect(() => {
-    if (shouldReduceMotion()) return;
-    const bloom = bloomRef.current;
-    const grid = gridRef.current;
-    if (bloom) hideEl(bloom);
-    if (grid) Array.from(grid.querySelectorAll<HTMLElement>(':scope > a')).forEach(c => {
-      hideEl(c);
-    });
-  }, []);
-
   useEffect(() => {
     if (shouldReduceMotion()) return;
 
@@ -73,18 +62,25 @@ export default function ProjectsSection() {
     const bloom = bloomRef.current;
     const grid = gridRef.current;
 
+    // Reveal a card via CSS class transition — no inline opacity/transform
+    function revealCard(el: HTMLElement, delay = 0) {
+      if (delay > 0) el.style.transitionDelay = `${delay}ms`;
+      el.classList.add(styles.cardRevealAnimate, styles.cardReveal);
+      // Remove the transition class after animation so hover/active transitions aren't affected
+      setTimeout(() => {
+        el.classList.remove(styles.cardRevealAnimate);
+        el.style.transitionDelay = '';
+      }, delay + 650);
+    }
+
     // Back-navigation: section already in viewport → fire cascade immediately
     if (section && section.getBoundingClientRect().top < window.innerHeight) {
       afterLayout(() => {
         headerRef.current?.trigger(0);
-        if (bloom) {
-          revealEl(bloom);
-        }
+        if (bloom) revealCard(bloom, 0);
         if (grid) {
           const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
-          cards.forEach((c, i) => {
-            revealEl(c, i * STAGGER);
-          });
+          cards.forEach((c, i) => revealCard(c, i * STAGGER));
           setTimeout(() => { grid.dataset.ready = 'true'; }, (cards.length - 1) * 120);
         }
       });
@@ -105,7 +101,9 @@ export default function ProjectsSection() {
 
     function watchBloom(): () => void {
       if (!bloom) return () => {};
-      return observe(bloom, isMobile ? 0 : 0.2, prepareReveal(bloom, 0));
+      return observe(bloom, isMobile ? 0 : 0.2, () => {
+        afterLayout(() => revealCard(bloom, 0));
+      });
     }
 
     function watchGrid(): () => void {
@@ -115,7 +113,7 @@ export default function ProjectsSection() {
         const cardCleanups = cards.map((c, i) =>
           observe(c, 0.2, () => {
             afterLayout(() => {
-              revealEl(c);
+              revealCard(c, 0);
               if (i === 0) grid!.dataset.ready = 'true';
             });
           })
@@ -124,7 +122,7 @@ export default function ProjectsSection() {
       }
       return observe(grid, 0.1, () => {
         afterLayout(() => {
-          cards.forEach((c, i) => revealEl(c, i * STAGGER));
+          cards.forEach((c, i) => revealCard(c, i * STAGGER));
           setTimeout(() => { grid!.dataset.ready = 'true'; }, (cards.length - 1) * 120);
         });
       });

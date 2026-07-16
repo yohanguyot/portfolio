@@ -47,13 +47,13 @@
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
-  /* clip-path instead of overflow:hidden — overflow:hidden+border-radius creates a
-     Safari mask layer that breaks CSS animation compositing on iOS */
-  clip-path: inset(0 round var(--radius-lg));
+  overflow: hidden;
   text-decoration: none;
   cursor: pointer;
   transition: transform var(--duration-fast) var(--ease);
   opacity: 0;
+  transform: scale(0.98) translateY(12px);
+  will-change: opacity, transform;
 }
 
 .cardLargeImageWrap {
@@ -61,8 +61,6 @@
   aspect-ratio: 640 / 400;
   flex-shrink: 0;
   overflow: hidden;
-  /* Round the image corners that touch the card edge */
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
 }
 
 
@@ -126,8 +124,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border-radius: var(--radius-lg);
-  /* clip-path instead of overflow:hidden — same reason as cardLarge */
-  clip-path: inset(0 round var(--radius-lg));
+  overflow: hidden;
   position: relative;
 }
 
@@ -156,10 +153,28 @@
   cursor: pointer;
   overflow: hidden;
   opacity: 0;
+  transform: scale(0.98) translateY(12px);
+  will-change: opacity, transform;
+}
+
+/* Reveal state — added via JS classList.add, never removed */
+.cardReveal {
+  opacity: 1;
+  transform: none;
+}
+
+/* Reveal transition — added with cardReveal, removed after animation ends */
+.cardRevealAnimate {
+  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cardLarge, .card { opacity: 1; }
+  .cardLarge, .card {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
 }
 
 .cardContent::before {
@@ -247,7 +262,6 @@
   .cardLargeImageWrap {
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 }
 
