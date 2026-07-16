@@ -47,16 +47,12 @@
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  /* clip-path instead of overflow:hidden — overflow:hidden+border-radius creates a
+     Safari mask layer that breaks CSS animation compositing on iOS */
+  clip-path: inset(0 round var(--radius-lg));
   text-decoration: none;
   cursor: pointer;
   transition: transform var(--duration-fast) var(--ease);
-}
-
-.cardLargeInner {
-  display: flex;
-  align-items: stretch;
-  width: 100%;
   opacity: 0;
 }
 
@@ -65,6 +61,8 @@
   aspect-ratio: 640 / 400;
   flex-shrink: 0;
   overflow: hidden;
+  /* Round the image corners that touch the card edge */
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
 }
 
 
@@ -128,7 +126,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  /* clip-path instead of overflow:hidden — same reason as cardLarge */
+  clip-path: inset(0 round var(--radius-lg));
   position: relative;
 }
 
@@ -156,10 +155,11 @@
   text-decoration: none;
   cursor: pointer;
   overflow: hidden;
+  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cardLargeInner, .cardInner { opacity: 1; }
+  .cardLarge, .card { opacity: 1; }
 }
 
 .cardContent::before {
@@ -188,7 +188,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  opacity: 0;
 }
 
 .cardImageWrap {
@@ -245,13 +244,10 @@
     flex-direction: column;
   }
 
-  .cardLargeInner {
-    flex-direction: column;
-  }
-
   .cardLargeImageWrap {
     width: 100%;
     aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 }
 
