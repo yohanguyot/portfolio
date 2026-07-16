@@ -26,6 +26,7 @@ export function hideEl(el: HTMLElement): void {
 
 export function revealEl(el: HTMLElement, delay = 0): () => void {
   el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
+  void el.offsetHeight; // force reflow — Safari needs to commit the current state before transitioning
   el.style.opacity = '1';
   el.style.transform = 'scale(1) translateY(0)';
   const id = setTimeout(() => {

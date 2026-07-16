@@ -22,7 +22,7 @@
     "subtitleHighlight2": "developers",
     "subtitlePost": ".",
     "ctaPrimary": "View projects",
-    "ctaSecondary": "Contact me",
+    "ctaSecondary": "Get in touch",
     "scroll": "Scroll"
   },
   "projects": {
@@ -132,7 +132,7 @@
       "needLabel": "What you need",
       "briefLabel": "Project brief or idea",
       "briefPlaceholder": "What is the main goal of your product and your current constraints (timeline, technical, design system…)?",
-      "submit": "Send message",
+      "submit": "Submit request",
       "sending": "Sending",
       "errors": {
         "emailRequired": "Email is required.",

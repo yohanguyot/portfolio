@@ -160,7 +160,7 @@ function HeroArcCanvas() {
       gDeep.addColorStop(peak,                                           `rgba(148,46,10,${0.50 * gi})`);
       gDeep.addColorStop(Math.min(1,   peak + dR),                      `rgba(100,26,6,${(0.20 + 0.10) * gi})`);
       gDeep.addColorStop(1,                                              `rgba(82,18,4,${dfR})`);
-      arc(dCtx, 20 * cpyScale, (isMobile ? 86 : 120) * edgeScale, gDeep);
+      arc(dCtx, 20 * cpyScale, (isMobile ? 72 : 120) * edgeScale, gDeep);
 
       // 2. Corona principale — bodyCanvas (CSS blur 11px desktop / 18px mobile)
       const gBody = bCtx.createLinearGradient(0, 0, w, 0);

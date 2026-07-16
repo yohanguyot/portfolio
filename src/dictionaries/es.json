@@ -22,7 +22,7 @@
     "subtitleHighlight2": "desarrolladores",
     "subtitlePost": ".",
     "ctaPrimary": "Ver proyectos",
-    "ctaSecondary": "Contactarme",
+    "ctaSecondary": "Contactar",
     "scroll": "Scroll"
   },
   "projects": {
@@ -132,7 +132,7 @@
       "needLabel": "Tu necesidad",
       "briefLabel": "Brief o idea del proyecto",
       "briefPlaceholder": "¿Cuál es el objetivo principal de tu producto y cuáles son tus restricciones actuales (tiempo, técnica, design system…)?",
-      "submit": "Enviar mensaje",
+      "submit": "Enviar solicitud",
       "sending": "Enviando",
       "errors": {
         "emailRequired": "El email es obligatorio.",
