@@ -295,4 +295,19 @@
   pointer-events: none;
 }
 
+@media (max-width: 768px) {
+  .arcCanvas {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .arcCanvas {
+    height: 260px;
+    margin-top: -200px;
+    margin-bottom: -60px;
+  }
+}
+
 

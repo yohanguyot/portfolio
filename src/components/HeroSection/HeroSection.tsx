@@ -107,26 +107,26 @@ function HeroArcCanvas() {
       const cpInfluenceX = (mx - w * 0.5) * 0.008;
       const breathe = Math.sin(t * 0.4) * 0.6;
       const cpx = w * 0.5 + cpInfluenceX;
-      const cpy = horizonY - Math.max(40, h * 0.28 * Math.min(1, Math.pow(w / 1200, 0.8)));
-      const x0 = -w * 0.05;
+      const cpy = horizonY - Math.max(40, h * 0.28);
+      const arcOverflow = isMobile ? 0.3 : 0.05;
+      const x0 = -w * arcOverflow;
       const y0 = horizonY + 8 + breathe;
-      const x2 = w * 1.05;
+      const x2 = w * (1 + arcOverflow);
       const y2 = horizonY + 8 + breathe;
 
       const normalizedMx = mx / w;
       const peak = isMobile ? 0.5 : Math.max(0.05, Math.min(0.95, normalizedMx + smoothVx * 0.002));
 
-      const sf = isMobile ? (0.5 + scrollProgress * 2.35) : 1.0;
-      const gi = isMobile ? (0.7 + scrollProgress * 0.3) : 1.0;
-
-      const dL = isMobile ? Math.max(0.12, sf * 0.38) : 0.15;
-      const dR = isMobile ? Math.max(0.12, sf * 0.38) : 0.25;
-      const bL = isMobile ? Math.max(0.09, sf * 0.28) : 0.10;
-      const bR = isMobile ? Math.max(0.09, sf * 0.28) : 0.20;
+      const gi = 1.0;
+      const sf = isMobile ? (0.4 + scrollProgress * 1.8) : 1.0;
+      const dL = isMobile ? Math.max(0.15, sf * 0.38) : 0.15;
+      const dR = isMobile ? Math.max(0.25, sf * 0.38) : 0.25;
+      const bL = isMobile ? Math.max(0.10, sf * 0.28) : 0.10;
+      const bR = isMobile ? Math.max(0.20, sf * 0.28) : 0.20;
       const iL = isMobile ? Math.max(0.06, sf * 0.18) : 0.06;
-      const iR = isMobile ? Math.max(0.06, sf * 0.18) : 0.12;
+      const iR = isMobile ? Math.max(0.12, sf * 0.18) : 0.12;
       const eL = isMobile ? Math.max(0.04, sf * 0.10) : 0.04;
-      const eR = isMobile ? Math.max(0.04, sf * 0.10) : 0.06;
+      const eR = isMobile ? Math.max(0.06, sf * 0.10) : 0.06;
 
       const edgeDist = Math.abs(peak - 0.5) * 2;
       const cpyScale = Math.min(1, w / 1200);
@@ -160,7 +160,7 @@ function HeroArcCanvas() {
       gDeep.addColorStop(peak,                                           `rgba(148,46,10,${0.50 * gi})`);
       gDeep.addColorStop(Math.min(1,   peak + dR),                      `rgba(100,26,6,${(0.20 + 0.10) * gi})`);
       gDeep.addColorStop(1,                                              `rgba(82,18,4,${dfR})`);
-      arc(dCtx, 20 * cpyScale, (isMobile ? (52 + scrollProgress * 34) : 120) * edgeScale, gDeep);
+      arc(dCtx, 20 * cpyScale, (isMobile ? 86 : 120) * edgeScale, gDeep);
 
       // 2. Corona principale — bodyCanvas (CSS blur 11px desktop / 18px mobile)
       const gBody = bCtx.createLinearGradient(0, 0, w, 0);
@@ -171,7 +171,7 @@ function HeroArcCanvas() {
       gBody.addColorStop(peak,                                           `rgba(215,94,46,${0.98 * gi})`);
       gBody.addColorStop(Math.min(1,   peak + bR),                      `rgba(168,60,24,${(0.28 + 0.18) * gi})`);
       gBody.addColorStop(1,                                              `rgba(145,48,16,${bfR})`);
-      arc(bCtx, 6 * cpyScale, (isMobile ? (24 + scrollProgress * 18) : 62) * edgeScale, gBody);
+      arc(bCtx, 6 * cpyScale, (isMobile ? 42 : 62) * edgeScale, gBody);
 
       // 3. Anneau interne — innerCanvas (CSS blur 3.5px desktop / 9px mobile)
       const gInner = nCtx.createLinearGradient(0, 0, w, 0);
