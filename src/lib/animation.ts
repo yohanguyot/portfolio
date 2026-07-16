@@ -34,6 +34,7 @@ export function revealEl(el: HTMLElement, delay = 0): () => void {
   );
   anim.onfinish = () => {
     el.style.opacity = '1';
+    el.style.transform = '';
     anim.cancel();
   };
   return () => anim.cancel();
