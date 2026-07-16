@@ -51,6 +51,7 @@
   text-decoration: none;
   cursor: pointer;
   transition: transform var(--duration-fast) var(--ease);
+  opacity: 0;
 }
 
 
@@ -152,6 +153,7 @@
   text-decoration: none;
   cursor: pointer;
   overflow: hidden;
+  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
