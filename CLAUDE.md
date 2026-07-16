@@ -229,11 +229,11 @@ Two durations for micro-interactions, one for entrance animations:
 
 **type=primary**
 - `default`: `color/btn/primary/bg`, `border-radius: radius/full`, primary shadows, inset highlight
-- `hover`: add `linear-gradient(rgba(0,0,0,0.12), rgba(0,0,0,0.12))` as the first `background-image` layer
+- `hover`: `filter: brightness(1.15)` — lightens without desaturating the orange gradient
 
 **type=secondary**
 - `default`: `color/btn/secondary/bg`, `border-radius: radius/full`, secondary shadows, inset highlight
-- `hover`: add `linear-gradient(rgba(0,0,0,0.12), rgba(0,0,0,0.12))` as the first `background-image` layer
+- `hover`: `filter: brightness(1.22)` — slightly higher value to match perceived lightening on dark gray
 
 **type=text**
 - `default`: no background, `padding: space/xs`, `border-radius: radius/sm`, text `color/text/primary`

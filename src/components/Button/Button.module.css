@@ -9,7 +9,7 @@
   text-box: trim-both cap alphabetic;
   white-space: nowrap;
   text-decoration: none;
-  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease), filter var(--duration-fast) var(--ease);
   user-select: none;
   max-height: 48px;
 }
@@ -37,15 +37,14 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.12);
+  background: transparent;
   opacity: 0;
-  transition: opacity var(--duration-fast) var(--ease);
   pointer-events: none;
 }
 
 @media (hover: hover) {
-  .primary:hover::before {
-    opacity: 1;
+  .primary:hover {
+    filter: brightness(1.15);
   }
 }
 
@@ -64,15 +63,14 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.12);
+  background: transparent;
   opacity: 0;
-  transition: opacity var(--duration-fast) var(--ease);
   pointer-events: none;
 }
 
 @media (hover: hover) {
-  .secondary:hover::before {
-    opacity: 1;
+  .secondary:hover {
+    filter: brightness(1.22);
   }
 }
 

@@ -15,17 +15,17 @@ const SKILL_ICONS = [Component, Route, CodeXml] as const;
 const BODY_HIGHLIGHTS: Record<string, string[][]> = {
   fr: [
     ["interfaces web et produit"],
-    ["double culture design & front-end", "fichiers Figma directement exploitables"],
+    ["double culture design & front-end", "sans perte en prod"],
     [],
   ],
   en: [
     ["web and product interfaces"],
-    ["dual design & front-end culture", "Figma files that are directly ready to implement"],
+    ["dual design & front-end culture", "no loss in production"],
     [],
   ],
   es: [
     ["interfaces web y de producto"],
-    ["doble cultura design & front-end", "archivos Figma directamente utilizables"],
+    ["doble cultura design & front-end", "sin pérdida en producción"],
     [],
   ],
 };
