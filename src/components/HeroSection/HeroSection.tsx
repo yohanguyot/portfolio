@@ -129,6 +129,7 @@ function HeroArcCanvas() {
       const eR = isMobile ? Math.max(0.04, sf * 0.10) : 0.06;
 
       const edgeDist = Math.abs(peak - 0.5) * 2;
+      const cpyScale = Math.min(1, w / 1200);
       const edgeScale = Math.max(0.72, 1 - Math.pow(edgeDist, 2.5) * 0.28);
       const halfReveal = w * introProgress;
 
@@ -159,7 +160,7 @@ function HeroArcCanvas() {
       gDeep.addColorStop(peak,                                           `rgba(148,46,10,${0.50 * gi})`);
       gDeep.addColorStop(Math.min(1,   peak + dR),                      `rgba(100,26,6,${(0.20 + 0.10) * gi})`);
       gDeep.addColorStop(1,                                              `rgba(82,18,4,${dfR})`);
-      arc(dCtx, 20, (isMobile ? (52 + scrollProgress * 34) : 120) * edgeScale, gDeep);
+      arc(dCtx, 20 * cpyScale, (isMobile ? (52 + scrollProgress * 34) : 120) * edgeScale, gDeep);
 
       // 2. Corona principale — bodyCanvas (CSS blur 11px desktop / 18px mobile)
       const gBody = bCtx.createLinearGradient(0, 0, w, 0);
@@ -170,7 +171,7 @@ function HeroArcCanvas() {
       gBody.addColorStop(peak,                                           `rgba(215,94,46,${0.98 * gi})`);
       gBody.addColorStop(Math.min(1,   peak + bR),                      `rgba(168,60,24,${(0.28 + 0.18) * gi})`);
       gBody.addColorStop(1,                                              `rgba(145,48,16,${bfR})`);
-      arc(bCtx, 6, (isMobile ? (24 + scrollProgress * 18) : 62) * edgeScale, gBody);
+      arc(bCtx, 6 * cpyScale, (isMobile ? (24 + scrollProgress * 18) : 62) * edgeScale, gBody);
 
       // 3. Anneau interne — innerCanvas (CSS blur 3.5px desktop / 9px mobile)
       const gInner = nCtx.createLinearGradient(0, 0, w, 0);
@@ -181,7 +182,7 @@ function HeroArcCanvas() {
       gInner.addColorStop(peak,                                          `rgba(255,175,80,${0.96 * gi})`);
       gInner.addColorStop(Math.min(1,   peak + iR),                     `rgba(224,115,54,${(0.12 + 0.32) * gi})`);
       gInner.addColorStop(1,                                             `rgba(205,92,40,${ifR})`);
-      arc(nCtx, -2, isMobile ? 18 : 18, gInner);
+      arc(nCtx, -2 * cpyScale, isMobile ? 18 : 18, gInner);
 
       // Fin du clip intro sur les couches glow
       for (const ctx of [dCtx, bCtx, nCtx]) ctx.restore();
@@ -201,7 +202,7 @@ function HeroArcCanvas() {
       gEdge.addColorStop(peak,                                           `rgba(255,242,198,${0.92 * gi})`);
       gEdge.addColorStop(Math.min(1,   peak + eR),                      `rgba(250,198,112,${(0.07 + 0.14) * gi})`);
       gEdge.addColorStop(1,                                              `rgba(230,155,68,${efR})`);
-      arc(mCtx, -7, isMobile ? 2.5 : 3, gEdge);
+      arc(mCtx, -7 * cpyScale, isMobile ? 2.5 : 3, gEdge);
 
       mCtx.restore();
 
