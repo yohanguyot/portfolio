@@ -25,16 +25,18 @@ export function hideEl(el: HTMLElement): void {
 }
 
 export function revealEl(el: HTMLElement, delay = 0): () => void {
-  el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  getComputedStyle(el).opacity; // force style resolution on Safari before transitioning
-  el.style.opacity = '1';
-  el.style.transform = 'scale(1) translateY(0)';
-  const id = setTimeout(() => {
-    el.style.transform = '';
-    el.style.transition = '';
-  }, DURATION + delay);
-  return () => clearTimeout(id);
+  const anim = el.animate(
+    [
+      { opacity: 0, transform: 'scale(0.98) translateY(12px)' },
+      { opacity: 1, transform: 'scale(1) translateY(0)' },
+    ],
+    { duration: DURATION, delay, easing: EASE, fill: 'forwards' }
+  );
+  anim.onfinish = () => {
+    el.style.opacity = '1';
+    anim.cancel();
+  };
+  return () => anim.cancel();
 }
 
 export function prepareReveal(el: HTMLElement, delay = 0): () => void {
