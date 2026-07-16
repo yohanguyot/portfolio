@@ -119,10 +119,9 @@ function HeroArcCanvas() {
 
       const peak = isMobile ? 0.5 : Math.max(0.05, Math.min(0.95, normalizedMx + smoothVx * 0.002));
 
-      // sf : spread part de 0.15 (compact) et s'étend à ~2.5x au scroll
-      // gi : intensité part de 0.35 et monte à 1.0 — contraste visible
-      const sf = isMobile ? (0.55 + scrollProgress * 2.3) : 1.0;
-      const gi = isMobile ? (0.75 + scrollProgress * 0.25) : 1.0;
+      // sf : spread, gi : intensité — mobile part plus haut pour matcher le rendu desktop
+      const sf = isMobile ? (0.85 + scrollProgress * 1.4) : 1.0;
+      const gi = isMobile ? (0.95 + scrollProgress * 0.05) : 1.0;
       // Math.max évite l'artefact "point" quand sf est petit
       const dL = isMobile ? Math.max(0.12, sf * 0.38) : 0.15;
       const dR = isMobile ? Math.max(0.12, sf * 0.38) : 0.25;
@@ -194,7 +193,7 @@ function HeroArcCanvas() {
       // lineWidth du halo réduit quand le pic est vers les bords
       const edgeDist = Math.abs(peak - 0.5) * 2; // 0 au centre, 1 au bord
       const edgeScale = Math.max(0.22, 1 - Math.pow(edgeDist, 2.5) * 0.78);
-      drawArc(20, (isMobile ? 86 : 120) * edgeScale, gDeep, isMobile ? 16 : 26, `rgba(180,60,12,0.9)`);
+      drawArc(20, (isMobile ? 110 : 120) * edgeScale, gDeep, isMobile ? 22 : 26, `rgba(180,60,12,0.9)`);
 
       // 2. Corona principale — orange vif, floor ~0.28 partout
       const gBody = ctx.createLinearGradient(0, 0, w, 0);
@@ -205,7 +204,7 @@ function HeroArcCanvas() {
       gBody.addColorStop(peak,                                           `rgba(215,94,46,${0.98 * gi})`);
       gBody.addColorStop(Math.min(1,   peak + bR),                      `rgba(168,60,24,${(0.28 + 0.18) * gi})`);
       gBody.addColorStop(1,                                              `rgba(145,48,16,${bfR})`);
-      drawArc(6, isMobile ? 42 : 62, gBody, isMobile ? 18 : 11, `rgba(220,95,45,0.9)`);
+      drawArc(6, isMobile ? 56 : 62, gBody, isMobile ? 20 : 11, `rgba(220,95,45,0.9)`);
 
       // 3. Anneau interne — jaune-orange, floor ~0.12 partout
       const gInner = ctx.createLinearGradient(0, 0, w, 0);
