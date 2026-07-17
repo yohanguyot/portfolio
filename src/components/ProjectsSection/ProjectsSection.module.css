@@ -117,11 +117,13 @@
 }
 
 /* ── Small cards grid ── */
+/* clip-path instead of overflow:hidden — same visual rounding but doesn't create the
+   nested clipping context that prevents overlay opacity animation on Safari compositor. */
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  clip-path: inset(0 round var(--radius-lg));
   position: relative;
 }
 
@@ -151,26 +153,25 @@
   overflow: hidden;
 }
 
-/* ── Reveal overlay — covers each card, collapses away to reveal it ── */
-/* opacity animation fails under nested overflow:hidden on Safari (compositor can't
-   promote the layer independently through two clipping contexts). scaleY is always
-   compositor-thread regardless of clipping ancestors. */
+/* ── Reveal overlay — covers each card, fades away to reveal it ── */
+/* Animating the card itself conflicts with ProjectImage GPU contexts on Safari.
+   A simple overlay fades instead. cardsGrid uses clip-path (not overflow:hidden)
+   so each card's overlay only has one clipping ancestor — same as the bloom card. */
 .cardOverlay {
   position: absolute;
   inset: 0;
   background: var(--color-bg-canvas);
   z-index: 10;
   pointer-events: none;
-  transform-origin: bottom center;
 }
 
-@keyframes overlayCollapse {
-  from { transform: scaleY(1); }
-  to   { transform: scaleY(0); }
+@keyframes overlayFade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 .cardOverlayAnimate {
-  animation: overlayCollapse 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: overlayFade 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .cardOverlayDone {

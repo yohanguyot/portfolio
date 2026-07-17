@@ -23,8 +23,7 @@
 
 
 /* ── Screen mockup ── */
-/* Hover scales ~1.043× uniformly from center — equivalent to the original inset shrink,
-   but uses transform (compositor-only) instead of top/left/right/bottom (layout). */
+/* default: inset(32%, 6.25%, -19.5%, 6.25%) → hover: inset(30.25%, 4.38%, -21.5%, 4.38%) */
 .screen {
   position: absolute;
   top: 32%;
@@ -34,7 +33,12 @@
   border-radius: 12px;
   overflow: hidden;
   z-index: 1;
-  transition: transform var(--duration-slow) var(--ease);
+  transition:
+    top var(--duration-slow) var(--ease),
+    left var(--duration-slow) var(--ease),
+    right var(--duration-slow) var(--ease),
+    bottom var(--duration-slow) var(--ease),
+    transform var(--duration-fast) var(--ease);
 }
 
 .screenImg {
@@ -91,6 +95,9 @@
   }
 
   .hovered .screen {
-    transform: scale(1.043);
+    top: 30.25%;
+    left: 4.38%;
+    right: 4.38%;
+    bottom: -21.5%;
   }
 }
