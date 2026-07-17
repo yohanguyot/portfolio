@@ -18,11 +18,14 @@
   right: -31.25%;
   bottom: -50%;
   opacity: 0.6;
+  /* Promote to GPU layer so Safari rasterizes the feGaussianBlur once instead of every hover frame */
+  will-change: transform, opacity;
   transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
 }
 
 
 /* ── Screen mockup ── */
+/* default: inset(32%, 6.25%, -19.5%, 6.25%) → hover: inset(30.25%, 4.38%, -21.5%, 4.38%) */
 .screen {
   position: absolute;
   top: 32%;
@@ -32,7 +35,12 @@
   border-radius: 12px;
   overflow: hidden;
   z-index: 1;
-  transition: transform var(--duration-fast) var(--ease);
+  transition:
+    top var(--duration-slow) var(--ease),
+    left var(--duration-slow) var(--ease),
+    right var(--duration-slow) var(--ease),
+    bottom var(--duration-slow) var(--ease),
+    transform var(--duration-fast) var(--ease);
 }
 
 .screenImg {
@@ -89,5 +97,12 @@
   :global(a):hover .bgGradient {
     transform: translateY(-12.36%);
     opacity: 0.7;
+  }
+
+  :global(a):hover .screen {
+    top: 30.25%;
+    left: 4.38%;
+    right: 4.38%;
+    bottom: -21.5%;
   }
 }
