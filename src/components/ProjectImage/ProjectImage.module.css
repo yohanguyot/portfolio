@@ -8,16 +8,16 @@
 }
 
 /* ── Gradient ── */
-/* top always at -50% (hover position); translateY(11%) simulates top: -28% in default state.
-   Using transform instead of top avoids re-rasterizing feGaussianBlur on every hover frame. */
+/* Default : top=-28%, lateral=-31.25%, bottom=-50%
+   Hover   : translate up by 22% of parent ≈ -12.36% of element height (178% of parent).
+   Using transform instead of animating top avoids re-rasterizing feGaussianBlur each frame. */
 .bgGradient {
   position: absolute;
-  top: -50%;
+  top: -28%;
   left: -31.25%;
   right: -31.25%;
   bottom: -50%;
   opacity: 0.6;
-  transform: translateY(11%);
   transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
 }
 
@@ -89,8 +89,9 @@
 
 /* ── Hover ── */
 @media (hover: hover) {
+  /* translateY(-12.36%) = -22% of parent / 178% element height = equivalent of top: -50% */
   .hovered .bgGradient {
-    transform: translateY(0);
+    transform: translateY(-12.36%);
     opacity: 0.7;
   }
 
