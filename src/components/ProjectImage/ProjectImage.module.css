@@ -21,28 +21,28 @@
   transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
 }
 
-/* Deep ambient glow — large spread, low opacity */
+/* Deep ambient glow — large spread approximating the ~100px vertical CSS blur of original feGaussianBlur(80) */
 .bgDeep {
   position: absolute;
   inset: 0;
-  filter: blur(50px);
-  opacity: 0.5;
+  filter: blur(90px);
+  opacity: 0.55;
 }
 
-/* Main body — medium blur, high opacity */
+/* Main body — medium blur, rich color */
 .bgBody {
   position: absolute;
   inset: 0;
-  filter: blur(22px) saturate(1.2);
-  opacity: 0.8;
+  filter: blur(40px) saturate(1.2);
+  opacity: 0.75;
 }
 
-/* Tight edge definition */
+/* Tight definition at the path shapes themselves */
 .bgEdge {
   position: absolute;
   inset: 0;
-  filter: blur(6px) saturate(1.3);
-  opacity: 0.45;
+  filter: blur(12px) saturate(1.3);
+  opacity: 0.5;
 }
 
 
