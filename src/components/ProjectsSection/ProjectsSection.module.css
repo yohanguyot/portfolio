@@ -159,12 +159,12 @@
 
 /* ── Reveal animation — local keyframes, triggered by JS adding .cardAnimate ── */
 @keyframes cardIn {
-  from { opacity: 0; transform: scale(0.98) translateY(12px); }
-  to   { opacity: 1; transform: none; }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .cardAnimate {
-  animation: cardIn 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: cardIn 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Persistent visible state — added by JS after animation, replaces .cardAnimate */
