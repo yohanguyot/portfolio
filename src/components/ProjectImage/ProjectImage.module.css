@@ -8,9 +8,8 @@
 }
 
 /* ── Gradient ── */
-/* Default : top=-28%, lateral=-31.25%, bottom=-50%
-   Hover   : translate up by 22% of parent ≈ -12.36% of element height (178% of parent).
-   Using transform instead of animating top avoids re-rasterizing feGaussianBlur each frame. */
+/* CSS radial-gradients replace the original SVG feGaussianBlur blobs.
+   Rasterized once into the GPU layer (will-change), never re-rasterized on hover. */
 .bgGradient {
   position: absolute;
   top: -28%;
@@ -18,6 +17,7 @@
   right: -31.25%;
   bottom: -50%;
   opacity: 0.6;
+  filter: saturate(1.2);
   will-change: transform, opacity;
   transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
 }

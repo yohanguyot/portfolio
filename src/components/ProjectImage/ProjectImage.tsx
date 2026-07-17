@@ -1,78 +1,33 @@
-import type { ReactElement } from "react";
 import Image from "next/image";
 import styles from "./ProjectImage.module.css";
 
 type ProjectSlug = "bloom" | "keepro" | "lecoffre" | "wenimmo";
 
-const BG_GRADIENTS: Record<ProjectSlug, ReactElement> = {
-  bloom: (
-    <svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style={{ display: "block" }} viewBox="0 0 1840 592" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <g opacity={1} filter="url(#bloom-card-grad)">
-        <path d="M928.5 296C638.117 297.361 200 200 200 200V492H1640V200C1640 200 1212.38 294.67 928.5 296Z" fill="#972802"/>
-        <path d="M928.5 336C638.117 336.957 200 257 200 257V492H1640V257C1640 257 1212.38 335.065 928.5 336Z" fill="#FC4203"/>
-        <path d="M928.5 368C638.117 368.475 200 325 200 325V492H1640V325C1640 325 1212.38 367.536 928.5 368Z" fill="#FEB39A"/>
-      </g>
-      <defs>
-        <filter id="bloom-card-grad" x="0" y="0" width="1840" height="592" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-          <feFlood floodOpacity={0} result="BackgroundImageFix"/>
-          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-          <feGaussianBlur stdDeviation={80} result="effect1_foregroundBlur"/>
-          <feColorMatrix type="saturate" values="1.2" in="effect1_foregroundBlur" result="saturated"/>
-        </filter>
-      </defs>
-    </svg>
-  ),
-  keepro: (
-    <svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style={{ display: "block" }} viewBox="0 0 1840 592" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <g opacity={1} filter="url(#keepro-card-grad)">
-        <path d="M928.5 296C638.117 297.361 200 200 200 200V492H1640V200C1640 200 1212.38 294.67 928.5 296Z" fill="#153F84"/>
-        <path d="M928.5 336C638.117 336.957 200 257 200 257V492H1640V257C1640 257 1212.38 335.065 928.5 336Z" fill="#4C84E2" fillOpacity={0.5}/>
-        <path d="M928.5 368C638.117 368.475 200 325 200 325V492H1640V325C1640 325 1212.38 367.536 928.5 368Z" fill="#A7C3F1"/>
-      </g>
-      <defs>
-        <filter id="keepro-card-grad" x="0" y="0" width="1840" height="592" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-          <feFlood floodOpacity={0} result="BackgroundImageFix"/>
-          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-          <feGaussianBlur stdDeviation={80} result="effect1_foregroundBlur"/>
-          <feColorMatrix type="saturate" values="1.2" in="effect1_foregroundBlur" result="saturated"/>
-        </filter>
-      </defs>
-    </svg>
-  ),
-  lecoffre: (
-    <svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style={{ display: "block" }} viewBox="0 0 1840 592" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <g opacity={1} filter="url(#lecoffre-card-grad)">
-        <path d="M928.5 296C638.117 297.361 200 200 200 200V492H1640V200C1640 200 1212.38 294.67 928.5 296Z" fill="#004599"/>
-        <path d="M928.5 336C638.117 336.957 200 257 200 257V492H1640V257C1640 257 1212.38 335.065 928.5 336Z" fill="#0072FF"/>
-        <path d="M928.5 368C638.117 368.475 200 325 200 325V492H1640V325C1640 325 1212.38 367.536 928.5 368Z" fill="#99C7FF"/>
-      </g>
-      <defs>
-        <filter id="lecoffre-card-grad" x="0" y="0" width="1840" height="592" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-          <feFlood floodOpacity={0} result="BackgroundImageFix"/>
-          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-          <feGaussianBlur stdDeviation={80} result="effect1_foregroundBlur"/>
-          <feColorMatrix type="saturate" values="1.2" in="effect1_foregroundBlur" result="saturated"/>
-        </filter>
-      </defs>
-    </svg>
-  ),
-  wenimmo: (
-    <svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style={{ display: "block" }} viewBox="0 0 1840 592" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <g opacity={1} filter="url(#wenimmo-card-grad)">
-        <path d="M928.5 296C638.117 297.361 200 200 200 200V492H1640V200C1640 200 1212.38 294.67 928.5 296Z" fill="#0B0B8E"/>
-        <path d="M928.5 336C638.117 336.957 200 257 200 257V492H1640V257C1640 257 1212.38 335.065 928.5 336Z" fill="#1313EC"/>
-        <path d="M928.5 368C638.117 368.475 200 325 200 325V492H1640V325C1640 325 1212.38 367.536 928.5 368Z" fill="#A1A1F7"/>
-      </g>
-      <defs>
-        <filter id="wenimmo-card-grad" x="0" y="0" width="1840" height="592" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-          <feFlood floodOpacity={0} result="BackgroundImageFix"/>
-          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-          <feGaussianBlur stdDeviation={80} result="effect1_foregroundBlur"/>
-          <feColorMatrix type="saturate" values="1.2" in="effect1_foregroundBlur" result="saturated"/>
-        </filter>
-      </defs>
-    </svg>
-  ),
+// CSS radial-gradient approximation of the original SVG feGaussianBlur blobs.
+// The .bgGradient div sits at top:-28% bottom:-50% of .wrap (178% tall total).
+// The visible window inside .wrap spans bgGradient y≈16% to y≈72%.
+// Gradient centers sit at y=72-85% so color rises from the bottom of the card.
+const BG_GRADIENTS: Record<ProjectSlug, string> = {
+  bloom: [
+    "radial-gradient(ellipse 130% 55% at 50% 72%, rgba(252,66,3,0.85)   0%, transparent 100%)",
+    "radial-gradient(ellipse 180% 75% at 50% 85%, rgba(151,40,2,0.70)   0%, transparent 100%)",
+    "radial-gradient(ellipse 100% 38% at 50% 65%, rgba(254,179,154,0.50) 0%, transparent 100%)",
+  ].join(", "),
+  keepro: [
+    "radial-gradient(ellipse 130% 55% at 50% 72%, rgba(76,132,226,0.65)  0%, transparent 100%)",
+    "radial-gradient(ellipse 180% 75% at 50% 85%, rgba(21,63,132,0.75)   0%, transparent 100%)",
+    "radial-gradient(ellipse 100% 38% at 50% 65%, rgba(167,195,241,0.50) 0%, transparent 100%)",
+  ].join(", "),
+  lecoffre: [
+    "radial-gradient(ellipse 130% 55% at 50% 72%, rgba(0,114,255,0.85)   0%, transparent 100%)",
+    "radial-gradient(ellipse 180% 75% at 50% 85%, rgba(0,69,153,0.70)    0%, transparent 100%)",
+    "radial-gradient(ellipse 100% 38% at 50% 65%, rgba(153,199,255,0.50) 0%, transparent 100%)",
+  ].join(", "),
+  wenimmo: [
+    "radial-gradient(ellipse 130% 55% at 50% 72%, rgba(19,19,236,0.85)   0%, transparent 100%)",
+    "radial-gradient(ellipse 180% 75% at 50% 85%, rgba(11,11,142,0.70)   0%, transparent 100%)",
+    "radial-gradient(ellipse 100% 38% at 50% 65%, rgba(161,161,247,0.50) 0%, transparent 100%)",
+  ].join(", "),
 };
 
 const ASSETS: Record<ProjectSlug, { logo: string; screen: string }> = {
@@ -109,9 +64,7 @@ export default function ProjectImage({ project, active = false, noActiveEffect =
     <div
       className={`${styles.wrap} ${active ? styles.active : ""} ${className ?? ""}`.trim()}
     >
-      <div className={styles.bgGradient}>
-        {BG_GRADIENTS[project]}
-      </div>
+      <div className={styles.bgGradient} style={{ background: BG_GRADIENTS[project] }} />
 
       <div className={`${styles.screen} ${noActiveEffect ? styles.screenFixed : ""}`}>
         <Image src={assets.screen} alt="" width={800} height={500} loading={eager ? "eager" : "lazy"} className={styles.screenImg} aria-hidden />
