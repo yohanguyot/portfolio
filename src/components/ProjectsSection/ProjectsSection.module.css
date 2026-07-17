@@ -153,34 +153,24 @@
   overflow: hidden;
 }
 
-/* ── Reveal overlay — covers each card, fades away to reveal it ── */
-/* Animating the card itself conflicts with ProjectImage GPU contexts on Safari.
-   A simple overlay fades instead. cardsGrid uses clip-path (not overflow:hidden)
-   so each card's overlay only has one clipping ancestor — same as the bloom card. */
-.cardOverlay {
+/* Focus ring — ::after au-dessus du contenu pour les deux types de card */
+/* outline normal rogné par clip-path (grid) ou caché derrière ProjectImage */
+.cardLarge:focus-visible,
+.card:focus-visible {
+  outline: none;
+}
+
+.cardLarge:focus-visible::after,
+.card:focus-visible::after {
+  content: '';
   position: absolute;
   inset: 0;
-  background: var(--color-bg-canvas);
-  z-index: 10;
+  border: 2px solid var(--color-border-active);
+  border-radius: var(--radius-lg);
   pointer-events: none;
+  z-index: 100;
 }
 
-@keyframes overlayFade {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-
-.cardOverlayAnimate {
-  animation: overlayFade 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.cardOverlayDone {
-  display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cardOverlay { display: none; }
-}
 
 .cardContent::before {
   content: '';

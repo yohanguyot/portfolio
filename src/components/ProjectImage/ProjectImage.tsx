@@ -25,11 +25,12 @@ type Props = {
   project: ProjectSlug;
   active?: boolean;
   noActiveEffect?: boolean;
+  activeScreenScale?: boolean;
   className?: string;
   eager?: boolean;
 };
 
-export default function ProjectImage({ project, active = false, noActiveEffect = false, className, eager = false }: Props) {
+export default function ProjectImage({ project, active = false, noActiveEffect = false, activeScreenScale = false, className, eager = false }: Props) {
   const assets = ASSETS[project];
 
   return (
@@ -43,7 +44,7 @@ export default function ProjectImage({ project, active = false, noActiveEffect =
         <img src={BG_SRCS[project]} className={styles.bgImg} width="100%" height="100%" alt="" aria-hidden />
       </div>
 
-      <div className={`${styles.screen} ${noActiveEffect ? styles.screenFixed : ""}`}>
+      <div className={`${styles.screen} ${noActiveEffect ? styles.screenFixed : ""} ${activeScreenScale ? styles.screenActive : ""}`}>
         <Image src={assets.screen} alt="" width={800} height={500} loading={eager ? "eager" : "lazy"} className={styles.screenImg} aria-hidden />
       </div>
 

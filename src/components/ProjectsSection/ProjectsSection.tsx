@@ -8,7 +8,7 @@ import ProjectImage from "@/components/ProjectImage/ProjectImage";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import { trackEvent } from "@/lib/analytics";
 import { useDict } from "@/lib/dict-context";
-import { shouldReduceMotion, observe, STAGGER, afterLayout, isMobileViewport } from "@/lib/animation";
+import { shouldReduceMotion, observe, STAGGER, afterLayout, isMobileViewport, hideEl, revealEl } from "@/lib/animation";
 import styles from "./ProjectsSection.module.css";
 
 type Project = {
@@ -61,16 +61,15 @@ export default function ProjectsSection() {
     const bloom = bloomRef.current;
     const grid = gridRef.current;
 
+    // Set initial hidden state — cards are hidden by JS so the reveal animation
+    // starts from the correct opacity:0 + transform state
+    if (bloom) hideEl(bloom);
+    if (grid) {
+      Array.from(grid.querySelectorAll<HTMLElement>(':scope > a')).forEach(c => hideEl(c));
+    }
+
     function revealCard(el: HTMLElement, delay = 0) {
-      const overlay = el.firstElementChild as HTMLElement | null;
-      if (!overlay) return;
-      if (delay > 0) overlay.style.animationDelay = `${delay}ms`;
-      overlay.classList.add(styles.cardOverlayAnimate);
-      setTimeout(() => {
-        overlay.classList.remove(styles.cardOverlayAnimate);
-        overlay.classList.add(styles.cardOverlayDone);
-        overlay.style.animationDelay = '';
-      }, delay + 650);
+      revealEl(el, delay);
     }
 
     // Back-navigation: section already in viewport → fire cascade immediately
@@ -157,11 +156,9 @@ export default function ProjectsSection() {
             className={styles.cardLarge}
             onClick={(e) => { navigate(e, `/${lang}/bloom`); trackEvent("project_click", { project: FEATURED.slug }); }}
           >
-            <span className={styles.cardOverlay} aria-hidden="true" />
             <div className={styles.cardLargeImageWrap}>
               <ProjectImage
                 project={FEATURED.slug}
-                noActiveEffect
                 eager
               />
             </div>
@@ -191,11 +188,11 @@ export default function ProjectsSection() {
                 className={styles.card}
                 onClick={(e) => { navigate(e, `/${lang}/${proj.slug}`); trackEvent("project_click", { project: proj.slug }); }}
               >
-                <span className={styles.cardOverlay} aria-hidden="true" />
                 <div className={styles.cardInner}>
                   <div className={styles.cardImageWrap}>
                     <ProjectImage
                       project={proj.slug}
+                      activeScreenScale
                       eager
                     />
                   </div>

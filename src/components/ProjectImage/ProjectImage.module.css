@@ -87,17 +87,8 @@
   display: block;
 }
 
-/* ── Active (press) — triggered by any ancestor <a> being :active ── */
-:global(a:active) .screen {
-  transform: scale(0.98);
-}
-
 .screenFixed {
   transform: none !important;
-}
-
-:global(a:active) .logo {
-  transform: scale(0.98);
 }
 
 .logoFixed {
@@ -109,10 +100,20 @@
    Avoids a React hovered prop that would force re-renders on every mouseenter. */
 @media (hover: hover) {
   :global(a):hover .bgImg {
-    transform: translateY(-12.36%);
+    transform: translateY(-6%);
   }
 
   :global(a):hover .screen {
     transform: scale(1.043);
   }
+}
+
+/* ── Active (press) — après hover pour gagner en ordre source à spécificité égale ── */
+/* .screenActive opt-in : seules les petites cards (pas Bloom) l'activent */
+:global(a:active) .screenActive {
+  transform: scale(1.01);
+}
+
+:global(a:active) .logo {
+  transform: scale(0.96);
 }
