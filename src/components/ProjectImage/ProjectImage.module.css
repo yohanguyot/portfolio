@@ -7,19 +7,42 @@
   isolation: isolate;
 }
 
-/* ── Gradient ── */
-/* CSS radial-gradients replace the original SVG feGaussianBlur blobs.
-   Rasterized once into the GPU layer (will-change), never re-rasterized on hover. */
+/* ── Gradient — 3 SVG layers with CSS blur ── */
+/* Original SVG paths preserved. feGaussianBlur removed — replaced by CSS filter: blur()
+   on each SVG element. CSS blur on an element is GPU-composited (same technique as
+   HeroArcCanvas), so Safari never re-rasterizes on hover. */
 .bgGradient {
   position: absolute;
   top: -28%;
   left: -31.25%;
   right: -31.25%;
   bottom: -50%;
-  opacity: 0.6;
-  filter: saturate(1.2);
   will-change: transform, opacity;
   transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
+}
+
+/* Deep ambient glow — large spread, low opacity */
+.bgDeep {
+  position: absolute;
+  inset: 0;
+  filter: blur(50px);
+  opacity: 0.5;
+}
+
+/* Main body — medium blur, high opacity */
+.bgBody {
+  position: absolute;
+  inset: 0;
+  filter: blur(22px) saturate(1.2);
+  opacity: 0.8;
+}
+
+/* Tight edge definition */
+.bgEdge {
+  position: absolute;
+  inset: 0;
+  filter: blur(6px) saturate(1.3);
+  opacity: 0.45;
 }
 
 
@@ -92,7 +115,6 @@
   /* translateY(-12.36%) = -22% of parent / 178% element height = equivalent of top: -50% */
   :global(a):hover .bgGradient {
     transform: translateY(-12.36%);
-    opacity: 0.7;
   }
 
   :global(a):hover .screen {
