@@ -96,19 +96,18 @@ const ASSETS: Record<ProjectSlug, { logo: string; screen: string }> = {
 
 type Props = {
   project: ProjectSlug;
-  hovered?: boolean;
   active?: boolean;
   noActiveEffect?: boolean;
   className?: string;
   eager?: boolean;
 };
 
-export default function ProjectImage({ project, hovered = false, active = false, noActiveEffect = false, className, eager = false }: Props) {
+export default function ProjectImage({ project, active = false, noActiveEffect = false, className, eager = false }: Props) {
   const assets = ASSETS[project];
 
   return (
     <div
-      className={`${styles.wrap} ${hovered ? styles.hovered : ""} ${active ? styles.active : ""} ${className ?? ""}`}
+      className={`${styles.wrap} ${active ? styles.active : ""} ${className ?? ""}`.trim()}
     >
       <div className={styles.bgGradient}>
         {BG_GRADIENTS[project]}

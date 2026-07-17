@@ -254,7 +254,20 @@
 /* ── Card CTA ── */
 .cardCta {
   align-self: flex-start;
-  transition: transform var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .cardLarge:hover .cardCta,
+  .card:hover .cardCta {
+    color: var(--color-text-accent);
+  }
+
+  /* Last span = arrow icon — mirrors Button's forceHover arrow translation */
+  .cardLarge:hover .cardCta > span:last-child,
+  .card:hover .cardCta > span:last-child {
+    transform: translateX(3px);
+  }
 }
 
 

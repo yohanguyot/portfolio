@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useTransitionRouter } from "next-view-transitions";
 import Button from "@/components/Button/Button";
@@ -39,7 +39,6 @@ function Tags({ tags }: { tags: string[] }) {
 export default function ProjectsSection() {
   const dict = useDict();
   const projects = dict.projects;
-  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const router = useTransitionRouter();
 
   function navigate(e: React.MouseEvent, href: string) {
@@ -156,15 +155,12 @@ export default function ProjectsSection() {
             ref={bloomRef}
             href={`/${lang}/bloom`}
             className={styles.cardLarge}
-            onMouseEnter={() => setHoveredSlug(FEATURED.slug)}
-            onMouseLeave={() => setHoveredSlug(null)}
             onClick={(e) => { navigate(e, `/${lang}/bloom`); trackEvent("project_click", { project: FEATURED.slug }); }}
           >
             <span className={styles.cardOverlay} aria-hidden="true" />
             <div className={styles.cardLargeImageWrap}>
               <ProjectImage
                 project={FEATURED.slug}
-                hovered={hoveredSlug === FEATURED.slug}
                 noActiveEffect
                 eager
               />
@@ -182,7 +178,6 @@ export default function ProjectsSection() {
                 type="text"
                 showArrowRight
                 as="span"
-                forceHover={hoveredSlug === FEATURED.slug}
                 className={styles.cardCta}
               />
             </div>
@@ -194,8 +189,6 @@ export default function ProjectsSection() {
                 key={proj.slug}
                 href={`/${lang}/${proj.slug}`}
                 className={styles.card}
-                onMouseEnter={() => setHoveredSlug(proj.slug)}
-                onMouseLeave={() => setHoveredSlug(null)}
                 onClick={(e) => { navigate(e, `/${lang}/${proj.slug}`); trackEvent("project_click", { project: proj.slug }); }}
               >
                 <span className={styles.cardOverlay} aria-hidden="true" />
@@ -203,7 +196,6 @@ export default function ProjectsSection() {
                   <div className={styles.cardImageWrap}>
                     <ProjectImage
                       project={proj.slug}
-                      hovered={hoveredSlug === proj.slug}
                       eager
                     />
                   </div>
@@ -220,7 +212,6 @@ export default function ProjectsSection() {
                       type="text"
                       showArrowRight
                       as="span"
-                      forceHover={hoveredSlug === proj.slug}
                       className={styles.cardCta}
                     />
                   </div>

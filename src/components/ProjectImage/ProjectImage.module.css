@@ -88,14 +88,16 @@
 }
 
 /* ── Hover ── */
+/* :global(a):hover — targets any <a> ancestor being hovered (the card link).
+   Avoids a React hovered prop that would force re-renders on every mouseenter. */
 @media (hover: hover) {
   /* translateY(-12.36%) = -22% of parent / 178% element height = equivalent of top: -50% */
-  .hovered .bgGradient {
+  :global(a):hover .bgGradient {
     transform: translateY(-12.36%);
     opacity: 0.7;
   }
 
-  .hovered .screen {
+  :global(a):hover .screen {
     top: 30.25%;
     left: 4.38%;
     right: 4.38%;
