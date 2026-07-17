@@ -25,7 +25,9 @@
 
 
 /* ── Screen mockup ── */
-/* default: inset(32%, 6.25%, -19.5%, 6.25%) → hover: inset(30.25%, 4.38%, -21.5%, 4.38%) */
+/* Scale(1.043) ≡ position hover: element is 87.5% of wrap on each axis,
+   transform-origin 50% 50% lands at (50%, 75.75%) of wrap — same as hover inset.
+   Compositor-only: no layout recalculation when hovering between cards on Safari. */
 .screen {
   position: absolute;
   top: 32%;
@@ -35,12 +37,7 @@
   border-radius: 12px;
   overflow: hidden;
   z-index: 1;
-  transition:
-    top var(--duration-slow) var(--ease),
-    left var(--duration-slow) var(--ease),
-    right var(--duration-slow) var(--ease),
-    bottom var(--duration-slow) var(--ease),
-    transform var(--duration-fast) var(--ease);
+  transition: transform var(--duration-slow) var(--ease);
 }
 
 .screenImg {
@@ -100,9 +97,6 @@
   }
 
   :global(a):hover .screen {
-    top: 30.25%;
-    left: 4.38%;
-    right: 4.38%;
-    bottom: -21.5%;
+    transform: scale(1.043);
   }
 }
