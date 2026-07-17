@@ -18,7 +18,9 @@
   right: -31.25%;
   bottom: -50%;
   opacity: 0.6;
-  /* Promote to GPU layer so Safari rasterizes the feGaussianBlur once instead of every hover frame */
+  /* CSS filter instead of SVG feGaussianBlur — GPU-compositable with will-change: transform.
+     stdDeviation=80 at SVG scale (~1840px wide) ≈ blur(28px) at card scale (~640px wide). */
+  filter: blur(28px) saturate(1.2);
   will-change: transform, opacity;
   transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
 }
