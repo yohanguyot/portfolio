@@ -63,12 +63,14 @@ export default function ProjectsSection() {
     const grid = gridRef.current;
 
     function revealCard(el: HTMLElement, delay = 0) {
-      if (delay > 0) el.style.animationDelay = `${delay}ms`;
-      el.classList.add(styles.cardAnimate);
+      const overlay = el.querySelector<HTMLElement>(`.${styles.cardOverlay}`);
+      if (!overlay) return;
+      if (delay > 0) overlay.style.animationDelay = `${delay}ms`;
+      overlay.classList.add(styles.cardOverlayAnimate);
       setTimeout(() => {
-        el.classList.remove(styles.cardAnimate);
-        el.classList.add(styles.cardVisible);
-        el.style.animationDelay = '';
+        overlay.classList.remove(styles.cardOverlayAnimate);
+        overlay.classList.add(styles.cardOverlayDone);
+        overlay.style.animationDelay = '';
       }, delay + 650);
     }
 
@@ -158,6 +160,7 @@ export default function ProjectsSection() {
             onMouseLeave={() => setHoveredSlug(null)}
             onClick={(e) => { navigate(e, `/${lang}/bloom`); trackEvent("project_click", { project: FEATURED.slug }); }}
           >
+            <span className={styles.cardOverlay} aria-hidden="true" />
             <div className={styles.cardLargeImageWrap}>
               <ProjectImage
                 project={FEATURED.slug}
@@ -195,6 +198,7 @@ export default function ProjectsSection() {
                 onMouseLeave={() => setHoveredSlug(null)}
                 onClick={(e) => { navigate(e, `/${lang}/${proj.slug}`); trackEvent("project_click", { project: proj.slug }); }}
               >
+                <span className={styles.cardOverlay} aria-hidden="true" />
                 <div className={styles.cardInner}>
                   <div className={styles.cardImageWrap}>
                     <ProjectImage
