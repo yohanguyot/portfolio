@@ -7,42 +7,26 @@
   isolation: isolate;
 }
 
-/* ── Gradient — 3 SVG layers with CSS blur ── */
-/* Original SVG paths preserved. feGaussianBlur removed — replaced by CSS filter: blur()
-   on each SVG element. CSS blur on an element is GPU-composited (same technique as
-   HeroArcCanvas), so Safari never re-rasterizes on hover. */
+/* ── Gradient ── */
+/* SVG loaded via <img> — rasterized once as a bitmap on load, never re-rasterized on hover.
+   Preserves the exact feGaussianBlur(80) + preserveAspectRatio="none" anisotropic visual. */
 .bgGradient {
   position: absolute;
   top: -28%;
   left: -31.25%;
   right: -31.25%;
   bottom: -50%;
+  opacity: 0.6;
   will-change: transform, opacity;
   transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
 }
 
-/* Deep ambient glow — large spread approximating the ~100px vertical CSS blur of original feGaussianBlur(80) */
-.bgDeep {
+.bgImg {
   position: absolute;
   inset: 0;
-  filter: blur(90px);
-  opacity: 0.55;
-}
-
-/* Main body — medium blur, rich color */
-.bgBody {
-  position: absolute;
-  inset: 0;
-  filter: blur(40px) saturate(1.2);
-  opacity: 0.75;
-}
-
-/* Tight definition at the path shapes themselves */
-.bgEdge {
-  position: absolute;
-  inset: 0;
-  filter: blur(12px) saturate(1.3);
-  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 
