@@ -3,30 +3,31 @@ import styles from "./ProjectImage.module.css";
 
 type ProjectSlug = "bloom" | "keepro" | "lecoffre" | "wenimmo";
 
-// CSS radial-gradient approximation of the original SVG feGaussianBlur blobs.
-// The .bgGradient div sits at top:-28% bottom:-50% of .wrap (178% tall total).
-// The visible window inside .wrap spans bgGradient y≈16% to y≈72%.
-// Gradient centers sit at y=72-85% so color rises from the bottom of the card.
+// Approximation of the original SVG feGaussianBlur(80) blobs.
+// The .bgGradient div is 178% of .wrap height (top:-28%, bottom:-50%).
+// Visible window = bgGradient y≈16% to 72%.
+// The original blur filled the ENTIRE visible height — linear-gradient handles
+// the vertical spread, radial-gradient adds the concentrated glow at the bottom.
 const BG_GRADIENTS: Record<ProjectSlug, string> = {
   bloom: [
-    "radial-gradient(ellipse 130% 55% at 50% 72%, rgba(252,66,3,0.85)   0%, transparent 100%)",
-    "radial-gradient(ellipse 180% 75% at 50% 85%, rgba(151,40,2,0.70)   0%, transparent 100%)",
-    "radial-gradient(ellipse 100% 38% at 50% 65%, rgba(254,179,154,0.50) 0%, transparent 100%)",
+    "linear-gradient(to top, rgba(151,40,2,0.50) 0%, transparent 75%)",
+    "radial-gradient(ellipse 180% 80% at 50% 100%, rgba(252,66,3,0.75)    0%, transparent 100%)",
+    "radial-gradient(ellipse 110% 60% at 50% 88%,  rgba(254,179,154,0.40) 0%, transparent 100%)",
   ].join(", "),
   keepro: [
-    "radial-gradient(ellipse 130% 55% at 50% 72%, rgba(76,132,226,0.65)  0%, transparent 100%)",
-    "radial-gradient(ellipse 180% 75% at 50% 85%, rgba(21,63,132,0.75)   0%, transparent 100%)",
-    "radial-gradient(ellipse 100% 38% at 50% 65%, rgba(167,195,241,0.50) 0%, transparent 100%)",
+    "linear-gradient(to top, rgba(21,63,132,0.50) 0%, transparent 75%)",
+    "radial-gradient(ellipse 180% 80% at 50% 100%, rgba(76,132,226,0.70)  0%, transparent 100%)",
+    "radial-gradient(ellipse 110% 55% at 50% 88%,  rgba(167,195,241,0.35) 0%, transparent 100%)",
   ].join(", "),
   lecoffre: [
-    "radial-gradient(ellipse 130% 55% at 50% 72%, rgba(0,114,255,0.85)   0%, transparent 100%)",
-    "radial-gradient(ellipse 180% 75% at 50% 85%, rgba(0,69,153,0.70)    0%, transparent 100%)",
-    "radial-gradient(ellipse 100% 38% at 50% 65%, rgba(153,199,255,0.50) 0%, transparent 100%)",
+    "linear-gradient(to top, rgba(0,69,153,0.50) 0%, transparent 75%)",
+    "radial-gradient(ellipse 180% 80% at 50% 100%, rgba(0,114,255,0.80)   0%, transparent 100%)",
+    "radial-gradient(ellipse 110% 55% at 50% 88%,  rgba(153,199,255,0.35) 0%, transparent 100%)",
   ].join(", "),
   wenimmo: [
-    "radial-gradient(ellipse 130% 55% at 50% 72%, rgba(19,19,236,0.85)   0%, transparent 100%)",
-    "radial-gradient(ellipse 180% 75% at 50% 85%, rgba(11,11,142,0.70)   0%, transparent 100%)",
-    "radial-gradient(ellipse 100% 38% at 50% 65%, rgba(161,161,247,0.50) 0%, transparent 100%)",
+    "linear-gradient(to top, rgba(11,11,142,0.50) 0%, transparent 75%)",
+    "radial-gradient(ellipse 180% 80% at 50% 100%, rgba(19,19,236,0.80)   0%, transparent 100%)",
+    "radial-gradient(ellipse 110% 55% at 50% 88%,  rgba(161,161,247,0.35) 0%, transparent 100%)",
   ].join(", "),
 };
 
