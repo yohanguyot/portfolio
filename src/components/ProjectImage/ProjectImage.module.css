@@ -21,12 +21,24 @@
   transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
 }
 
+/* Fixed base layer — never translates, ensures bottom coverage on hover */
+.bgImgBase {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.5;
+}
+
+/* Active layer — translates up on hover */
 .bgImg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: block;
+  transition: transform var(--duration-slow) var(--ease);
 }
 
 
@@ -96,8 +108,8 @@
 /* :global(a):hover — targets any <a> ancestor being hovered (the card link).
    Avoids a React hovered prop that would force re-renders on every mouseenter. */
 @media (hover: hover) {
-  :global(a):hover .bgGradient {
-    opacity: 0.75;
+  :global(a):hover .bgImg {
+    transform: translateY(-12.36%);
   }
 
   :global(a):hover .screen {

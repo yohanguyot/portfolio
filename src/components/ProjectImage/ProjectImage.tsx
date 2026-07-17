@@ -35,6 +35,10 @@ export default function ProjectImage({ project, active = false, noActiveEffect =
   return (
     <div className={`${styles.wrap} ${active ? styles.active : ""} ${className ?? ""}`.trim()}>
       <div className={styles.bgGradient}>
+        {/* Fixed base — stays in place on hover to prevent gap at card bottom */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={BG_SRCS[project]} className={styles.bgImgBase} width="100%" height="100%" alt="" aria-hidden />
+        {/* Active layer — translates up on hover for the lift visual effect */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={BG_SRCS[project]} className={styles.bgImg} width="100%" height="100%" alt="" aria-hidden />
       </div>
