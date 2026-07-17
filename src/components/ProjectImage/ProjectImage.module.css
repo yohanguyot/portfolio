@@ -8,21 +8,23 @@
 }
 
 /* ── Gradient ── */
-/* Default : top=-28% (=22% - 64.1%×78%), lateral=-31.25%, bottom=-50% */
-/* Hover   : top=-50%, le reste inchangé */
+/* top always at -50% (hover position); translateY(11%) simulates top: -28% in default state.
+   Using transform instead of top avoids re-rasterizing feGaussianBlur on every hover frame. */
 .bgGradient {
   position: absolute;
-  top: -28%;
+  top: -50%;
   left: -31.25%;
   right: -31.25%;
   bottom: -50%;
   opacity: 0.6;
-  transition: top var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
+  transform: translateY(11%);
+  transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
 }
 
 
 /* ── Screen mockup ── */
-/* default: inset(32%, 6.25%, -19.5%, 6.25%) → hover: inset(30.25%, 4.38%, -21.5%, 4.38%) */
+/* Hover scales ~1.043× uniformly from center — equivalent to the original inset shrink,
+   but uses transform (compositor-only) instead of top/left/right/bottom (layout). */
 .screen {
   position: absolute;
   top: 32%;
@@ -32,12 +34,7 @@
   border-radius: 12px;
   overflow: hidden;
   z-index: 1;
-  transition:
-    top var(--duration-slow) var(--ease),
-    left var(--duration-slow) var(--ease),
-    right var(--duration-slow) var(--ease),
-    bottom var(--duration-slow) var(--ease),
-    transform var(--duration-fast) var(--ease);
+  transition: transform var(--duration-slow) var(--ease);
 }
 
 .screenImg {
@@ -88,17 +85,12 @@
 
 /* ── Hover ── */
 @media (hover: hover) {
-  /* Le gradient remonte et s'intensifie */
   .hovered .bgGradient {
-    top: -50%;
+    transform: translateY(0);
     opacity: 0.7;
   }
 
-  /* La maquette grossit légèrement */
   .hovered .screen {
-    top: 30.25%;
-    left: 4.38%;
-    right: 4.38%;
-    bottom: -21.5%;
+    transform: scale(1.043);
   }
 }

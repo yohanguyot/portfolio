@@ -63,7 +63,7 @@ export default function ProjectsSection() {
     const grid = gridRef.current;
 
     function revealCard(el: HTMLElement, delay = 0) {
-      const overlay = el.querySelector<HTMLElement>(`.${styles.cardOverlay}`);
+      const overlay = el.firstElementChild as HTMLElement | null;
       if (!overlay) return;
       if (delay > 0) overlay.style.animationDelay = `${delay}ms`;
       overlay.classList.add(styles.cardOverlayAnimate);
