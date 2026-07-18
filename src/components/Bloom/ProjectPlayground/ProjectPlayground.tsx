@@ -395,11 +395,6 @@ export default function ProjectPlayground({ dict }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Précharge toutes les images clients au montage — zéro latence au premier switch
-  useEffect(() => {
-    CLIENTS.forEach(c => { const img = new window.Image(); img.src = c.imageSrc; });
-  }, []);
-
   const currentIdx = CLIENTS.findIndex(c => c.id === activeId);
   const canPrev = currentIdx > 0;
   const canNext = currentIdx < CLIENTS.length - 1;

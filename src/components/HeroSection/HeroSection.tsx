@@ -27,7 +27,7 @@ function HeroArcCanvas() {
     const mCtx = mainCanvas.getContext("2d",  { alpha: true }) as CanvasRenderingContext2D;
     if (!dCtx || !bCtx || !nCtx || !mCtx) return;
 
-    let w = 0, h = 0, canvasLeft = 0;
+    let w = 0, h = 0, canvasLeft = 0, isMobile = false;
 
     function resize() {
       if (!wrapper || !deepCanvas || !bodyCanvas || !innerCanvas || !mainCanvas) return;
@@ -42,10 +42,10 @@ function HeroArcCanvas() {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
       canvasLeft = wrapper.getBoundingClientRect().left;
-      const isMob = window.innerWidth < 1024;
-      deepCanvas.style.filter  = `blur(${isMob ? 16 : 26}px)`;
-      bodyCanvas.style.filter  = `blur(${isMob ? 18 : 11}px)`;
-      innerCanvas.style.filter = `blur(${isMob ? 9 : 3.5}px)`;
+      isMobile = window.innerWidth < 1024;
+      deepCanvas.style.filter  = `blur(${isMobile ? 16 : 26}px)`;
+      bodyCanvas.style.filter  = `blur(${isMobile ? 18 : 11}px)`;
+      innerCanvas.style.filter = `blur(${isMobile ? 9 : 3.5}px)`;
     }
     resize();
 
@@ -93,8 +93,6 @@ function HeroArcCanvas() {
 
       const introRaw = Math.max(0, (now - t0 - INTRO_DELAY) / INTRO_DURATION);
       const introProgress = introRaw >= 1 ? 1 : 1 - Math.pow(1 - introRaw, 3);
-
-      const isMobile = window.innerWidth < 1024;
 
       // Mobile: arc centré ; desktop: suit la souris
       const targetMx = isMobile ? w * 0.5 : clientX - canvasLeft;
@@ -236,8 +234,6 @@ function HeroArcCanvas() {
       mCtx.fill();
       mCtx.restore();
     }
-
-    animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);

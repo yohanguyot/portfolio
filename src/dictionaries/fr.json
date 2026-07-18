@@ -31,7 +31,7 @@
     "heading": "Ce que j'ai construit.",
     "cta": "Voir le projet",
     "featured": {
-      "description": "Moteur white-label pour marketplaces d'actifs numériques. Une architecture unique et scalable qui accélère le Time-to-Market, éprouvée en production par plus de sept clients sur des marchés radicalement différents."
+      "description": "Moteur white-label pour marketplaces d'actifs numériques. Une architecture unique et scalable qui accélère le time-to-market, éprouvée en production par plus de sept clients sur des marchés radicalement différents."
     },
     "items": [
       {
@@ -130,8 +130,8 @@
       "namePlaceholder": "Mark Scout",
       "emailLabel": "Email",
       "needLabel": "Votre besoin",
-      "briefLabel": "Brief ou idée du projet",
-      "briefPlaceholder": "Quel est l'objectif principal de votre produit et vos contraintes actuelles (timing, technique, design system...) ?",
+      "briefLabel": "Votre projet",
+      "briefPlaceholder": "Quel est l’objectif principal de votre produit et vos contraintes actuelles (timing, stack technique, design system…) ?",
       "submit": "Envoyer ma demande",
       "sending": "Envoi en cours",
       "errors": {

@@ -1,8 +1,10 @@
 export const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
 export const DURATION = 600;
 export const STAGGER = 80;
+export const ANIMATION_CLEANUP_BUFFER_MS = 50;
 export const NAV_SCROLL_OFFSET = 76;
 export const MOBILE_BREAKPOINT = 1024;
+// Must match @keyframes revealEl 'from' in src/app/globals.css
 export const HIDDEN_TRANSFORM = 'scale(0.98) translateY(12px)';
 
 const _motionQuery = typeof window !== 'undefined'
@@ -32,10 +34,12 @@ export function revealEl(el: HTMLElement, delay = 0): () => void {
     el.style.opacity = '1';
     el.style.transform = '';
     el.style.animation = '';
-  }, DURATION + delay + 50);
+  }, DURATION + delay + ANIMATION_CLEANUP_BUFFER_MS);
 
   return () => {
     clearTimeout(id);
+    el.style.opacity = '1';
+    el.style.transform = '';
     el.style.animation = '';
   };
 }

@@ -19,11 +19,11 @@ const BODY_HIGHLIGHTS: Record<string, string[][]> = {
   ],
   en: [
     ["web and product interfaces"],
-    ["dual design and front-end culture", "seamless handoff to production"],
+    ["dual background in product design and front-end development", "zero-loss production handoff"],
   ],
   es: [
     ["interfaces web y de producto"],
-    ["doble cultura design y front-end", "traspaso sin pérdidas a producción"],
+    ["doble competencia en diseño de producto y desarrollo front-end", "paso a producción sin degradación"],
   ],
 };
 

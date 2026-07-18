@@ -588,20 +588,24 @@ void col.offsetHeight;          // force reflow
 | FeatureItems dans card | `12px` | `0.98` | `600ms` | hérité du card | — |
 | Hero (page load, CSS) | `16px` | `0.97` | `600ms` | — | — |
 
-Helper `revealEl` à créer en local dans chaque composant. Retourne un cancel handle `() => void` (clearTimeout interne) :
+Helper `revealEl` exporté depuis `src/lib/animation.ts`. Utilise `@keyframes revealEl` (défini dans `globals.css`) avec `animation-fill-mode: forwards`. Retourne un cancel handle `() => void` :
 
 ```ts
-function revealEl(el: HTMLElement, delay: number): () => void {
-  el.style.transition =
-    `opacity ${DURATION}ms ${EASE} ${delay}ms, ` +
-    `transform ${DURATION}ms ${EASE} ${delay}ms`;
-  el.style.opacity = '1';
-  el.style.transform = 'scale(1) translateY(0)';
+// The @keyframes revealEl 'from' state must match HIDDEN_TRANSFORM — both are scale(0.98) translateY(12px)
+export function revealEl(el: HTMLElement, delay = 0): () => void {
+  el.style.transition = '';
+  el.style.animation = `revealEl ${DURATION}ms ${EASE} ${delay}ms forwards`;
   const id = setTimeout(() => {
+    el.style.opacity = '1';
     el.style.transform = '';
-    el.style.transition = '';
-  }, DURATION + delay);
-  return () => clearTimeout(id);
+    el.style.animation = '';
+  }, DURATION + delay + 50);
+  return () => {
+    clearTimeout(id);
+    el.style.opacity = '1';
+    el.style.transform = '';
+    el.style.animation = '';
+  };
 }
 ```
 

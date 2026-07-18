@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const SECTION_IDS = ['projets', 'a-propos', 'process', 'contact'];
+const SECTION_IDS = ['projets', 'a-propos', 'process'];
 const NAV_HEIGHT = 60;
 
 export function useScrollSpy(isHome: boolean) {
@@ -11,8 +11,6 @@ export function useScrollSpy(isHome: boolean) {
     const offset = NAV_HEIGHT + Math.round(window.innerHeight * 0.25);
 
     function getActive() {
-      const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
-      if (nearBottom) return 'contact';
       const scrollY = window.scrollY + offset;
       let active: string | null = null;
       for (const id of SECTION_IDS) {

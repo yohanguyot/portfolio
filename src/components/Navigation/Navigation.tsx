@@ -379,10 +379,8 @@ export default function Navigation() {
                 );
               })}
             </div>
-            <div className={styles.mobileFooter}>
-              <Button label={dict.nav.cta} type="subtle" href="#contact" onClick={close} className={styles.mobileCta} />
-              <LanguageDropdown inline />
-            </div>
+            <Button label={dict.nav.cta} type="subtle" href="#contact" onClick={close} className={styles.mobileCta} />
+            <LanguageDropdown inline />
           </div>
         </>,
         document.body
