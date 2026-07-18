@@ -369,6 +369,8 @@
   position: relative;
   width: 100%;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
   transition: transform var(--duration-fast) var(--ease);
   padding: 8px 16px;
   min-height: 40px;

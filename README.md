@@ -1,5 +1,7 @@
 # Portfolio · Yohan Guyot
 
+**[yohanguyot.com](https://yohanguyot.com)**
+
 Personal portfolio built with Next.js 16 (App Router), CSS Modules, and a fully custom design system. No UI framework, no Tailwind — design tokens defined as CSS custom properties, animations hand-rolled.
 
 ## Stack
@@ -48,7 +50,8 @@ src/
 │   ├── animation.ts          # Scroll animation utilities (observe, revealEl…)
 │   ├── config.ts             # Shared constants: BASE_URL, LOCALES
 │   ├── getDictionary.ts      # Locale → JSON loader
-│   └── dict-context.tsx      # Dictionary React context
+│   ├── dict-context.tsx      # Dictionary React context
+│   └── __tests__/            # Vitest unit tests for animation utilities
 ├── styles/
 │   └── typography.module.css # Typography scale (composes-ready classes)
 └── proxy.ts                  # Middleware: locale detection + redirect
@@ -73,10 +76,12 @@ Three locales: `fr` (default), `en`, `es`. No third-party library.
 ## Scripts
 
 ```bash
-npm run dev      # Development server
-npm run build    # Production build
-npm run start    # Serve production build
-npm run lint     # ESLint
+npm run dev        # Development server
+npm run build      # Production build
+npm run start      # Serve production build
+npm run lint       # ESLint
+npm run test       # Vitest (single run)
+npm run test:watch # Vitest (watch mode)
 ```
 
 ## Design system

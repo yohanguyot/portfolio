@@ -1,8 +1,10 @@
 export const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
 export const DURATION = 600;
 export const STAGGER = 80;
+export const ANIMATION_CLEANUP_BUFFER_MS = 50;
 export const NAV_SCROLL_OFFSET = 76;
 export const MOBILE_BREAKPOINT = 1024;
+// Must match @keyframes revealEl 'from' in src/app/globals.css
 export const HIDDEN_TRANSFORM = 'scale(0.98) translateY(12px)';
 
 const _motionQuery = typeof window !== 'undefined'
@@ -25,22 +27,21 @@ export function hideEl(el: HTMLElement): void {
 }
 
 export function revealEl(el: HTMLElement, delay = 0): () => void {
-  el.style.transition = `opacity ${DURATION}ms ${EASE} ${delay}ms, transform ${DURATION}ms ${EASE} ${delay}ms`;
-  el.style.opacity = '1';
-  el.style.transform = 'scale(1) translateY(0)';
-  const id = setTimeout(() => {
-    el.style.transform = '';
-    el.style.transition = '';
-  }, DURATION + delay);
-  return () => clearTimeout(id);
-}
+  el.style.transition = '';
+  el.style.animation = `revealEl ${DURATION}ms ${EASE} ${delay}ms forwards`;
 
-export function prepareReveal(el: HTMLElement, delay = 0): () => void {
-  el.style.transition = 'none';
-  el.style.opacity = '0';
-  el.style.transform = HIDDEN_TRANSFORM;
-  void el.offsetHeight;
-  return () => afterLayout(() => revealEl(el, delay));
+  const id = setTimeout(() => {
+    el.style.opacity = '1';
+    el.style.transform = '';
+    el.style.animation = '';
+  }, DURATION + delay + ANIMATION_CLEANUP_BUFFER_MS);
+
+  return () => {
+    clearTimeout(id);
+    el.style.opacity = '1';
+    el.style.transform = '';
+    el.style.animation = '';
+  };
 }
 
 export function observe(

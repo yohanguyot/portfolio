@@ -10,19 +10,20 @@
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
     "menuLabel": "Menú",
-    "langLabel": "Idioma"
+    "langLabel": "Idioma",
+    "cta": "Contactar"
   },
   "hero": {
     "eyebrow": "Yohan Guyot · Product Designer",
     "titleLine1": "Design to prod.",
-    "titleLine2": "Sin fricción.",
+    "titleLine2": "Sin fricciones.",
     "subtitlePre1": "Diseño para ",
     "subtitleHighlight1": "usuarios",
     "subtitleMid": ", entrego para ",
     "subtitleHighlight2": "desarrolladores",
     "subtitlePost": ".",
-    "ctaPrimary": "Ver proyectos",
-    "ctaSecondary": "Contactarme",
+    "ctaPrimary": "Contactar",
+    "ctaSecondary": "Ver proyectos",
     "scroll": "Scroll"
   },
   "projects": {
@@ -30,17 +31,17 @@
     "heading": "Lo que construí.",
     "cta": "Ver proyecto",
     "featured": {
-      "description": "Motor white-label para marketplaces de activos digitales. Una arquitectura única y escalable que acelera el Time-to-Market, probada en producción por más de siete clientes en mercados radicalmente diferentes."
+      "description": "Motor white-label para marketplaces de activos digitales. Una arquitectura única y escalable que acelera el time-to-market, probada en producción por más de siete clientes en mercados radicalmente diferentes."
     },
     "items": [
       {
-        "description": "Certificación y trazabilidad documental mediante anclaje blockchain, diseñada para su adopción real por equipos no técnicos."
+        "description": "Certificación y trazabilidad documental mediante anclaje blockchain, diseñada para la adopción real de equipos no técnicos."
       },
       {
-        "description": "Gestión segura de expedientes para notarios, diseñada para intercambios sensibles sin sobrecargar el trabajo diario de los usuarios."
+        "description": "Gestión segura de expedientes para notarios, diseñada para intercambios sensibles sin añadir fricción al día a día."
       },
       {
-        "description": "Plataforma de gestión patrimonial para Asesores Financieros y Middle Office, con dos perfiles y lógicas de negocio completamente distintas."
+        "description": "Gestión patrimonial para asesores financieros y Middle Office, diseñada para dos perfiles con lógicas de negocio completamente distintas."
       }
     ]
   },
@@ -64,61 +65,60 @@
   },
   "about": {
     "label": "Sobre mí",
-    "headingPre": "Diseñador con un ",
+    "headingPre": "Diseñar con ",
     "headingBreak": true,
-    "headingAccent": "enfoque técnico",
+    "headingAccent": "cultura técnica",
     "headingPost": ".",
     "skills": [
       {
-        "title": "Design Systems",
-        "description": "Un sistema estructurado y documentado para escalar, iterar y mantener coherencia total en cada nueva funcionalidad."
+        "title": "Product & UX",
+        "description": "Interfaces diseñadas de punta a punta, que anticipan casos complejos y errores para garantizar la estabilidad en producción."
       },
       {
-        "title": "Product & UX",
-        "description": "Interfaces diseñadas de principio a fin, que anticipan los casos complejos y los errores que marcan la diferencia en producción."
+        "title": "Design Systems",
+        "description": "Un sistema estructurado, escalable y documentado para escalar y mantener una coherencia total con cada nueva funcionalidad."
       },
       {
         "title": "Design to Code",
-        "description": "Maquetas pensadas con las restricciones técnicas en mente para que cada decisión de Figma llegue intacta a producción."
+        "description": "Una transición fluida hacia el desarrollo, garantizando que las decisiones de diseño se mantengan firmes hasta la producción."
       }
     ],
     "body": [
-      "Diseño interfaces web y de producto para entornos de alta exigencia, como fintech, gestión patrimonial o seguridad.",
-      "Mi doble cultura design & front-end cambia concretamente la dinámica del proyecto: las restricciones técnicas se integran desde las primeras maquetas para entregar archivos Figma directamente utilizables, sin pérdida en producción.",
-      "Según las necesidades, trabajo en el diseño global de productos y design systems, o en la creación y publicación completa de sitios web y landing pages."
+      "Diseño interfaces web y de producto para entornos de alta complejidad, como fintech, gestión patrimonial y seguridad.",
+      "Mi doble competencia en diseño de producto y desarrollo front-end me permite integrar las restricciones técnicas desde el primer día, entregando recursos listos para producción que garantizan un paso a producción sin degradación."
     ]
   },
   "process": {
     "label": "Proceso",
     "heading": "Cómo trabajo.",
-    "description": "Cada proyecto empieza con las mismas preguntas: ¿qué es lo que realmente debe sostenerse, y qué puede esperar?",
+    "description": "Cuatro etapas clave para alinear la visión de producto, el diseño y el desarrollo.",
     "steps": [
       {
-        "title": "Descubrimiento",
-        "description": "Antes de abrir Figma, entiendo el contexto y los usuarios. Lo que se aclara aquí no habrá que corregirlo después.",
-        "label": "//Paso 01"
+        "title": "Encuadre",
+        "description": "Definir las bases estratégicas del producto para alinear objetivos de negocio y expectativas de usuarios desde su inicio.",
+        "label": "//Etapa 01"
       },
       {
         "title": "Arquitectura",
-        "description": "Defino tokens, componentes y nomenclatura para que diseño y desarrollo hablen el mismo idioma.",
-        "label": "//Paso 02"
+        "description": "Estructurar la lógica del producto antes de las pantallas para alinear directamente los componentes de diseño y el código.",
+        "label": "//Etapa 02"
       },
       {
-        "title": "Iteración",
-        "description": "Trabajo en ciclos cortos con el equipo, explorando y refinando hasta que cada elección esté justificada y validada.",
-        "label": "//Paso 03"
+        "title": "Alineación",
+        "description": "Diseñar e iterar en ciclos rápidos, confrontando cada decisión con las prioridades del producto y las realidades del código.",
+        "label": "//Etapa 03"
       },
       {
-        "title": "Entrega",
-        "description": "Entrego archivos listos para implementar: propiedades nombradas, variantes y estados cubiertos.",
-        "label": "//Paso 04"
+        "title": "Transferencia",
+        "description": "Entregar especificaciones y maquetas directamente utilizables para la producción, sin dejar margen a la interpretación.",
+        "label": "//Etapa 04"
       }
     ]
   },
   "contact": {
     "label": "Contacto",
     "heading": "Diseñemos tu proyecto.",
-    "description": "Describe tu proyecto en pocas palabras, respondo rápido.",
+    "description": "Cuéntame en pocas palabras, respondo rápido.",
     "needs": [
       "Product Design",
       "Rediseño UX/UI",
@@ -130,9 +130,9 @@
       "namePlaceholder": "Mark Scout",
       "emailLabel": "Email",
       "needLabel": "Tu necesidad",
-      "briefLabel": "Brief o idea del proyecto",
-      "briefPlaceholder": "¿Cuál es el objetivo principal de tu producto y cuáles son tus restricciones actuales (tiempo, técnica, design system…)?",
-      "submit": "Enviar mensaje",
+      "briefLabel": "Tu proyecto",
+      "briefPlaceholder": "¿Cuál es el objetivo principal de tu producto y tus restricciones actuales (plazos, tecnología, sistema de diseño...)?",
+      "submit": "Enviar solicitud",
       "sending": "Enviando",
       "errors": {
         "emailRequired": "El email es obligatorio.",

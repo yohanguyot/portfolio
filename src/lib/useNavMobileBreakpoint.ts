@@ -1,17 +1,27 @@
 import { useState, useRef, useLayoutEffect, useCallback } from 'react';
 
+// Persists across remounts (language switches) within the same browser session.
+// We keep the largest threshold ever measured so the nav never downgrades to
+// desktop based on a shorter label set (e.g. "EN" narrower than "Français").
+let persistedThreshold = 0;
+
 export function useNavMobileBreakpoint(navRef: React.RefObject<HTMLElement | null>) {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 600 || (persistedThreshold > 0 && window.innerWidth < persistedThreshold);
+  });
   const [mounted, setMounted] = useState(false);
-  const thresholdRef = useRef(0);
-  const isMobileRef = useRef(false);
+  const thresholdRef = useRef(persistedThreshold);
+  const isMobileRef = useRef(isMobile);
 
   useLayoutEffect(() => {
     if (!navRef.current) return;
 
     function measureThreshold() {
       if (!navRef.current || isMobileRef.current) return;
-      thresholdRef.current = navRef.current.scrollWidth + 48;
+      const t = navRef.current.scrollWidth + 48;
+      persistedThreshold = Math.max(persistedThreshold, t);
+      thresholdRef.current = persistedThreshold;
     }
 
     function check() {

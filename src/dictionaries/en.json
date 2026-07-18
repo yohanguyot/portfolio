@@ -10,19 +10,20 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "menuLabel": "Menu",
-    "langLabel": "Language"
+    "langLabel": "Language",
+    "cta": "Get in touch"
   },
   "hero": {
     "eyebrow": "Yohan Guyot · Product Designer",
     "titleLine1": "Design to prod.",
     "titleLine2": "Frictionless.",
-    "subtitlePre1": "I design for ",
+    "subtitlePre1": "Designing for ",
     "subtitleHighlight1": "users",
-    "subtitleMid": ", I deliver for ",
+    "subtitleMid": ", delivering for ",
     "subtitleHighlight2": "developers",
     "subtitlePost": ".",
-    "ctaPrimary": "View projects",
-    "ctaSecondary": "Contact me",
+    "ctaPrimary": "Get in touch",
+    "ctaSecondary": "View projects",
     "scroll": "Scroll"
   },
   "projects": {
@@ -30,17 +31,17 @@
     "heading": "What I've built.",
     "cta": "View project",
     "featured": {
-      "description": "White-label engine for digital asset marketplaces. A unique, scalable architecture that accelerates Time-to-Market, proven in production by more than seven clients across radically different markets."
+      "description": "White-label engine for digital asset marketplaces. A single, scalable architecture that accelerates time-to-market, proven in production by over seven clients across radically different industries."
     },
     "items": [
       {
-        "description": "Blockchain-anchored document certification and traceability, designed for real-world adoption by non-technical teams."
+        "description": "Blockchain-anchored document certification and traceability, built for real-world adoption by non-technical teams."
       },
       {
-        "description": "Secure document management for notaries, built for sensitive exchanges without burdening users' daily workflow."
+        "description": "Secure case management for notaries, built for sensitive exchanges without adding friction to daily operations."
       },
       {
-        "description": "Wealth management platform for Financial Advisors and Back-Office teams, tailored for two profiles with completely different business logic."
+        "description": "Wealth management platform for IFAs and Middle Office, built for two profiles with distinct operational workflows."
       }
     ]
   },
@@ -64,61 +65,60 @@
   },
   "about": {
     "label": "About",
-    "headingPre": "Designer with a ",
+    "headingPre": "Designing with a ",
     "headingBreak": true,
     "headingAccent": "technical mindset",
     "headingPost": ".",
     "skills": [
       {
-        "title": "Design Systems",
-        "description": "A structured, documented system that allows scaling, iterating, and maintaining total consistency with every new feature."
+        "title": "Product & UX",
+        "description": "End-to-end interface design that anticipates edge cases and errors to guarantee stability in production."
       },
       {
-        "title": "Product & UX",
-        "description": "End-to-end interfaces that anticipate complex cases and the errors that make all the difference in production."
+        "title": "Design Systems",
+        "description": "A structured, adaptable, and documented system to scale and maintain total consistency across every new feature."
       },
       {
         "title": "Design to Code",
-        "description": "Mockups built with technical constraints in mind, so that decisions made in Figma hold all the way to production."
+        "description": "A seamless transition to development, ensuring design decisions hold up all the way to production."
       }
     ],
     "body": [
-      "I design web and product interfaces for high-stakes environments such as fintech, wealth management, and security.",
-      "My dual design & front-end culture concretely changes the project dynamic: technical constraints are integrated from the first mockups to deliver Figma files that are directly ready to implement, with no loss in production.",
-      "Depending on the project, I work on the overall design of products and design systems, or on the complete creation and launch of marketing sites and landing pages."
+      "I design web and product interfaces for highly complex environments, such as fintech, wealth management, and security.",
+      "My dual background in product design and front-end development allows me to integrate technical constraints from day one, delivering production-ready assets that ensure a zero-loss production handoff."
     ]
   },
   "process": {
     "label": "Process",
     "heading": "How I work.",
-    "description": "Every project starts with the same questions: what truly needs to work, and what can wait?",
+    "description": "Four key steps to align product vision, design, and development.",
     "steps": [
       {
-        "title": "Discovery",
-        "description": "Before opening Figma, I understand context and users. What's clarified here won't need correcting later.",
+        "title": "Framing",
+        "description": "Defining the product's strategic foundations to align business objectives and user expectations from the start.",
         "label": "//Step 01"
       },
       {
         "title": "Architecture",
-        "description": "I define tokens, components and naming before the first screens, so design and dev speak the same language.",
+        "description": "Structuring the product logic prior to building any screens to directly align design components and the codebase.",
         "label": "//Step 02"
       },
       {
-        "title": "Iteration",
-        "description": "I work in short cycles with the team, exploring and refining until every choice is justified and validated.",
+        "title": "Alignment",
+        "description": "Designing and iterating in rapid cycles, confronting every decision against product priorities and code realities.",
         "label": "//Step 03"
       },
       {
-        "title": "Delivery",
-        "description": "I deliver implementation-ready files: named properties, documented variants, and all states covered.",
+        "title": "Handoff",
+        "description": "Delivering directly actionable specifications and layouts for production, leaving no room for interpretation.",
         "label": "//Step 04"
       }
     ]
   },
   "contact": {
     "label": "Contact",
-    "heading": "Let's design your project.",
-    "description": "Describe your project in a few words, I reply fast.",
+    "heading": "Let's build your project.",
+    "description": "Describe your project in a few words, I'll get back to you quickly.",
     "needs": [
       "Product Design",
       "UX/UI Redesign",
@@ -129,10 +129,10 @@
       "nameLabel": "Full name",
       "namePlaceholder": "Mark Scout",
       "emailLabel": "Email",
-      "needLabel": "What you need",
-      "briefLabel": "Project brief or idea",
-      "briefPlaceholder": "What is the main goal of your product and your current constraints (timeline, technical, design system…)?",
-      "submit": "Send message",
+      "needLabel": "Your need",
+      "briefLabel": "Your project",
+      "briefPlaceholder": "What is the primary objective of your product and your current constraints (timeline, tech stack, design system...)?",
+      "submit": "Submit request",
       "sending": "Sending",
       "errors": {
         "emailRequired": "Email is required.",

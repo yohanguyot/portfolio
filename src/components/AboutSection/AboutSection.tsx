@@ -10,23 +10,20 @@ import type { Dictionary } from "@/lib/getDictionary";
 import { shouldReduceMotion, observe, revealEl, STAGGER, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import styles from "./AboutSection.module.css";
 
-const SKILL_ICONS = [Component, Route, CodeXml] as const;
+const SKILL_ICONS = [Route, Component, CodeXml] as const;
 
 const BODY_HIGHLIGHTS: Record<string, string[][]> = {
   fr: [
     ["interfaces web et produit"],
-    ["double culture design & front-end", "sans perte en prod"],
-    [],
+    ["double culture design et front-end", "passage en prod sans perte"],
   ],
   en: [
     ["web and product interfaces"],
-    ["dual design & front-end culture", "no loss in production"],
-    [],
+    ["dual background in product design and front-end development", "zero-loss production handoff"],
   ],
   es: [
     ["interfaces web y de producto"],
-    ["doble cultura design & front-end", "sin pérdida en producción"],
-    [],
+    ["doble competencia en diseño de producto y desarrollo front-end", "paso a producción sin degradación"],
   ],
 };
 

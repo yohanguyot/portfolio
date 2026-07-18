@@ -588,20 +588,24 @@ void col.offsetHeight;          // force reflow
 | FeatureItems dans card | `12px` | `0.98` | `600ms` | hérité du card | — |
 | Hero (page load, CSS) | `16px` | `0.97` | `600ms` | — | — |
 
-Helper `revealEl` à créer en local dans chaque composant. Retourne un cancel handle `() => void` (clearTimeout interne) :
+Helper `revealEl` exporté depuis `src/lib/animation.ts`. Utilise `@keyframes revealEl` (défini dans `globals.css`) avec `animation-fill-mode: forwards`. Retourne un cancel handle `() => void` :
 
 ```ts
-function revealEl(el: HTMLElement, delay: number): () => void {
-  el.style.transition =
-    `opacity ${DURATION}ms ${EASE} ${delay}ms, ` +
-    `transform ${DURATION}ms ${EASE} ${delay}ms`;
-  el.style.opacity = '1';
-  el.style.transform = 'scale(1) translateY(0)';
+// The @keyframes revealEl 'from' state must match HIDDEN_TRANSFORM — both are scale(0.98) translateY(12px)
+export function revealEl(el: HTMLElement, delay = 0): () => void {
+  el.style.transition = '';
+  el.style.animation = `revealEl ${DURATION}ms ${EASE} ${delay}ms forwards`;
   const id = setTimeout(() => {
+    el.style.opacity = '1';
     el.style.transform = '';
-    el.style.transition = '';
-  }, DURATION + delay);
-  return () => clearTimeout(id);
+    el.style.animation = '';
+  }, DURATION + delay + 50);
+  return () => {
+    clearTimeout(id);
+    el.style.opacity = '1';
+    el.style.transform = '';
+    el.style.animation = '';
+  };
 }
 ```
 
@@ -733,6 +737,35 @@ Pair with `transition: transform var(--duration-fast) var(--ease)` so the releas
 }
 ```
 
+**`:active` source order — must follow `@media (hover: hover)`**: at equal specificity, last rule in source wins. If an element has both a hover transform and an active transform, place the `:active` rule **after** the hover media query, otherwise hover overrides active on pointer devices.
+
+```css
+/* ✓ — active wins at equal specificity */
+@media (hover: hover) {
+  .card:hover .screen { transform: scale(1.04); }
+}
+.card:active .screen { transform: scale(1.01); }
+
+/* ✗ — hover overwrites active on pointer devices */
+.card:active .screen { transform: scale(1.01); }
+@media (hover: hover) {
+  .card:hover .screen { transform: scale(1.04); }
+}
+```
+
+**`:active` scale — hover vs touch baseline**: on pointer devices, the element may already be at a hover scale when clicked. On touchscreens it starts from rest. Use both media queries when the values differ:
+
+```css
+/* Pointer: reduce from hover scale */
+@media (hover: hover) {
+  .card:active .screen { transform: scale(1.01); }
+}
+/* Touch: reduce from rest */
+@media (hover: none) {
+  .card:active .screen { transform: scale(0.98); }
+}
+```
+
 ### Hover states — touchscreen guard
 
 **Every `:hover` rule must be wrapped in `@media (hover: hover)`** — without it, hover styles fire on tap on touchscreens and stay stuck until the user taps elsewhere.
@@ -752,6 +785,73 @@ Pair with `transition: transform var(--duration-fast) var(--ease)` so the releas
 ```
 
 This applies to every element: links, buttons, cards, chips, inputs, icons. No exception.
+
+### Focus ring in clipped containers
+
+Browser `outline` is clipped by ancestor `clip-path` and `overflow: hidden`. When a focusable element lives inside such a container, use a `::after` pseudo-element instead:
+
+```css
+.card:focus-visible {
+  outline: none;
+}
+.card:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-border-active);
+  border-radius: var(--radius-lg); /* match the card's own radius */
+  pointer-events: none;
+  z-index: 100; /* above ProjectImage and any GPU-composited children */
+}
+```
+
+The `::after` fills the element (`inset: 0`), its border is inside the element's own bounds (never clipped), and `z-index: 100` ensures it renders above all content including GPU-promoted layers.
+
+A global `:focus-visible` outline in `globals.css` handles all other elements that are not in clipped containers:
+
+```css
+:focus-visible {
+  outline: 2px solid var(--color-border-active);
+  outline-offset: 3px;
+}
+```
+
+### SVG `feGaussianBlur` — Safari performance
+
+Safari re-rasterizes inline SVG elements with `feGaussianBlur` on CPU every time a sibling enters a new state (hover, active). This causes inter-card lag on hover.
+
+**Fix**: load SVG gradient files via `<img src=".svg">` instead of inline JSX. The browser rasterizes the SVG once as a bitmap on load and caches it — no re-rasterization on state changes.
+
+- Store SVG files in `public/images/projects/` (cards in `cards/`, banners in `banners/`)
+- Render with `<img src="/path/gradient.svg" width="100%" height="100%" alt="" aria-hidden />`
+- Filter IDs inside each file can be simplified to `id="blur"` since they're isolated per resource
+
+This applies to both `ProjectImage` (card gradient) and `HeroBanner` (project page banner).
+
+### Canvas DPR cap — blur performance
+
+For canvas elements with CSS `filter: blur()`, cap `devicePixelRatio` at 1.5. At DPR=2 (Retina Mac), the canvas is 4× larger but the blur absorbs all the extra resolution — the visual result is identical while the render cost is 4× higher.
+
+```ts
+const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+```
+
+Apply this wherever multiple canvases stack with blur filters (e.g. `HeroSection`). Going beyond 1.5 on blur-heavy canvases makes mouse tracking and animations sluggish on high-DPR screens.
+
+### Image preloading for interactive components
+
+When a component switches between multiple images (tabs, client selector, carousel), the first display of each image has network latency. Preload all images on mount:
+
+```ts
+useEffect(() => {
+  ITEMS.forEach(item => {
+    const img = new window.Image();
+    img.src = item.imageSrc;
+  });
+}, []);
+```
+
+The browser fetches and caches all images immediately on mount, so every subsequent switch is instant from cache.
 
 ### Internationalisation — ajouter une nouvelle langue
 
@@ -886,7 +986,16 @@ background: rgba(198, 83, 46, 0.40);
 
 ### User selection
 
-Interactive elements (`button`, `a`, `[role="button"]`) have `user-select: none` applied globally in `globals.css` — prevents accidental text selection on click or double-click. Do not add it again per-component.
+`button`, `a`, and `[role="button"]` have `user-select: none` applied globally in `globals.css` — prevents accidental text selection on click or double-click:
+
+```css
+button, a, [role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+```
+
+Do not add it again per-component for standard elements. **Exception**: custom interactive elements rendered as `<div>` or other non-interactive tags (e.g. a card button rendered as `<div>`) must declare `user-select: none` themselves since they are not covered by the global rule.
 
 ### Text selection
 
@@ -1035,3 +1144,41 @@ Le composant `Button` accepte un prop `forceHover` pour synchroniser visuellemen
 ```
 
 Utiliser ce pattern chaque fois qu'un bouton est imbriqué dans une card ou un lien cliquable — sans ça, le bouton ne réagit pas au hover de son parent.
+
+---
+
+## Tests
+
+### Stack
+
+- **Vitest** + **jsdom** — unit tests for browser animation utilities
+- Config: `vitest.config.ts` at the repo root
+- Setup file: `src/lib/__tests__/setup.ts` — stubs for `matchMedia`, `requestAnimationFrame`, and `IntersectionObserver`
+
+```bash
+npm run test        # single run
+npm run test:watch  # watch mode
+```
+
+### Writing tests for animation utilities
+
+All exports from `src/lib/animation.ts` are covered in `src/lib/__tests__/animation.test.ts`.
+
+**Key patterns:**
+
+**Fake timers** — use `vi.useFakeTimers()` / `vi.useRealTimers()` in `beforeEach`/`afterEach` for tests involving `setTimeout` (e.g. `revealEl` cleanup timer). Do **not** use fake timers in `observeFeatureCard` tests — they conflict with the Promise-based rAF stub.
+
+**Flushing rAF** — the `requestAnimationFrame` stub resolves via `Promise.resolve()`. To flush two frames (as `afterLayout` requires):
+```ts
+await new Promise<void>(resolve =>
+  requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+);
+```
+
+**Triggering IntersectionObserver** — the stub attaches itself to observed elements as `el.__io__`. Call `el.__io__.trigger(true)` to simulate intersection:
+```ts
+const io = (el as HTMLElement & { __io__: { trigger: (v: boolean) => void } }).__io__;
+io.trigger(true);
+```
+
+**Disconnect tracking** — `MockIntersectionObserver` tracks `disconnected` state. `trigger()` is a no-op after `disconnect()`, which is how fire-once behavior is tested.

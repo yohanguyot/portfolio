@@ -7,6 +7,7 @@ import { ChevronDown } from "lucide-react";
 import NextLink from "next/link";
 import { Link, useTransitionRouter } from "next-view-transitions";
 import { useDict } from "@/lib/dict-context";
+import Button from "@/components/Button/Button";
 import { NAV_SCROLL_OFFSET } from "@/lib/animation";
 import { useNavMobileBreakpoint } from "@/lib/useNavMobileBreakpoint";
 import { useScrollSpy } from "@/lib/useScrollSpy";
@@ -79,7 +80,6 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
   const currentLang = (pathname.split("/")[1] || "fr").toUpperCase();
   const [isOpen, setIsOpen] = useState(false);
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({});
-  const [stride, setStride] = useState(0);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLUListElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -145,24 +145,9 @@ export function LanguageDropdown({ className, inline }: LanguageDropdownProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  useLayoutEffect(() => {
-    if (!inline || !wrapperRef.current) return;
-    const btns = wrapperRef.current.querySelectorAll("button");
-    if (btns.length >= 2) {
-      setStride((btns[1] as HTMLElement).offsetLeft - (btns[0] as HTMLElement).offsetLeft);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inline]);
-
   if (inline) {
-    const currentIndex = LANGUAGES.findIndex(({ code }) => code === currentLang);
     return (
       <div ref={wrapperRef} className={[styles.langInline, className ?? ""].filter(Boolean).join(" ")}>
-        <span
-          className={styles.langInlineIndicator}
-          style={{ transform: `translateX(${currentIndex * stride}px)` }}
-          aria-hidden="true"
-        />
         {LANGUAGES.map(({ code }) => (
           <button
             key={code}
@@ -232,7 +217,6 @@ export default function Navigation() {
     { label: dict.nav.links.projects, href: "#projets" },
     { label: dict.nav.links.about, href: "#a-propos" },
     { label: dict.nav.links.process, href: "#process" },
-    { label: dict.nav.links.contact, href: "#contact", alwaysLocal: true },
   ];
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -320,22 +304,21 @@ export default function Navigation() {
           </div>
 
           {/* Desktop */}
-          <div className={styles.right}>
-            <div className={styles.links}>
-              {NAV_LINKS.map((l) => {
-                const sectionId = l.href.replace("#", "");
-                return (
-                  <NavLink
-                    key={l.href}
-                    label={l.label}
-                    href={isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`}
-                    state={activeSection === sectionId ? "active" : "default"}
-                  />
-                );
-              })}
-            </div>
+          <div className={styles.links}>
+            {NAV_LINKS.map((l) => {
+              const sectionId = l.href.replace("#", "");
+              return (
+                <NavLink
+                  key={l.href}
+                  label={l.label}
+                  href={isHome ? l.href : `/${lang}${l.href}`}
+                  state={activeSection === sectionId ? "active" : "default"}
+                />
+              );
+            })}
             <LanguageDropdown />
           </div>
+          <Button label={dict.nav.cta} type="subtle" href="#contact" className={styles.navCta} />
 
           {/* Mobile */}
           <button
@@ -367,37 +350,37 @@ export default function Navigation() {
             aria-modal="true"
             aria-label={dict.nav.menuLabel}
           >
-            {NAV_LINKS.map((l, i) => {
-              const href = isHome || l.alwaysLocal ? l.href : `/${lang}${l.href}`;
-              const MobileTag = href.startsWith("/") && !href.includes("#") ? Link : "a";
-              return (
-                <MobileTag
-                  key={l.href}
-                  href={href}
-                  className={styles.mobileLink}
-                  onClick={(e: React.MouseEvent) => {
-                    if (href.includes("#")) {
-                      e.preventDefault();
-                      const id = href.slice(href.indexOf("#") + 1);
-                      const el = document.getElementById(id);
-                      if (el) {
-                        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_SCROLL_OFFSET, behavior: "smooth" });
-                      } else {
-                        router.push(href.startsWith("/") ? href : `/${lang}${href}`);
+            <div className={styles.mobileLinks}>
+              {NAV_LINKS.map((l, i) => {
+                const href = isHome ? l.href : `/${lang}${l.href}`;
+                const MobileTag = href.startsWith("/") && !href.includes("#") ? Link : "a";
+                return (
+                  <MobileTag
+                    key={l.href}
+                    href={href}
+                    className={styles.mobileLink}
+                    onClick={(e: React.MouseEvent) => {
+                      if (href.includes("#")) {
+                        e.preventDefault();
+                        const id = href.slice(href.indexOf("#") + 1);
+                        const el = document.getElementById(id);
+                        if (el) {
+                          window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_SCROLL_OFFSET, behavior: "smooth" });
+                        } else {
+                          router.push(href.startsWith("/") ? href : `/${lang}${href}`);
+                        }
                       }
-                    }
-                    close();
-                  }}
-                  ref={i === 0 ? firstLinkRef : undefined}
-                >
-                  {l.label}
-                </MobileTag>
-              );
-            })}
-            <div className={styles.mobileDivider} />
-            <div className={styles.mobileFooter}>
-              <LanguageDropdown inline />
+                      close();
+                    }}
+                    ref={i === 0 ? firstLinkRef : undefined}
+                  >
+                    {l.label}
+                  </MobileTag>
+                );
+              })}
             </div>
+            <Button label={dict.nav.cta} type="subtle" href="#contact" onClick={close} className={styles.mobileCta} />
+            <LanguageDropdown inline />
           </div>
         </>,
         document.body

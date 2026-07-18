@@ -24,7 +24,9 @@
 .tags {
   display: flex;
   gap: var(--space-xs);
-  flex-wrap: wrap;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  mask-image: linear-gradient(to right, black 80%, transparent 100%);
 }
 
 .tag {
@@ -51,11 +53,7 @@
   text-decoration: none;
   cursor: pointer;
   transition: transform var(--duration-fast) var(--ease);
-  opacity: 0;
 }
-
-
-
 
 .cardLargeImageWrap {
   width: 640px;
@@ -121,11 +119,13 @@
 }
 
 /* ── Small cards grid ── */
+/* clip-path instead of overflow:hidden — same visual rounding but doesn't create the
+   nested clipping context that prevents overlay opacity animation on Safari compositor. */
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  clip-path: inset(0 round var(--radius-lg));
   position: relative;
 }
 
@@ -153,12 +153,26 @@
   text-decoration: none;
   cursor: pointer;
   overflow: hidden;
-  opacity: 0;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cardLarge, .card { opacity: 1; }
+/* Focus ring — ::after au-dessus du contenu pour les deux types de card */
+/* outline normal rogné par clip-path (grid) ou caché derrière ProjectImage */
+.cardLarge:focus-visible,
+.card:focus-visible {
+  outline: none;
 }
+
+.cardLarge:focus-visible::after,
+.card:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-border-active);
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+  z-index: 100;
+}
+
 
 .cardContent::before {
   content: '';
@@ -232,7 +246,20 @@
 /* ── Card CTA ── */
 .cardCta {
   align-self: flex-start;
-  transition: transform var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .cardLarge:hover .cardCta,
+  .card:hover .cardCta {
+    color: var(--color-text-accent);
+  }
+
+  /* Last span = arrow icon — mirrors Button's forceHover arrow translation */
+  .cardLarge:hover .cardCta > span:last-child,
+  .card:hover .cardCta > span:last-child {
+    transform: translateX(3px);
+  }
 }
 
 

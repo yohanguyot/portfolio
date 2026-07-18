@@ -8,21 +8,43 @@
 }
 
 /* ── Gradient ── */
-/* Default : top=-28% (=22% - 64.1%×78%), lateral=-31.25%, bottom=-50% */
-/* Hover   : top=-50%, le reste inchangé */
+/* SVG loaded via <img> — rasterized once as a bitmap on load, never re-rasterized on hover.
+   Preserves the exact feGaussianBlur(80) + preserveAspectRatio="none" anisotropic visual. */
 .bgGradient {
   position: absolute;
   top: -28%;
   left: -31.25%;
   right: -31.25%;
   bottom: -50%;
-  opacity: 0.6;
-  transition: top var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
+  opacity: 0.5;
+  will-change: transform, opacity;
+  transition: transform var(--duration-slow) var(--ease), opacity var(--duration-slow) var(--ease);
+}
+
+/* Fixed base layer — never translates, ensures bottom coverage on hover */
+.bgImgBase {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Active layer — translates up on hover */
+.bgImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform var(--duration-slow) var(--ease);
 }
 
 
 /* ── Screen mockup ── */
-/* default: inset(32%, 6.25%, -19.5%, 6.25%) → hover: inset(30.25%, 4.38%, -21.5%, 4.38%) */
+/* Scale(1.043) ≡ position hover: element is 87.5% of wrap on each axis,
+   transform-origin 50% 50% lands at (50%, 75.75%) of wrap — same as hover inset.
+   Compositor-only: no layout recalculation when hovering between cards on Safari. */
 .screen {
   position: absolute;
   top: 32%;
@@ -32,12 +54,7 @@
   border-radius: 12px;
   overflow: hidden;
   z-index: 1;
-  transition:
-    top var(--duration-slow) var(--ease),
-    left var(--duration-slow) var(--ease),
-    right var(--duration-slow) var(--ease),
-    bottom var(--duration-slow) var(--ease),
-    transform var(--duration-fast) var(--ease);
+  transition: transform var(--duration-slow) var(--ease);
 }
 
 .screenImg {
@@ -69,17 +86,8 @@
   display: block;
 }
 
-/* ── Active (press) — triggered by any ancestor <a> being :active ── */
-:global(a:active) .screen {
-  transform: scale(0.98);
-}
-
 .screenFixed {
   transform: none !important;
-}
-
-:global(a:active) .logo {
-  transform: scale(0.98);
 }
 
 .logoFixed {
@@ -87,18 +95,38 @@
 }
 
 /* ── Hover ── */
+/* :global(a):hover — targets any <a> ancestor being hovered (the card link).
+   Avoids a React hovered prop that would force re-renders on every mouseenter. */
 @media (hover: hover) {
-  /* Le gradient remonte et s'intensifie */
-  .hovered .bgGradient {
-    top: -50%;
-    opacity: 0.7;
+  :global(a):hover .bgGradient {
+    opacity: 0.6;
   }
 
-  /* La maquette grossit légèrement */
-  .hovered .screen {
-    top: 30.25%;
-    left: 4.38%;
-    right: 4.38%;
-    bottom: -21.5%;
+  :global(a):hover .bgImg {
+    transform: translateY(-6%);
   }
+
+  :global(a):hover .screen {
+    transform: scale(1.043);
+  }
+}
+
+/* ── Active (press) — après hover pour gagner en ordre source à spécificité égale ── */
+/* .screenActive opt-in : seules les petites cards (pas Bloom) l'activent */
+/* hover: hover → screen déjà à 1.043, on réduit légèrement */
+/* hover: none  → screen à 1 au repos, scale(0.98) pour le retour tactile */
+@media (hover: hover) {
+  :global(a:active) .screenActive {
+    transform: scale(1.01);
+  }
+}
+
+@media (hover: none) {
+  :global(a:active) .screenActive {
+    transform: scale(0.98);
+  }
+}
+
+:global(a:active) .logo {
+  transform: scale(0.96);
 }
