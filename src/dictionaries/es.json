@@ -10,7 +10,8 @@
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
     "menuLabel": "Menú",
-    "langLabel": "Idioma"
+    "langLabel": "Idioma",
+    "cta": "Contactar"
   },
   "hero": {
     "eyebrow": "Yohan Guyot · Product Designer",
@@ -21,8 +22,8 @@
     "subtitleMid": ", entrego para ",
     "subtitleHighlight2": "desarrolladores",
     "subtitlePost": ".",
-    "ctaPrimary": "Ver proyectos",
-    "ctaSecondary": "Contactar",
+    "ctaPrimary": "Contactar",
+    "ctaSecondary": "Ver proyectos",
     "scroll": "Scroll"
   },
   "projects": {
@@ -70,47 +71,46 @@
     "headingPost": ".",
     "skills": [
       {
-        "title": "Design Systems",
-        "description": "Un sistema estructurado y documentado para escalar, iterar y mantener coherencia total en cada nueva funcionalidad."
-      },
-      {
         "title": "Product & UX",
         "description": "Interfaces diseñadas de principio a fin, que anticipan los casos complejos y los errores que marcan la diferencia en producción."
       },
       {
+        "title": "Design Systems",
+        "description": "Un sistema estructurado, escalable y documentado que permite escalar y mantener coherencia total en cada nueva funcionalidad."
+      },
+      {
         "title": "Design to Code",
-        "description": "Maquetas pensadas con las restricciones técnicas en mente para que cada decisión de Figma llegue intacta a producción."
+        "description": "Una transición fluida hacia el desarrollo, garantizando que las decisiones de diseño se mantengan hasta la producción."
       }
     ],
     "body": [
       "Diseño interfaces web y de producto para entornos de alta exigencia, como fintech, gestión patrimonial o seguridad.",
-      "Mi doble cultura design & front-end cambia concretamente la dinámica del proyecto: las restricciones técnicas se integran desde las primeras maquetas para entregar archivos Figma directamente utilizables, sin pérdida en producción.",
-      "Según las necesidades, trabajo en el diseño global de productos y design systems, o en la creación y publicación completa de sitios web y landing pages."
+      "Mi doble cultura design y front-end me permite integrar las restricciones técnicas desde la fase de diseño para entregar archivos directamente utilizables, garantizando un traspaso sin pérdidas a producción."
     ]
   },
   "process": {
     "label": "Proceso",
     "heading": "Cómo trabajo.",
-    "description": "Cada proyecto empieza con las mismas preguntas: ¿qué es lo que realmente debe sostenerse, y qué puede esperar?",
+    "description": "Cuatro pasos clave para alinear la visión de producto, el diseño y el desarrollo.",
     "steps": [
       {
-        "title": "Descubrimiento",
-        "description": "Antes de abrir Figma, entiendo el contexto y los usuarios. Lo que se aclara aquí no habrá que corregirlo después.",
+        "title": "Encuadre",
+        "description": "Sentar las bases estratégicas del producto para alinear los objetivos de negocio y las expectativas de los usuarios desde el inicio.",
         "label": "//Paso 01"
       },
       {
         "title": "Arquitectura",
-        "description": "Defino tokens, componentes y nomenclatura para que diseño y desarrollo hablen el mismo idioma.",
+        "description": "Estructurar la lógica del producto antes de las primeras pantallas para alinear directamente los componentes de diseño y el código.",
         "label": "//Paso 02"
       },
       {
-        "title": "Iteración",
-        "description": "Trabajo en ciclos cortos con el equipo, explorando y refinando hasta que cada elección esté justificada y validada.",
+        "title": "Alineación",
+        "description": "Diseñar e iterar en ciclos rápidos confrontando cada decisión con las prioridades del producto y las realidades del código.",
         "label": "//Paso 03"
       },
       {
-        "title": "Entrega",
-        "description": "Entrego archivos listos para implementar: propiedades nombradas, variantes y estados cubiertos.",
+        "title": "Transferencia",
+        "description": "Entregar especificaciones y maquetas directamente utilizables para producción, sin lugar a la interpretación.",
         "label": "//Paso 04"
       }
     ]

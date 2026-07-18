@@ -10,7 +10,8 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "menuLabel": "Menu",
-    "langLabel": "Language"
+    "langLabel": "Language",
+    "cta": "Get in touch"
   },
   "hero": {
     "eyebrow": "Yohan Guyot · Product Designer",
@@ -21,8 +22,8 @@
     "subtitleMid": ", I deliver for ",
     "subtitleHighlight2": "developers",
     "subtitlePost": ".",
-    "ctaPrimary": "View projects",
-    "ctaSecondary": "Get in touch",
+    "ctaPrimary": "Get in touch",
+    "ctaSecondary": "View projects",
     "scroll": "Scroll"
   },
   "projects": {
@@ -70,47 +71,46 @@
     "headingPost": ".",
     "skills": [
       {
-        "title": "Design Systems",
-        "description": "A structured, documented system that allows scaling, iterating, and maintaining total consistency with every new feature."
-      },
-      {
         "title": "Product & UX",
         "description": "End-to-end interfaces that anticipate complex cases and the errors that make all the difference in production."
       },
       {
+        "title": "Design Systems",
+        "description": "A structured, scalable and documented system that allows scaling and maintaining total consistency with every new feature."
+      },
+      {
         "title": "Design to Code",
-        "description": "Mockups built with technical constraints in mind, so that decisions made in Figma hold all the way to production."
+        "description": "A smooth transition to development, ensuring that design decisions hold all the way to production."
       }
     ],
     "body": [
       "I design web and product interfaces for high-stakes environments such as fintech, wealth management, and security.",
-      "My dual design & front-end culture concretely changes the project dynamic: technical constraints are integrated from the first mockups to deliver Figma files that are directly ready to implement, with no loss in production.",
-      "Depending on the project, I work on the overall design of products and design systems, or on the complete creation and launch of marketing sites and landing pages."
+      "My dual design and front-end culture allows me to integrate technical constraints from the design phase, delivering files that are directly ready to implement, ensuring a seamless handoff to production."
     ]
   },
   "process": {
     "label": "Process",
     "heading": "How I work.",
-    "description": "Every project starts with the same questions: what truly needs to work, and what can wait?",
+    "description": "Four key steps to align product vision, design and development.",
     "steps": [
       {
-        "title": "Discovery",
-        "description": "Before opening Figma, I understand context and users. What's clarified here won't need correcting later.",
+        "title": "Framing",
+        "description": "Laying the strategic foundations of the product to align business objectives and user expectations from the start.",
         "label": "//Step 01"
       },
       {
         "title": "Architecture",
-        "description": "I define tokens, components and naming before the first screens, so design and dev speak the same language.",
+        "description": "Structuring product logic upstream of the screens to directly align design components and code.",
         "label": "//Step 02"
       },
       {
-        "title": "Iteration",
-        "description": "I work in short cycles with the team, exploring and refining until every choice is justified and validated.",
+        "title": "Alignment",
+        "description": "Designing and iterating in fast cycles, testing every decision against product priorities and code realities.",
         "label": "//Step 03"
       },
       {
-        "title": "Delivery",
-        "description": "I deliver implementation-ready files: named properties, documented variants, and all states covered.",
+        "title": "Handoff",
+        "description": "Delivering specifications and mockups ready for production, with no room for interpretation.",
         "label": "//Step 04"
       }
     ]

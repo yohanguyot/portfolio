@@ -33,15 +33,6 @@
   box-shadow: var(--color-btn-primary-shadow);
 }
 
-.primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: transparent;
-  opacity: 0;
-  pointer-events: none;
-}
-
 @media (hover: hover) {
   .primary:hover {
     filter: brightness(1.15);
@@ -59,18 +50,31 @@
   box-shadow: var(--color-btn-secondary-shadow);
 }
 
-.secondary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: transparent;
-  opacity: 0;
-  pointer-events: none;
-}
-
 @media (hover: hover) {
   .secondary:hover {
     filter: brightness(1.22);
+  }
+}
+
+/* ── Subtle ── */
+.subtle {
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  color: var(--color-btn-secondary-text);
+  background: var(--color-bg-surface-3);
+  border: 1px solid var(--color-border-strong);
+  box-shadow:
+    0px 0px 0px 1px color-mix(in srgb, var(--color-bg-canvas) 10%, transparent),
+    0px 3px 4px -1px color-mix(in srgb, var(--color-bg-canvas) 10%, transparent),
+    inset 0px 1px 0px 0px rgba(255, 255, 255, 0.10);
+  transition: background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .subtle:hover {
+    background: var(--color-bg-surface-4);
   }
 }
 
@@ -136,14 +140,16 @@
   }
 }
 
-.forceHover .iconText:last-child,
-.forceHover .iconPrimary:last-child {
-  transform: translateX(3px);
-}
+@media (hover: hover) {
+  .forceHover .iconText:last-child,
+  .forceHover .iconPrimary:last-child {
+    transform: translateX(3px);
+  }
 
-.forceHover .iconText:first-child,
-.forceHover .iconPrimary:first-child {
-  transform: translateX(-3px);
+  .forceHover .iconText:first-child,
+  .forceHover .iconPrimary:first-child {
+    transform: translateX(-3px);
+  }
 }
 
 /* ── Loading dots ── */
@@ -175,11 +181,20 @@
 }
 
 /* ── Forced hover (playground) ── */
-.forceHover.primary::before,
-.forceHover.secondary::before {
-  opacity: 1;
-}
+@media (hover: hover) {
+  .forceHover.primary {
+    filter: brightness(1.15);
+  }
 
-.forceHover.text {
-  color: var(--color-text-accent);
+  .forceHover.secondary {
+    filter: brightness(1.22);
+  }
+
+  .forceHover.subtle {
+    background: var(--color-bg-surface-4);
+  }
+
+  .forceHover.text {
+    color: var(--color-text-accent);
+  }
 }

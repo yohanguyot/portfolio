@@ -733,6 +733,35 @@ Pair with `transition: transform var(--duration-fast) var(--ease)` so the releas
 }
 ```
 
+**`:active` source order — must follow `@media (hover: hover)`**: at equal specificity, last rule in source wins. If an element has both a hover transform and an active transform, place the `:active` rule **after** the hover media query, otherwise hover overrides active on pointer devices.
+
+```css
+/* ✓ — active wins at equal specificity */
+@media (hover: hover) {
+  .card:hover .screen { transform: scale(1.04); }
+}
+.card:active .screen { transform: scale(1.01); }
+
+/* ✗ — hover overwrites active on pointer devices */
+.card:active .screen { transform: scale(1.01); }
+@media (hover: hover) {
+  .card:hover .screen { transform: scale(1.04); }
+}
+```
+
+**`:active` scale — hover vs touch baseline**: on pointer devices, the element may already be at a hover scale when clicked. On touchscreens it starts from rest. Use both media queries when the values differ:
+
+```css
+/* Pointer: reduce from hover scale */
+@media (hover: hover) {
+  .card:active .screen { transform: scale(1.01); }
+}
+/* Touch: reduce from rest */
+@media (hover: none) {
+  .card:active .screen { transform: scale(0.98); }
+}
+```
+
 ### Hover states — touchscreen guard
 
 **Every `:hover` rule must be wrapped in `@media (hover: hover)`** — without it, hover styles fire on tap on touchscreens and stay stuck until the user taps elsewhere.
@@ -752,6 +781,63 @@ Pair with `transition: transform var(--duration-fast) var(--ease)` so the releas
 ```
 
 This applies to every element: links, buttons, cards, chips, inputs, icons. No exception.
+
+### Focus ring in clipped containers
+
+Browser `outline` is clipped by ancestor `clip-path` and `overflow: hidden`. When a focusable element lives inside such a container, use a `::after` pseudo-element instead:
+
+```css
+.card:focus-visible {
+  outline: none;
+}
+.card:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-border-active);
+  border-radius: var(--radius-lg); /* match the card's own radius */
+  pointer-events: none;
+  z-index: 100; /* above ProjectImage and any GPU-composited children */
+}
+```
+
+The `::after` fills the element (`inset: 0`), its border is inside the element's own bounds (never clipped), and `z-index: 100` ensures it renders above all content including GPU-promoted layers.
+
+A global `:focus-visible` outline in `globals.css` handles all other elements that are not in clipped containers:
+
+```css
+:focus-visible {
+  outline: 2px solid var(--color-border-active);
+  outline-offset: 3px;
+}
+```
+
+### SVG `feGaussianBlur` — Safari performance
+
+Safari re-rasterizes inline SVG elements with `feGaussianBlur` on CPU every time a sibling enters a new state (hover, active). This causes inter-card lag on hover.
+
+**Fix**: load SVG gradient files via `<img src=".svg">` instead of inline JSX. The browser rasterizes the SVG once as a bitmap on load and caches it — no re-rasterization on state changes.
+
+- Store SVG files in `public/images/projects/` (cards in `cards/`, banners in `banners/`)
+- Render with `<img src="/path/gradient.svg" width="100%" height="100%" alt="" aria-hidden />`
+- Filter IDs inside each file can be simplified to `id="blur"` since they're isolated per resource
+
+This applies to both `ProjectImage` (card gradient) and `HeroBanner` (project page banner).
+
+### Image preloading for interactive components
+
+When a component switches between multiple images (tabs, client selector, carousel), the first display of each image has network latency. Preload all images on mount:
+
+```ts
+useEffect(() => {
+  ITEMS.forEach(item => {
+    const img = new window.Image();
+    img.src = item.imageSrc;
+  });
+}, []);
+```
+
+The browser fetches and caches all images immediately on mount, so every subsequent switch is instant from cache.
 
 ### Internationalisation — ajouter une nouvelle langue
 
@@ -886,7 +972,16 @@ background: rgba(198, 83, 46, 0.40);
 
 ### User selection
 
-Interactive elements (`button`, `a`, `[role="button"]`) have `user-select: none` applied globally in `globals.css` — prevents accidental text selection on click or double-click. Do not add it again per-component.
+`button`, `a`, and `[role="button"]` have `user-select: none` applied globally in `globals.css` — prevents accidental text selection on click or double-click:
+
+```css
+button, a, [role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+```
+
+Do not add it again per-component for standard elements. **Exception**: custom interactive elements rendered as `<div>` or other non-interactive tags (e.g. a card button rendered as `<div>`) must declare `user-select: none` themselves since they are not covered by the global rule.
 
 ### Text selection
 

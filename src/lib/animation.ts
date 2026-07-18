@@ -40,14 +40,6 @@ export function revealEl(el: HTMLElement, delay = 0): () => void {
   };
 }
 
-export function prepareReveal(el: HTMLElement, delay = 0): () => void {
-  el.style.transition = 'none';
-  el.style.opacity = '0';
-  el.style.transform = HIDDEN_TRANSFORM;
-  void el.offsetHeight;
-  return () => afterLayout(() => revealEl(el, delay));
-}
-
 export function observe(
   el: HTMLElement | null,
   threshold: number,

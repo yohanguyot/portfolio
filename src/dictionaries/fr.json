@@ -10,7 +10,8 @@
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "menuLabel": "Menu",
-    "langLabel": "Langue"
+    "langLabel": "Langue",
+    "cta": "Me contacter"
   },
   "hero": {
     "eyebrow": "Yohan Guyot · Product Designer",
@@ -21,8 +22,8 @@
     "subtitleMid": ", je livre pour les ",
     "subtitleHighlight2": "développeurs",
     "subtitlePost": ".",
-    "ctaPrimary": "Voir les projets",
-    "ctaSecondary": "Prendre contact",
+    "ctaPrimary": "Me contacter",
+    "ctaSecondary": "Voir les projets",
     "scroll": "Scroll"
   },
   "projects": {
@@ -70,47 +71,46 @@
     "headingPost": ".",
     "skills": [
       {
-        "title": "Design Systems",
-        "description": "Un système structuré et documenté qui permet de scaler, itérer et maintenir une cohérence totale à chaque nouvelle feature."
-      },
-      {
         "title": "Product & UX",
         "description": "Des interfaces conçues de bout en bout, qui anticipent les cas complexes et les erreurs qui font la différence en production."
       },
       {
+        "title": "Design Systems",
+        "description": "Un système structuré, évolutif et documenté qui permet de scaler et maintenir une cohérence totale à chaque nouvelle feature."
+      },
+      {
         "title": "Design to Code",
-        "description": "Des maquettes pensées avec les contraintes techniques en tête, pour que les décisions prises dans Figma tiennent jusqu'en prod."
+        "description": "Une transition fluide vers le développement, garantissant que les décisions de conception tiennent jusqu’à la production."
       }
     ],
     "body": [
-      "Je conçois des interfaces web et produit pour des environnements à forts enjeux, à l'image de la fintech, de la gestion de patrimoine ou de la sécurité.",
-      "Ma double culture design & front-end change concrètement la dynamique de projet : les contraintes techniques sont intégrées dès les premières maquettes pour livrer des fichiers Figma directement exploitables, sans perte en prod.",
-      "Selon les besoins, j'interviens sur la conception globale de produits et de design systems, ou sur la création et la mise en ligne complète de sites vitrines et landing pages."
+      "Je conçois des interfaces web et produit pour des environnements à forts enjeux, comme la fintech, la gestion de patrimoine ou la sécurité.",
+      "Ma double culture design et front-end me permet d’intégrer les contraintes techniques dès la phase de conception pour livrer des fichiers directement exploitables, garantissant un passage en prod sans perte."
     ]
   },
   "process": {
     "label": "Process",
     "heading": "Comment je travaille.",
-    "description": "Chaque projet commence par les mêmes questions : qu'est-ce qui doit vraiment tenir, et qu'est-ce qui peut attendre ?",
+    "description": "Quatre étapes clés pour aligner la vision produit, le design et le développement.",
     "steps": [
       {
-        "title": "Découverte",
-        "description": "Avant d'ouvrir Figma, je comprends le contexte et les utilisateurs. Ce qui se clarifie ici ne sera pas à corriger plus tard.",
+        "title": "Cadrage",
+        "description": "Poser les bases stratégiques du produit pour aligner les objectifs business et les attentes des utilisateurs dès le départ.",
         "label": "//Étape 01"
       },
       {
         "title": "Architecture",
-        "description": "Je définis tokens, composants et nomenclature avant les premiers écrans, pour que design et dev parlent le même langage.",
+        "description": "Structurer la logique produit en amont des écrans pour aligner directement les composants design et le code.",
         "label": "//Étape 02"
       },
       {
-        "title": "Itération",
-        "description": "Je travaille par cycles courts avec l'équipe, en explorant et affinant jusqu'à ce que chaque décision soit justifiée et validée.",
+        "title": "Alignement",
+        "description": "Concevoir et itérer par cycles rapides en confrontant chaque décision aux priorités du produit et aux réalités du code.",
         "label": "//Étape 03"
       },
       {
-        "title": "Livraison",
-        "description": "Je livre des fichiers prêts à implémenter : propriétés nommées, variantes documentées et tous les états couverts.",
+        "title": "Transfert",
+        "description": "Livrer des spécifications et des maquettes directement exploitables pour la production, sans place à l'interprétation.",
         "label": "//Étape 04"
       }
     ]

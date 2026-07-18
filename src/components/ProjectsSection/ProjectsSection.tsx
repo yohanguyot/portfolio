@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useTransitionRouter } from "next-view-transitions";
+import { Link } from "next-view-transitions";
 import Button from "@/components/Button/Button";
 import ProjectImage from "@/components/ProjectImage/ProjectImage";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
@@ -39,16 +39,10 @@ function Tags({ tags }: { tags: string[] }) {
 export default function ProjectsSection() {
   const dict = useDict();
   const projects = dict.projects;
-  const router = useTransitionRouter();
-
-  function navigate(e: React.MouseEvent, href: string) {
-    e.preventDefault();
-    router.push(href);
-  }
 
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<SectionHeaderHandle>(null);
-  const bloomRef = useRef<HTMLAnchorElement>(null);
+  const bloomRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
@@ -68,18 +62,14 @@ export default function ProjectsSection() {
       Array.from(grid.querySelectorAll<HTMLElement>(':scope > a')).forEach(c => hideEl(c));
     }
 
-    function revealCard(el: HTMLElement, delay = 0) {
-      revealEl(el, delay);
-    }
-
     // Back-navigation: section already in viewport → fire cascade immediately
     if (section && section.getBoundingClientRect().top < window.innerHeight) {
       afterLayout(() => {
         headerRef.current?.trigger(0);
-        if (bloom) revealCard(bloom, 0);
+        if (bloom) revealEl(bloom, 0);
         if (grid) {
           const cards = Array.from(grid.querySelectorAll<HTMLElement>(':scope > a'));
-          cards.forEach((c, i) => revealCard(c, i * STAGGER));
+          cards.forEach((c, i) => revealEl(c, i * STAGGER));
           setTimeout(() => { grid.dataset.ready = 'true'; }, (cards.length - 1) * 120);
         }
       });
@@ -101,7 +91,7 @@ export default function ProjectsSection() {
     function watchBloom(): () => void {
       if (!bloom) return () => {};
       return observe(bloom, isMobile ? 0 : 0.2, () => {
-        afterLayout(() => revealCard(bloom, 0));
+        afterLayout(() => revealEl(bloom, 0));
       });
     }
 
@@ -112,7 +102,7 @@ export default function ProjectsSection() {
         const cardCleanups = cards.map((c, i) =>
           observe(c, 0.2, () => {
             afterLayout(() => {
-              revealCard(c, 0);
+              revealEl(c, 0);
               if (i === 0) grid!.dataset.ready = 'true';
             });
           })
@@ -121,7 +111,7 @@ export default function ProjectsSection() {
       }
       return observe(grid, 0.1, () => {
         afterLayout(() => {
-          cards.forEach((c, i) => revealCard(c, i * STAGGER));
+          cards.forEach((c, i) => revealEl(c, i * STAGGER));
           setTimeout(() => { grid!.dataset.ready = 'true'; }, (cards.length - 1) * 120);
         });
       });
@@ -150,43 +140,44 @@ export default function ProjectsSection() {
         <SectionHeader ref={headerRef} label={projects.label} heading={projects.heading} className={styles.sectionHeader} skipObserver />
 
         <div className={styles.projectItems}>
-          <a
-            ref={bloomRef}
-            href={`/${lang}/bloom`}
-            className={styles.cardLarge}
-            onClick={(e) => { navigate(e, `/${lang}/bloom`); trackEvent("project_click", { project: FEATURED.slug }); }}
-          >
-            <div className={styles.cardLargeImageWrap}>
-              <ProjectImage
-                project={FEATURED.slug}
-                eager
-              />
-            </div>
-            <div className={styles.cardLargeContent}>
-              <div className={styles.cardLargeBody}>
-                <Tags tags={FEATURED.tags} />
-                <div className={styles.cardText}>
-                  <h3 className={styles.cardTitleLg}>{FEATURED.title}</h3>
-                  <p className={styles.cardDesc}>{FEATURED.description}</p>
-                </div>
+          <div ref={bloomRef}>
+            <Link
+              href={`/${lang}/bloom`}
+              className={styles.cardLarge}
+              onClick={() => trackEvent("project_click", { project: FEATURED.slug })}
+            >
+              <div className={styles.cardLargeImageWrap}>
+                <ProjectImage
+                  project={FEATURED.slug}
+                  eager
+                />
               </div>
-              <Button
-                label={projects.cta}
-                type="text"
-                showArrowRight
-                as="span"
-                className={styles.cardCta}
-              />
-            </div>
-          </a>
+              <div className={styles.cardLargeContent}>
+                <div className={styles.cardLargeBody}>
+                  <Tags tags={FEATURED.tags} />
+                  <div className={styles.cardText}>
+                    <h3 className={styles.cardTitleLg}>{FEATURED.title}</h3>
+                    <p className={styles.cardDesc}>{FEATURED.description}</p>
+                  </div>
+                </div>
+                <Button
+                  label={projects.cta}
+                  type="text"
+                  showArrowRight
+                  as="span"
+                  className={styles.cardCta}
+                />
+              </div>
+            </Link>
+          </div>
 
           <div ref={gridRef} className={styles.cardsGrid}>
             {PROJECTS.map((proj) => (
-              <a
+              <Link
                 key={proj.slug}
                 href={`/${lang}/${proj.slug}`}
                 className={styles.card}
-                onClick={(e) => { navigate(e, `/${lang}/${proj.slug}`); trackEvent("project_click", { project: proj.slug }); }}
+                onClick={() => trackEvent("project_click", { project: proj.slug })}
               >
                 <div className={styles.cardInner}>
                   <div className={styles.cardImageWrap}>
@@ -213,7 +204,7 @@ export default function ProjectsSection() {
                     />
                   </div>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

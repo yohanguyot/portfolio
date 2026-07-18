@@ -17,11 +17,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-xl);
+  padding: var(--space-xs) var(--space-xs) var(--space-xs) var(--space-xl);
   background: var(--color-bg-overlay);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-full);
-  backdrop-filter: blur(12px);
+  backdrop-filter: var(--overlay-blur);
 }
 
 .container {
@@ -29,6 +29,7 @@
   align-items: center;
   gap: var(--space-2xl);
   max-width: 1200px;
+
 }
 
 .logoContainer {
@@ -43,6 +44,8 @@
   color: var(--color-text-primary);
   white-space: nowrap;
   text-decoration: none;
+  padding-block: var(--space-xs);
+  margin-block: calc(-1 * var(--space-xs));
   transition: transform var(--duration-fast) var(--ease);
 }
 
@@ -56,11 +59,6 @@
   gap: var(--space-md);
 }
 
-.right {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2xl);
-}
 
 /* ── Burger icon morph ── */
 .burgerLine {
@@ -111,7 +109,7 @@
 .navLink {
   display: flex;
   align-items: center;
-  padding-block: var(--space-xs);
+  height: 44px;
   cursor: pointer;
   background: none;
   border: none;
@@ -152,17 +150,12 @@
 .langDropdown {
   display: flex;
   align-items: center;
-  padding: var(--space-xs) var(--space-sm);
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-full);
+  height: 44px;
+  background: none;
+  border: none;
   cursor: pointer;
-  gap: var(--space-2xs);
-  transition:
-    background var(--duration-fast) var(--ease),
-    border-color var(--duration-fast) var(--ease),
-    color var(--duration-fast) var(--ease),
-    transform var(--duration-fast) var(--ease);
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
 }
 
 .langDropdown:active {
@@ -174,10 +167,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-inline: var(--space-2xs);
-  color: var(--color-text-secondary);
+  padding-inline: var(--space-sm);
   white-space: nowrap;
-  transition: color var(--duration-fast) var(--ease);
 }
 
 .langIcon {
@@ -186,33 +177,19 @@
   justify-content: center;
   width: 16px;
   height: 16px;
-  color: var(--color-text-secondary);
-  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+  transition: transform var(--duration-fast) var(--ease);
 }
 
 .langIconOpen {
   transform: rotate(180deg);
 }
 
-.langDropdownHover,
 .langDropdownActive {
-  background: var(--color-bg-surface-2);
-}
-
-.langDropdownHover .langLabel,
-.langDropdownActive .langLabel,
-.langDropdownHover .langIcon,
-.langDropdownActive .langIcon {
   color: var(--color-text-primary);
 }
 
 @media (hover: hover) {
   .langDropdown:hover {
-    background: var(--color-bg-surface-2);
-  }
-
-  .langDropdown:hover .langLabel,
-  .langDropdown:hover .langIcon {
     color: var(--color-text-primary);
   }
 }
@@ -277,41 +254,27 @@
 
 /* ── Language inline (mobile) — segmented pill ── */
 .langInline {
-  --lang-btn-w: 56px;
-  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--space-2xs);
+  gap: var(--space-xs);
   padding: var(--space-2xs);
-  background: var(--color-bg-surface-2);
+  background: var(--color-bg-surface);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-full);
 }
 
-/* sliding indicator — JS reads offsetLeft diff to compute stride, no hardcoded value */
-.langInlineIndicator {
-  position: absolute;
-  inset: var(--space-2xs);
-  width: var(--lang-btn-w);
-  left: var(--space-2xs);
-  border-radius: var(--radius-full);
-  background: var(--color-bg-surface-3);
-  pointer-events: none;
-  transition: transform var(--duration-fast) var(--ease);
-}
 
 .langInlineOption {
   composes: labelMd from '@/styles/typography.module.css';
-  position: relative;
-  z-index: 1;
-  width: var(--lang-btn-w);
-  height: 44px;
+  flex: 1;
+  height: 34px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
-  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease), background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
 }
 
 @media (hover: hover) {
@@ -321,7 +284,11 @@
 .langInlineOption:active {
   transform: scale(0.95);
 }
-.langInlineOptionActive { color: var(--color-text-primary); }
+
+.langInlineOptionActive {
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface-2);
+}
 
 /* ── Mobile dropdown ── */
 .mobileBackdrop {
@@ -336,7 +303,7 @@
   z-index: 200;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-xl);
   padding: var(--space-lg);
   background: var(--color-bg-overlay);
   border: 1px solid var(--color-border-subtle);
@@ -350,26 +317,46 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.mobileDivider {
+.mobileLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
   width: 100%;
-  height: 1px;
-  background: var(--color-border-strong);
+
+}
+
+.navCta {
+  height: 44px;
 }
 
 .mobileFooter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: var(--space-xs);
+  display: grid;
+  width: fit-content;
+  align-self: center;
+  gap: var(--space-xl);
+}
+
+@media (max-width: 499px) {
+  .mobileFooter {
+    width: 100%;
+  }
+}
+
+.mobileCta {
+  height: 48px;
+  padding: var(--space-md) var(--space-lg);
 }
 
 .mobileLink {
-  composes: headingXs from '@/styles/typography.module.css';
+  composes: labelMd from '@/styles/typography.module.css';
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   width: 100%;
-  padding-block: var(--space-sm);
+  height: 44px;
+  padding-inline: var(--space-sm);
   color: var(--color-text-secondary);
   text-decoration: none;
   transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
@@ -405,7 +392,8 @@
   min-width: 1px;
 }
 
-.navMobile .right {
+.navMobile .links,
+.navMobile .navCta {
   display: none;
 }
 
@@ -429,7 +417,8 @@
     justify-content: space-between;
     min-width: 1px;
   }
-  .nav .right { display: none; }
+  .nav .links,
+  .nav .navCta { display: none; }
   .nav .hamburger { display: flex; }
 
   /* L'animation écrase opacity de navHidden — rendre les liens cliquables dès le SSR */

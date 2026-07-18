@@ -325,12 +325,12 @@ export default function HeroSection() {
           </div>
 
           <div className={styles.buttons}>
-            <Button label={h.ctaPrimary} type="primary" href="#projets" />
-            <Button label={h.ctaSecondary} type="secondary" href="#contact" />
+            <Button label={h.ctaPrimary} type="primary" href="#contact" />
+            <Button label={h.ctaSecondary} type="secondary" href="#projets" />
           </div>
         </div>
 
-        <a href="#projets" className={styles.scrollIndicator} aria-label={h.ctaPrimary} onClick={(e) => { e.preventDefault(); const el = document.getElementById("projets"); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_SCROLL_OFFSET, behavior: "smooth" }); }}>
+        <a href="#projets" className={styles.scrollIndicator} aria-label={h.ctaSecondary} onClick={(e) => { e.preventDefault(); const el = document.getElementById("projets"); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_SCROLL_OFFSET, behavior: "smooth" }); }}>
           <span className={styles.scrollLabel}>{h.scroll}</span>
           <div className={styles.scrollLine} />
         </a>

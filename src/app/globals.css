@@ -85,7 +85,8 @@
   --color-bg-surface:   rgba(244, 244, 245, 0.02); /* neutral/100 @2% */
   --color-bg-surface-2: rgba(244, 244, 245, 0.04); /* neutral/100 @4% */
   --color-bg-surface-3: rgba(244, 244, 245, 0.06); /* neutral/100 @6% */
-  --color-bg-overlay:   rgba(18, 18, 20, 0.80);    /* neutral/900 @80% */
+  --color-bg-surface-4: rgba(244, 244, 245, 0.08); /* neutral/100 @8% */
+  --color-bg-overlay:   rgba(18, 18, 20, 0.90);    /* neutral/900 @90% */
   --color-bg-active:    rgba(198, 83, 46, 0.10);   /* brand/600  @10% */
 
   /* Text */
@@ -221,6 +222,7 @@ p {
 :focus-visible {
   outline: 2px solid var(--color-border-active);
   outline-offset: 3px;
+  border-radius: var(--radius-md);
 }
 
 ::selection {
@@ -229,6 +231,7 @@ p {
 }
 
 button, a, [role="button"] {
+  -webkit-user-select: none;
   user-select: none;
 }
 

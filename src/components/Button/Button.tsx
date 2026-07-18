@@ -5,7 +5,7 @@ import { Link } from "next-view-transitions";
 import { NAV_SCROLL_OFFSET } from "@/lib/animation";
 import styles from "./Button.module.css";
 
-type ButtonType = "primary" | "secondary" | "text";
+type ButtonType = "primary" | "secondary" | "text" | "subtle";
 
 type ButtonProps = {
   label: string;
