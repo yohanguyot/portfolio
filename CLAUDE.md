@@ -828,6 +828,16 @@ Safari re-rasterizes inline SVG elements with `feGaussianBlur` on CPU every time
 
 This applies to both `ProjectImage` (card gradient) and `HeroBanner` (project page banner).
 
+### Canvas DPR cap — blur performance
+
+For canvas elements with CSS `filter: blur()`, cap `devicePixelRatio` at 1.5. At DPR=2 (Retina Mac), the canvas is 4× larger but the blur absorbs all the extra resolution — the visual result is identical while the render cost is 4× higher.
+
+```ts
+const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+```
+
+Apply this wherever multiple canvases stack with blur filters (e.g. `HeroSection`). Going beyond 1.5 on blur-heavy canvases makes mouse tracking and animations sluggish on high-DPR screens.
+
 ### Image preloading for interactive components
 
 When a component switches between multiple images (tabs, client selector, carousel), the first display of each image has network latency. Preload all images on mount:
@@ -1134,3 +1144,41 @@ Le composant `Button` accepte un prop `forceHover` pour synchroniser visuellemen
 ```
 
 Utiliser ce pattern chaque fois qu'un bouton est imbriqué dans une card ou un lien cliquable — sans ça, le bouton ne réagit pas au hover de son parent.
+
+---
+
+## Tests
+
+### Stack
+
+- **Vitest** + **jsdom** — unit tests for browser animation utilities
+- Config: `vitest.config.ts` at the repo root
+- Setup file: `src/lib/__tests__/setup.ts` — stubs for `matchMedia`, `requestAnimationFrame`, and `IntersectionObserver`
+
+```bash
+npm run test        # single run
+npm run test:watch  # watch mode
+```
+
+### Writing tests for animation utilities
+
+All exports from `src/lib/animation.ts` are covered in `src/lib/__tests__/animation.test.ts`.
+
+**Key patterns:**
+
+**Fake timers** — use `vi.useFakeTimers()` / `vi.useRealTimers()` in `beforeEach`/`afterEach` for tests involving `setTimeout` (e.g. `revealEl` cleanup timer). Do **not** use fake timers in `observeFeatureCard` tests — they conflict with the Promise-based rAF stub.
+
+**Flushing rAF** — the `requestAnimationFrame` stub resolves via `Promise.resolve()`. To flush two frames (as `afterLayout` requires):
+```ts
+await new Promise<void>(resolve =>
+  requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+);
+```
+
+**Triggering IntersectionObserver** — the stub attaches itself to observed elements as `el.__io__`. Call `el.__io__.trigger(true)` to simulate intersection:
+```ts
+const io = (el as HTMLElement & { __io__: { trigger: (v: boolean) => void } }).__io__;
+io.trigger(true);
+```
+
+**Disconnect tracking** — `MockIntersectionObserver` tracks `disconnected` state. `trigger()` is a no-op after `disconnect()`, which is how fire-once behavior is tested.
