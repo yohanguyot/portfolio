@@ -31,7 +31,7 @@ function HeroArcCanvas() {
 
     function resize() {
       if (!wrapper || !deepCanvas || !bodyCanvas || !innerCanvas || !mainCanvas) return;
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       w = wrapper.offsetWidth;
       h = wrapper.offsetHeight;
       for (const canvas of [deepCanvas, bodyCanvas, innerCanvas, mainCanvas]) {
