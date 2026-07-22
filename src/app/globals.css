@@ -8,13 +8,6 @@
   font-display: swap;
   font-style: normal;
 }
-@font-face {
-  font-family: 'Cabinet Grotesk';
-  src: url('/fonts/cabinet-grotesk-800-v1.woff2') format('woff2');
-  font-weight: 800;
-  font-display: swap;
-  font-style: normal;
-}
 
 /* ─────────────────────────────────────────────
    LAYER 1 — Primitives

@@ -10,6 +10,7 @@ Personal portfolio built with Next.js 16 (App Router), CSS Modules, and a fully 
 |---|---|
 | Framework | Next.js 16, React 19, TypeScript 5 |
 | Styling | CSS Modules + CSS custom properties |
+| Fonts | Cabinet Grotesk (self-hosted), Geist + JetBrains Mono (Google Fonts) |
 | Icons | Lucide React |
 | Email | Resend |
 | Analytics | Vercel Analytics + Speed Insights |

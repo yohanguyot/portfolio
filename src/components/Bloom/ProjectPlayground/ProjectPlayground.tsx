@@ -4,11 +4,20 @@ import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useIsomorphicLayoutEffect } from "@/lib/hooks";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { Inter, Poppins, Josefin_Sans, Archivo } from "next/font/google";
 import SectionHeader, { type SectionHeaderHandle } from "@/components/SectionHeader/SectionHeader";
 import ProjectNav from "@/components/Project/Nav/Nav";
 import type { Dictionary } from "@/lib/getDictionary";
 import { shouldReduceMotion, observe, revealEl, STAGGER, afterLayout, isMobileViewport, hideEl } from "@/lib/animation";
 import styles from "./ProjectPlayground.module.css";
+
+// Brand-showcase fonts: scoped to this component only (used exclusively by the CLIENTS card demos below),
+// not loaded site-wide via the root layout.
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const poppins = Poppins({ variable: "--font-poppins", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+const josefinSans = Josefin_Sans({ variable: "--font-josefin-sans", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+const archivo = Archivo({ variable: "--font-archivo", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+const playgroundFontVars = `${inter.variable} ${poppins.variable} ${josefinSans.variable} ${archivo.variable}`;
 
 type ClientId = "bloom" | "erable" | "the-elements-nation" | "lqr-house" | "repetto" | "versity";
 
@@ -407,7 +416,7 @@ export default function ProjectPlayground({ dict }: Props) {
 
   return (
     <>
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef} className={`${styles.section} ${playgroundFontVars}`}>
       <div className={styles.container}>
         <div className={styles.playground}>
           <div className={styles.header}>

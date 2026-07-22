@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Inter, Poppins, Josefin_Sans, Archivo } from "next/font/google";
-import { JetBrains_Mono } from "next/font/google";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import NoDrag from "@/components/NoDrag/NoDrag";
 import { BASE_URL } from "@/lib/config";
@@ -18,29 +17,6 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   weight: ["500"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const josefinSans = Josefin_Sans({
-  variable: "--font-josefin-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const archivo = Archivo({
-  variable: "--font-archivo",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -61,10 +37,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${geistSans.variable} ${jetbrainsMono.variable} ${inter.variable} ${poppins.variable} ${josefinSans.variable} ${archivo.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="fr" className={`${geistSans.variable} ${jetbrainsMono.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <link rel="preload" href="/fonts/cabinet-grotesk-700-v1.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/cabinet-grotesk-800-v1.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body>
         <ViewTransitions>

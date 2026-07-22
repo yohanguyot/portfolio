@@ -15,8 +15,8 @@
   },
   "hero": {
     "eyebrow": "Yohan Guyot · Product Designer",
-    "titleLine1": "Design to prod.",
-    "titleLine2": "Sin fricciones.",
+    "titleLine1": "Design to prod",
+    "titleLine2": "Sin fricción",
     "subtitlePre1": "Diseño para ",
     "subtitleHighlight1": "usuarios",
     "subtitleMid": ", entrego para ",
@@ -28,7 +28,7 @@
   },
   "projects": {
     "label": "Proyectos seleccionados",
-    "heading": "Lo que construí.",
+    "heading": "Proyectos y entregas",
     "cta": "Ver proyecto",
     "featured": {
       "description": "Motor white-label para marketplaces de activos digitales. Una arquitectura única y escalable que acelera el time-to-market, probada en producción por más de siete clientes en mercados radicalmente diferentes."
@@ -68,19 +68,19 @@
     "headingPre": "Diseñar con ",
     "headingBreak": true,
     "headingAccent": "cultura técnica",
-    "headingPost": ".",
+    "headingPost": "",
     "skills": [
       {
         "title": "Product & UX",
-        "description": "Interfaces diseñadas de punta a punta, que anticipan casos complejos y errores para garantizar la estabilidad en producción."
+        "description": "Interfaces diseñadas de punta a punta que anticipan casos complejos y errores, manteniendo la producción estable."
       },
       {
         "title": "Design Systems",
-        "description": "Un sistema estructurado, escalable y documentado para escalar y mantener una coherencia total con cada nueva funcionalidad."
+        "description": "Un sistema estructurado, adaptable y documentado que escala de forma uniforme en cada nueva funcionalidad."
       },
       {
         "title": "Design to Code",
-        "description": "Una transición fluida hacia el desarrollo, garantizando que las decisiones de diseño se mantengan firmes hasta la producción."
+        "description": "Una transición fluida hacia el desarrollo, garantizando que las decisiones de diseño sigan firmes hasta la producción."
       }
     ],
     "body": [
@@ -90,7 +90,7 @@
   },
   "process": {
     "label": "Proceso",
-    "heading": "Cómo trabajo.",
+    "heading": "Cómo trabajo",
     "description": "Cuatro etapas clave para alinear la visión de producto, el diseño y el desarrollo.",
     "steps": [
       {
@@ -105,19 +105,19 @@
       },
       {
         "title": "Alineación",
-        "description": "Diseñar e iterar en ciclos rápidos, confrontando cada decisión con las prioridades del producto y las realidades del código.",
+        "description": "Diseñar e iterar en ciclos cortos, midiendo cada decisión frente a las prioridades del producto y las realidades del código.",
         "label": "//Etapa 03"
       },
       {
         "title": "Transferencia",
-        "description": "Entregar especificaciones y maquetas directamente utilizables para la producción, sin dejar margen a la interpretación.",
+        "description": "Entregar especificaciones y maquetas directamente utilizables para producción, sin dejar margen a la interpretación.",
         "label": "//Etapa 04"
       }
     ]
   },
   "contact": {
     "label": "Contacto",
-    "heading": "Diseñemos tu proyecto.",
+    "heading": "Diseñemos tu proyecto",
     "description": "Cuéntame en pocas palabras, respondo rápido.",
     "needs": [
       "Product Design",
@@ -149,13 +149,13 @@
     "copyright": "Product Designer"
   },
   "projectNav": {
-    "back": "Volver",
+    "back": "Todos los proyectos",
     "prev": "Proyecto anterior",
     "next": "Proyecto siguiente"
   },
   "wenimmo": {
     "intro": {
-      "description": "Un SaaS B2B de distribución financiera diseñado para dos perfiles con necesidades divergentes. Su interfaz única adapta los flujos de los Asesores Financieros y el Middle Office mientras unifica el seguimiento de suscripciones.",
+      "description": "Un SaaS B2B de distribución financiera diseñado para dos perfiles operativos con necesidades distintas. Su interfaz única adapta los flujos de asesores patrimoniales y Middle Office, unificando el seguimiento de suscripciones.",
       "meta": [
         {
           "label": "Período",
@@ -174,7 +174,7 @@
         {
           "value": "300",
           "suffix": "+",
-          "label": "Despachos CGP incorporados"
+          "label": "Asesores integrados"
         },
         {
           "value": "1.000",
@@ -189,104 +189,104 @@
         {
           "value": "15",
           "label": "Por suscripción",
-          "unit": " min"
+          "unit": "min"
         }
       ]
     },
     "context": {
       "label": "Contexto",
-      "heading": "Un dato compartido entre dos perfiles.",
-      "p1": "Wenimmo es un SaaS B2B de distribución financiera. Los Asesores Financieros inician las suscripciones y gestionan la relación con el cliente, mientras que el Middle Office pilota el cumplimiento y la validación de los expedientes.",
-      "p2": "El reto: hacer convivir estos recorridos divergentes dentro de una única herramienta sin sobrecargar la experiencia."
+      "heading": "Un dato compartido entre dos perfiles",
+      "p1": "Wenimmo es un SaaS B2B de distribución financiera. Los asesores patrimoniales inician las suscripciones y gestionan la relación con el cliente, mientras que el Middle Office lidera el cumplimiento y la validación de expedientes.",
+      "p2": "El reto: hacer convivir estos flujos divergentes en una sola herramienta sin recargar la experiencia."
     },
     "problem": {
       "label": "Problema",
-      "heading": "Conciliar velocidad y rigor.",
-      "p1": "El Asesor Financiero trabaja en movilidad, entre visitas. Su prioridad es la inmediatez: gestionar sus expedientes e iniciar una suscripción en unos pocos clics. Al contrario, el Middle Office trata volúmenes y exige densidad: filtros avanzados, pipeline granular y seguimiento administrativo completo.",
-      "p2": "El desafío es diseñar un sistema único capaz de cambiar sus prioridades de UI según el perfil conectado, sin desarrollar dos productos distintos."
+      "heading": "Conciliar velocidad y rigor",
+      "p1": "El asesor opera en movilidad, entre reunión y reunión. Su prioridad es la inmediatez: gestionar expedientes e iniciar suscripciones en un par de clics. Por el contrario, el Middle Office maneja volumen y exige densidad: filtros avanzados, pipeline granular y seguimiento administrativo completo.",
+      "p2": "El reto radica en diseñar un sistema único capaz de adaptar sus prioridades de UI según el perfil conectado, sin crear dos productos independientes."
     },
     "solution": {
       "label": "Solución",
-      "heading": "Una plataforma para dos lógicas.",
-      "p1": "La plataforma se apoya en una base de datos única para garantizar una sincronización total. La interfaz se ajusta dinámicamente al perfil modificando su densidad visual, sus prioridades y sus acciones.",
-      "p2": "Por un lado, un recorrido lineal guía al Asesor Financiero hasta la firma. Por otro, un pipeline denso está optimizado para el tratamiento masivo del Middle Office."
+      "heading": "Una plataforma para dos lógicas",
+      "p1": "La plataforma se apoya en una base de datos única para garantizar una sincronización total. La interfaz se adapta dinámicamente al perfil ajustando su densidad visual, prioridades y acciones.",
+      "p2": "Por un lado, un flujo lineal guía al asesor hasta la firma. Por el otro, un pipeline denso está optimizado para el procesamiento masivo del Middle Office."
     },
     "decisions": {
       "label": "Decisiones",
-      "heading": "Diseñar para dos necesidades opuestas.",
+      "heading": "Diseñar para dos necesidades opuestas",
       "features": [
         {
-          "title": "Diseño a medida",
-          "description": "La aplicación carga un entorno dedicado según el tipo de cuenta, adaptado a los flujos de cada perfil sin sobrecarga visual."
+          "title": "Diseño a la medida",
+          "description": "La aplicación carga un entorno dedicado según la cuenta, adaptado al flujo de cada perfil sin recarga visual."
         },
         {
           "title": "Flujos sincronizados",
-          "description": "Cada acción se refleja instantáneamente de un tipo de cuenta al otro, ofreciendo una referencia común para ambos perfiles."
+          "description": "Cada acción se refleja al instante entre cuentas, ofreciendo un punto de referencia común para ambos perfiles."
         },
         {
-          "title": "Normativa invisible",
-          "description": "El KYC y la firma electrónica se integran en el tunnel y se ejecutan en segundo plano para mantener la fluidez del recorrido."
+          "title": "Regulación invisible",
+          "description": "El KYC y la firma electrónica se integraron en el flujo y se ejecutan en segundo plano para mantener la fluidez de la experiencia."
         }
       ]
     },
     "cgp": {
-      "label": "Perfil Asesor Financiero",
-      "heading": "Entre visitas,\nen movilidad.",
-      "description": "Diseñada para un uso en movilidad, la interfaz permite al Asesor Financiero verificar el estado de un expediente al instante, iniciar una suscripción o validar un documento. El sistema preserva el contexto entre sesiones: retomar un flujo interrumpido no requiere ningún esfuerzo de reconstrucción.",
+      "label": "Perfil Asesor",
+      "heading": "En reuniones,\nentre citas con clientes",
+      "description": "Diseñada para la movilidad, la interfaz permite al asesor consultar el estado de un expediente al instante, iniciar una suscripción o validar documentos. El sistema conserva el contexto entre sesiones para reanudar flujos interrumpidos sin esfuerzo.",
       "features": [
         {
           "title": "Separación de flujos",
-          "description": "El perfil del inversor (particular/sociedad) se define en un único punto de entrada, orienta el flujo y elimina errores de datos."
+          "description": "El tipo de inversionista (persona/empresa) definido al inicio orienta el flujo y elimina errores de captura."
         },
         {
-          "title": "Visibilidad del progreso",
-          "description": "El stepper hace que el progreso sea predecible en un túnel denso, reduce la carga cognitiva y facilita la reanudación del expediente."
+          "title": "Visibilidad del avance",
+          "description": "El indicador de pasos hace predecible el avance en un flujo denso, reduce la carga cognitiva y facilita retomar el expediente."
         },
         {
-          "title": "Estados orientados al negocio",
-          "description": "Los estados reemplazan la nomenclatura técnica por el lenguaje del sector, al servicio de los equipos en lugar del servidor."
+          "title": "Estatus de negocio",
+          "description": "Las etiquetas traducen la lógica técnica a lenguaje de negocio, al servicio de los equipos y no de la base de datos."
         },
         {
           "title": "Acciones irreversibles",
-          "description": "La convención RTO y el envío final comprometen al Asesor. La interfaz aísla estas acciones por su peso reglamentario."
+          "description": "El convenio RTO y el envío final comprometen al asesor. La interfaz aísla estas acciones para remarcar su alcance legal."
         }
       ]
     },
     "middleOffice": {
       "label": "Perfil Middle Office",
-      "heading": "Procesar en masa, sin perder el hilo.",
-      "description": "El Middle Office orquesta diariamente decenas de suscripciones complejas con estados en constante cambio. La interfaz se adapta en tiempo real para racionalizar los flujos masivos, automatizar las tareas repetitivas y eliminar los riesgos de error operativo.",
+      "heading": "Procesamiento masivo, sin perder el control",
+      "description": "El Middle Office orquesta a diario decenas de suscripciones complejas con estatus en constante cambio. La interfaz se adapta en tiempo real para optimizar flujos masivos, automatizar tareas repetitivas y eliminar riesgos de error operativo.",
       "features": [
         {
           "title": "Vista centralizada",
-          "description": "La vista lista centraliza todos los expedientes para gestionar el conjunto de flujos, sea cual sea el Asesor de origen."
+          "description": "La vista de lista consolida todos los expedientes para gestionar el total de los flujos, sin importar el asesor de origen."
         },
         {
           "title": "Acciones contextuales",
-          "description": "Relanzar, señalar o validar: las acciones se adaptan al estado del expediente para eliminar operaciones imposibles."
+          "description": "Ya sea para dar seguimiento, reportar o aprobar, las acciones se adaptan al estatus para evitar operaciones no permitidas."
         },
         {
-          "title": "Control del volumen",
-          "description": "Los filtros avanzados y la selección múltiple aceleran el tratamiento masivo sin sacrificar la trazabilidad individual."
+          "title": "Control de volumen",
+          "description": "Filtros avanzados y selección múltiple agilizan la gestión masiva sin perder la trazabilidad de cada expediente."
         },
         {
           "title": "Cierre confirmado",
-          "description": "Una vez validado por el operador, este estado final congela el visual y bloquea definitivamente el historial de la suscripción."
+          "description": "Una vez validado por el operador, este estatus final fija la interfaz y bloquea definitivamente el historial de la suscripción."
         }
       ]
     },
     "impact": {
       "label": "Impacto",
-      "heading": "Productividad multiplicada.",
-      "description": "La unificación del recorrido suprime la barrera entre front y back-office. Una sola interfaz orquesta ahora dos perfiles con objetivos opuestos, garantizando una fluidez operativa total.",
+      "heading": "Productividad multiplicada",
+      "description": "La unificación del flujo elimina la barrera entre el front y el back-office. Una sola interfaz orquesta dos perfiles con objetivos opuestos, garantizando una fluidez operativa total.",
       "features": [
         {
-          "title": "Para los Asesores Financieros",
-          "description": "Las interrupciones del recorrido ya no cortan el flujo de trabajo. El seguimiento visual permite retomar cualquier expediente en curso, eliminando definitivamente las fricciones de entrada de datos."
+          "title": "Para los asesores",
+          "description": "Las interrupciones ya no cortan el flujo de trabajo. El seguimiento visual permite retomar cualquier expediente activo, eliminando definitivamente las fricciones de captura."
         },
         {
           "title": "Para el Middle Office",
-          "description": "Seguridad y fluidez guían el tratamiento masivo. Las acciones contextuales y la trazabilidad integrada suprimen los errores de entrada y fluidifican drásticamente las validaciones."
+          "description": "Seguridad y fluidez guían el procesamiento masivo. Las acciones contextuales y la trazabilidad integrada eliminan errores de captura y agilizan drásticamente las validaciones."
         }
       ]
     }
@@ -311,77 +311,77 @@
     },
     "context": {
       "label": "Contexto",
-      "heading": "Una gestión notarial simple y segura.",
-      "p1": "La plataforma centraliza y automatiza la recopilación de estos documentos sensibles. Desde su espacio, el notario controla cada documento recibido antes de asegurar el expediente final mediante anclaje blockchain.",
-      "p2": "Por otro lado, el cliente final dispone de un recorrido guiado para enviar sus justificantes y seguir el avance de su expediente de forma autónoma."
+      "heading": "Gestión notarial simple y segura",
+      "p1": "La plataforma centraliza y automatiza la recolección de documentos sensibles. Desde su espacio, el notario revisa cada documento antes de asegurar el expediente final mediante anclaje en blockchain.",
+      "p2": "Por su parte, el cliente final cuenta con un flujo guiado para enviar sus justificantes y seguir el avance de su expediente con total autonomía."
     },
     "problem": {
       "label": "Problema",
-      "heading": "Claridad cliente, control notarial.",
-      "p1": "La recopilación de documentos notariales sufre tradicionalmente de seguimientos manuales, dispersión de archivos y falta de trazabilidad formal. Ante esta complejidad, diseñar un único portal habría exigido demasiados compromisos.",
-      "p2": "El notario exige alta densidad de datos y control total, mientras que el cliente requiere absoluta claridad. Fusionar estas expectativas asimétricas habría degradado inevitablemente la experiencia de uno u otro."
+      "heading": "Claridad cliente, control notarial",
+      "p1": "La recolección de documentos notariales sufre tradicionalmente de seguimientos manuales, dispersión de archivos y falta de trazabilidad formal. Ante esta complejidad, diseñar un portal único habría exigido demasiadas concesiones.",
+      "p2": "El notario exige una alta densidad de datos y un control total, mientras que el cliente requiere una claridad absoluta. Fusionar estas expectativas asimétricas habría degradado inevitablemente la experiencia de una u otra parte."
     },
     "solution": {
       "label": "Solución",
-      "heading": "Tres espacios para un expediente.",
-      "p1": "Tres espacios distintos se apoyan en una fuente de datos única para que el notario gestione, el cliente deposite y la administración supervise los accesos.",
-      "p2": "Esta separación garantiza una estanqueidad funcional estricta. Al eliminar cualquier compromiso global, cada entorno se calibra para las prioridades de su usuario sin degradar nunca la experiencia de los demás actores."
+      "heading": "Tres espacios para un solo expediente",
+      "p1": "Tres espacios distintos se apoyan en una fuente de datos única para permitir que el notario gestione, el cliente cargue y la administración supervise los accesos.",
+      "p2": "Esta separación garantiza un aislamiento funcional estricto. Al eliminar concesiones generales, cada entorno está calibrado para las prioridades de su usuario, sin degradar nunca la experiencia de los demás actores."
     },
     "decisions": {
       "label": "Decisiones",
-      "heading": "Simplificar con decisiones de diseño.",
+      "heading": "Simplificar mediante decisiones de diseño",
       "features": [
         {
           "title": "Espacios separados",
-          "description": "El notario dispone de una vista densa para su expertise, mientras que el cliente tiene un recorrido limpio y sin distracciones."
+          "description": "El notario cuenta con una vista densa adaptada a su experiencia, mientras que el cliente disfruta de un flujo limpio y sin distracciones."
         },
         {
           "title": "Estados progresivos",
-          "description": "Un pipeline visual sustituye los estados difusos por etapas claras, reduciendo drásticamente los recordatorios manuales."
+          "description": "Un pipeline visual reemplaza los estados ambiguos con etapas claras, reduciendo los seguimientos manuales al cliente."
         },
         {
           "title": "Blockchain integrada",
-          "description": "El anclaje blockchain se integra en el flujo del notario y se convierte en una acción transparente con respuesta visual instantánea."
+          "description": "El anclaje en blockchain se integra en el flujo del notario como una acción transparente con confirmación visual instantánea."
         }
       ]
     },
     "notaire": {
-      "label": "Espacio notario",
-      "heading": "Centralizar la gestión del expediente.",
-      "p1": "El espacio del notario centraliza todo el ciclo de vida del expediente, desde la solicitud de documentos hasta la certificación final. Es el entorno más denso de la plataforma, diseñado para validar cada documento y activar el anclaje blockchain con un clic.",
-      "p2": "La gestión se apoya en un sistema de estados dinámicos (vacío, en curso, completado, acción requerida, validado, anclado) que refleja el avance exacto del expediente en tiempo real."
+      "label": "Espacio del notario",
+      "heading": "Centralizar la gestión del expediente",
+      "p1": "El espacio del notario centraliza todo el ciclo de vida del expediente, desde la solicitud de documentos hasta la certificación final. Es el entorno más denso de la plataforma, diseñado para validar cada documento y activar el anclaje en blockchain en un solo clic.",
+      "p2": "La gestión se apoya en un sistema de estados dinámicos (vacío, en curso, completado, acción requerida, validado, anclado) que refleja el progreso exacto del expediente en tiempo real."
     },
     "client": {
-      "label": "Espacio cliente",
-      "heading": "Depurar la interfaz para guiar el depósito.",
-      "p1": "El entorno cliente elimina toda carga cognitiva para centrarse exclusivamente en la acción esperada: saber qué documento depositar y dónde, sin sufrir la complejidad del sistema de gestión.",
-      "p2": "Tras una autenticación segura mediante FranceConnect, un recorrido guiado toma el relevo. La interfaz separa claramente los documentos validados de los que aún espera el despacho, ofreciendo visibilidad inmediata sobre las tareas pendientes."
+      "label": "Espacio del cliente",
+      "heading": "Simplificar la interfaz para guiar la carga",
+      "p1": "El entorno del cliente elimina cualquier carga cognitiva para enfocarse exclusivamente en la acción requerida: saber qué documento cargar y dónde, sin la complejidad del sistema de gestión.",
+      "p2": "Tras una verificación de identidad segura, un flujo guiado toma el control. La interfaz separa claramente los documentos validados de los que aún requiere la notaría, ofreciendo visibilidad inmediata sobre las tareas pendientes."
     },
     "admin": {
-      "label": "Espacio admin",
-      "heading": "La gobernanza segura por votación.",
-      "p1": "El espacio de administración centraliza el control de los despachos notariales a través de tres niveles de permisos distintos, diseñados para segmentar finamente las responsabilidades.",
-      "p2": "Para proteger los datos sensibles, el rol de Super-Admin integra un sistema de votación obligatorio. Esta decisión de diseño garantiza que ninguna modificación crítica de los derechos del ecosistema pueda validarse unilateralmente por un solo usuario."
+      "label": "Espacio del administrador",
+      "heading": "Gobernanza por voto",
+      "p1": "El espacio de administración centraliza el control de las notarías mediante tres niveles de permisos distintos, diseñados para segmentar detalladamente las responsabilidades.",
+      "p2": "Para proteger los datos sensibles, el rol de Superadministrador integra un sistema de votación obligatorio. Esta decisión de diseño garantiza que ninguna modificación crítica de los permisos del ecosistema pueda ser aprobada unilateralmente por un solo usuario."
     },
     "impact": {
       "label": "Impacto",
-      "heading": "Cero formación, cero recordatorios.",
-      "description": "La interfaz elimina la complejidad de adopción para perfiles con usos asimétricos. Al compartimentar los espacios, cada actor dispone de un entorno calibrado para sus objetivos operativos, sin ruido visual innecesario.",
+      "heading": "Sin capacitación, sin recontactos",
+      "description": "La interfaz elimina la complejidad de adopción para perfiles con flujos asimétricos. Al segmentar los espacios, cada actor cuenta con un entorno calibrado para sus objetivos operativos, sin ruido visual innecesario.",
       "features": [
         {
-          "title": "Para los notarios",
-          "description": "Sin más recordatorios manuales perdidos entre correos. La interfaz centraliza el seguimiento de expedientes en tiempo real, ofrece visibilidad total y permite recordar o certificar con un clic."
+          "title": "Para notarías",
+          "description": "Sin recontactos manuales perdidos en correos. La interfaz centraliza el seguimiento de expedientes en tiempo real, ofrece visibilidad total y permite recontactar o certificar en un clic."
         },
         {
-          "title": "Para los clientes",
-          "description": "Autonomía completa desde el inicio. FranceConnect elimina la fricción de autenticación, el recorrido indica los documentos requeridos y notifica al cliente en cada etapa."
+          "title": "Para clientes",
+          "description": "Autonomía total desde el inicio. La verificación de identidad segura elimina la fricción de autenticación, mientras que el flujo guiado indica los documentos requeridos y notifica al cliente en cada etapa."
         }
       ]
     }
   },
   "keepro": {
     "intro": {
-      "description": "Un SaaS B2B de certificación blockchain diseñado para equipos no técnicos. Su arquitectura de doble lectura ofrece acceso directo a las pruebas criptográficas sin sobrecargar la interfaz principal.",
+      "description": "Un SaaS B2B de certificación blockchain diseñado para equipos no técnicos. Su arquitectura de doble lectura ofrece acceso directo a pruebas criptográficas sin recargar la interfaz principal.",
       "meta": [
         {
           "label": "Período",
@@ -399,84 +399,84 @@
     },
     "context": {
       "label": "Contexto",
-      "heading": "Hacer la prueba blockchain accesible.",
+      "heading": "Hacer la prueba blockchain accesible",
       "p1": "La plataforma genera la huella criptográfica de los archivos para probar su existencia e integridad de forma inmutable.",
-      "p2": "Todo el reto de diseño consistía en hacer este anclaje técnico transparente para los equipos de negocio (jurídico, RR.HH., compliance) que depositan y verifican a diario estos documentos sensibles."
+      "p2": "El mayor reto de diseño consistió en hacer este anclaje técnico transparente para los equipos de negocio (legal, RR. HH., cumplimiento) que cargan y verifican a diario estos documentos sensibles."
     },
     "problem": {
       "label": "Problema",
-      "heading": "La blockchain, fiable pero ilegible.",
-      "p1": "Los datos criptográficos brutos siguen siendo indescifrables para los equipos de negocio, aunque son indispensables para los perfiles técnicos.",
-      "p2": "El reto consistía en gestionar esta asimetría: ¿cómo confirmar la integridad de un archivo a un usuario no técnico sin ocultar ni desnaturalizar la prueba bruta que necesitan los desarrolladores?"
+      "heading": "La blockchain, fiable pero ilegible",
+      "p1": "Los datos criptográficos crudos siguen siendo indescifrables para los equipos de negocio, aunque resultan indispensables para los perfiles técnicos.",
+      "p2": "El reto consistía en gestionar esta asimetría: ¿cómo confirmar la integridad de un archivo a un usuario no técnico sin ocultar ni distorsionar la prueba cruda que exigen los desarrolladores?"
     },
     "solution": {
       "label": "Solución",
-      "heading": "Del lenguaje técnico al lenguaje de negocio.",
-      "p1": "La solución articula esta doble lectura en torno a cuatro flujos clave: el pilotaje mediante el dashboard, la trazabilidad mediante el historial, la acción mediante el depósito y la resolución de dudas mediante la verificación.",
-      "p2": "Este enfoque jerarquiza la información para mostrar lo esencial por defecto y hace que el dato técnico sea accesible bajo demanda. Los estados de la interfaz se nombran para responder a una pregunta concreta del usuario, no para describir un estado del sistema."
+      "heading": "Traducir la tecnología al lenguaje de negocio",
+      "p1": "La solución articula esta doble visión en torno a cuatro flujos clave: la gestión mediante el dashboard, la trazabilidad mediante el historial, la acción mediante el depósito y la resolución de dudas mediante la verificación.",
+      "p2": "Este enfoque jerarquiza la información para mostrar de entrada lo esencial y hace que los datos técnicos estén disponibles a demanda. Los estados de la interfaz están diseñados para responder a una pregunta concreta del usuario, no para describir un estado del sistema."
     },
     "decisions": {
       "label": "Decisiones",
-      "heading": "Guiar la mirada de negocio.",
-      "description": "Cada elección de visualización estuvo guiada por una jerarquía estricta de la información. La experiencia se apoya en tres arbitrajes fundamentales, diseñados para guiar la mirada del perfil de negocio sin sobrecargar nunca la interfaz.",
+      "heading": "Guiar la mirada de negocio",
+      "description": "Cada decisión de visualización fue dictada por una jerarquía estricta de la información. La experiencia se basa en tres decisiones clave, diseñadas para guiar la mirada del perfil de negocio sin recargar nunca la interfaz.",
       "features": [
         {
           "title": "Ocultar la complejidad",
-          "description": "Los datos criptográficos se retiran de la vista principal. La interfaz se centra en una sola pregunta: ¿se completó el depósito?"
+          "description": "Los datos criptográficos se eliminan de la vista principal. La interfaz se centra en una sola pregunta: ¿se realizó el depósito con éxito?"
         },
         {
-          "title": "Agrupar por lote y espacio",
-          "description": "Varios archivos depositados juntos forman una sola entrada en el historial. Los espacios los segmentan por contexto de negocio."
+          "title": "Agrupar por lote y por espacio",
+          "description": "Varios archivos depositados juntos forman una sola entrada en el historial. Luego, los espacios los segmentan por contexto de negocio."
         },
         {
           "title": "Dos niveles de lectura",
-          "description": "Los equipos operativos siguen el flujo principal. Los perfiles técnicos acceden a los datos brutos mediante un drawer, sin saturar la vista general."
+          "description": "Los equipos de negocio siguen el flujo principal. Los perfiles técnicos acceden a los datos brutos a través de un drawer, sin recargar la vista."
         }
       ]
     },
     "dashboard": {
       "label": "Dashboard",
-      "heading": "Simplificar la lectura de datos.",
-      "description": "El dashboard centraliza los indicadores de volumen y el estado de los flujos para aislar inmediatamente las anomalías de certificación. Pensado para el pilotaje operativo más que para la simple consulta, este espacio pone de relieve las acciones urgentes y los fallos de anclaje. La interfaz protege al usuario de la sobrecarga cognitiva, mientras mantiene el historial completo disponible en el segundo nivel de lectura."
+      "heading": "Simplificar la lectura de datos",
+      "description": "El dashboard centraliza los indicadores de volumen y el estado de los flujos para aislar de inmediato las anomalías de certificación. Pensado para la gestión operacional más que para la simple consulta, este espacio saca a la superficie las acciones urgentes y los fallos de anclaje. La interfaz protege al usuario de la sobrecarga cognitiva, manteniendo el historial completo disponible en un segundo nivel de lectura."
     },
     "deposits": {
       "label": "Depósitos",
-      "heading": "Clarificar el registro de depósitos",
-      "description": "Para absorber grandes volúmenes de documentos, el historial segmenta la actividad por contextos temáticos. La vista principal favorece una lectura rápida del estado de los archivos, mientras que un panel lateral concentra el seguimiento técnico y las pruebas de anclaje, accesibles bajo demanda."
+      "heading": "Clarificar el seguimiento de los depósitos",
+      "description": "Para absorber altos volúmenes de documentos, el historial segmenta la actividad por contextos temáticos. La vista principal prioriza una lectura rápida del estado de los archivos, mientras que un panel lateral concentra el seguimiento técnico y las pruebas de anclaje, accesibles a demanda."
     },
     "parcours": {
       "label": "Recorridos de usuario",
-      "heading": "Fluidificar los recorridos clave.",
+      "heading": "Fluidificar los recorridos clave",
       "items": [
         {
-          "title": "Asegurar el proceso de certificación",
-          "description": "El tunnel de depósito procesa varios archivos simultáneamente. La interfaz muestra una estimación en tiempo real del tiempo de espera y genera un ticket de soporte pre-rellenado en caso de bloqueo."
+          "title": "Asegurar la certificación de archivos",
+          "description": "El flujo de depósito procesa varios archivos simultáneamente. La interfaz muestra una estimación del tiempo de espera en tiempo real y genera un ticket de soporte precompletado en caso de bloqueo."
         },
         {
-          "title": "Hacer la verificación instantánea",
-          "description": "Este recorrido simplifica el acceso a los datos de la blockchain. La aplicación analiza el documento al instante para ofrecer un estado visual claro, permitiendo verificar su autenticidad de un vistazo sin sufrir la complejidad técnica."
+          "title": "Hacer que la verificación sea instantánea",
+          "description": "Este recorrido simplifica el acceso a los datos de la blockchain. La aplicación analiza el documento instantáneamente para entregar un estado visual claro, permitiendo verificar su autenticidad de un vistazo sin sufrir la complejidad técnica."
         }
       ]
     },
     "impact": {
       "label": "Impacto",
-      "heading": "Optimizar la eficiencia operativa.",
-      "description": "Al eliminar las fricciones vinculadas a la lectura de datos técnicos, la interfaz suprime la pérdida de tiempo histórica de la certificación. La información se adapta al perfil del usuario para entregarle el nivel de lectura exacto que necesita, garantizando la autonomía de los equipos de negocio y de los desarrolladores.",
+      "heading": "Optimizar la eficiencia operativa",
+      "description": "Al eliminar la fricción al leer datos técnicos, la interfaz borra la pérdida de tiempo histórica de la certificación. La información se adapta al perfil del usuario para entregar el nivel exacto de lectura que necesita, garantizando la autonomía tanto de los equipos de negocio como de los desarrolladores.",
       "features": [
         {
           "title": "Equipos de negocio",
-          "description": "Sin necesidad de consultar un experto para validar un depósito. Los estados son legibles sin conocimientos de blockchain, el progreso en tiempo real y el soporte sigue siendo accesible desde la interfaz."
+          "description": "Ya no es necesario acudir a un experto para validar un depósito. Los estados se entienden sin conocimientos de blockchain, el progreso se muestra en tiempo real y el soporte permanece accesible directamente en la interfaz."
         },
         {
           "title": "Equipos técnicos",
-          "description": "Sin necesidad de buscar un hash: todo está centralizado en el detalle del depósito. La exportación CSV cubre las necesidades de auditoría, reforzando la autonomía para reducir drásticamente los tickets."
+          "description": "Ya no hace falta buscar un hash: todo está centralizado en el detalle del depósito. La exportación CSV cubre las necesidades de auditoría, reforzando la autonomía de los usuarios para reducir tickets drásticamente."
         }
       ]
     }
   },
   "bloom": {
     "intro": {
-      "description": "Un marketplace Web3 white-label de arquitectura modular. Pensada para adaptarse a cada cliente, la interfaz se reconfigura instantáneamente sin tocar el código.",
+      "description": "Un marketplace Web3 white-label con arquitectura modular. Pensada para adaptarse a cada cliente, la interfaz se reconfigura al instante sin tocar código.",
       "meta": [
         {
           "label": "Período",
@@ -515,105 +515,105 @@
     },
     "context": {
       "label": "Contexto",
-      "heading": "Alinear diseño y código.",
-      "p1": "Desplegar una arquitectura única bajo identidades radicalmente diferentes expone la plataforma a una deuda técnica constante. Sin una estructura semántica estricta, cada personalización de cliente debilita el mantenimiento global del producto.",
-      "p2": "Para absorber mundos opuestos, del gaming a las finanzas, el sistema se apoya en un tematizado dinámico. El diseño y el código comparten las mismas variables, eliminando los ajustes de ida y vuelta y garantizando la integridad de la interfaz en cada despliegue."
+      "heading": "Alinear diseño y código",
+      "p1": "Desplegar una arquitectura única bajo identidades radicalmente distintas expone la plataforma a una deuda técnica constante. Sin una estructura semántica estricta, cada personalización de cliente fragiliza el mantenimiento global del producto.",
+      "p2": "Para absorber universos opuestos, del gaming a las finanzas, el sistema se apoya en un temado dinámico. El diseño y el código comparten las mismas variables, eliminando las idas y vueltas de ajuste y garantizando la integridad de la interfaz en cada despliegue."
     },
     "problem": {
       "label": "Problema",
-      "heading": "El costo técnico de la personalización.",
-      "p1": "Lo que varía de un cliente a otro se limita a los valores de superficie: colores, tipografías, bordes redondeados o espaciados. Los comportamientos, la jerarquía y la accesibilidad permanecen estrictamente sin cambios.",
-      "p2": "Separar estas dos capas permite desplegar decenas de identidades sin impactar la estructura de los componentes. Más que una optimización visual, es la decisión técnica fundamental que hace viable el white-label a escala."
+      "heading": "El costo técnico del trabajo a medida",
+      "p1": "Lo que varía de un cliente a otro se limita estrictamente a valores de superficie: colores, tipografía, radios de borde o espaciados. Los comportamientos, la jerarquía y la accesibilidad se mantienen intactos.",
+      "p2": "Aislar estas dos capas permite desplegar decenas de identidades sin impactar la estructura de los componentes. Más que una optimización visual, es la decisión técnica fundamental que hace viable el white-label a escala."
     },
     "solution": {
       "label": "Solución",
-      "heading": "Un solo sistema para todas las marcas.",
-      "p1": "Para industrializar el producto desde una base única, la solución se apoya en una arquitectura de tres niveles: valores primitivos fijos, tokens semánticos configurables por cliente, y componentes agnósticos.",
-      "p2": "La integración técnica se realiza una sola vez para que la UI se adapte dinámicamente. Lo que requería meses de investigación y desarrollo ahora se integra con un nuevo cliente en una semana."
+      "heading": "Un solo sistema para todas las marcas",
+      "p1": "Para industrializar el producto desde una base única, la solución se apoya en una arquitectura de tres niveles: valores primitivos fijos, tokens semánticos configurables por cliente y componentes agnósticos.",
+      "p2": "La integración técnica se hace una sola vez para que la UI se adapte dinámicamente. Lo que antes exigía meses de investigación y desarrollo ahora se integra para un nuevo cliente en una semana."
     },
     "decision": {
       "label": "Decisión",
-      "heading": "Industrializar el multi-marca.",
-      "description": "Bloom arrancó sin capa semántica por pragmatismo. Con el crecimiento del producto, esta deuda técnica requirió tres semanas de refactorización para reestructurar el sistema. Para un producto escalable, esta capa intermedia es una base indispensable desde el inicio, no una optimización tardía.",
+      "heading": "Industrializar el multi-marca",
+      "description": "Bloom comenzó sin capa semántica por pragmatismo. Con el crecimiento del producto, esta deuda técnica exigió tres semanas de reestructuración para reorganizar el sistema. Para un producto escalable, esta capa intermedia es una base indispensable desde el principio, no una optimización tardía.",
       "features": [
         {
           "title": "Límites del modelo bruto",
-          "description": "Vincular los componentes a los valores brutos acelera el inicio, pero acumula deuda técnica en cada variación de cliente."
+          "description": "Vincular componentes a valores brutos acelera el inicio, pero acumula deuda técnica con cada variante de cliente."
         },
         {
           "title": "El ecosistema semántico",
-          "description": "Una capa intermedia traduce los primitivos según su contexto. Cambiar la identidad de un cliente se reduce a pocas variables."
+          "description": "Una capa intermedia traduce primitivas según su contexto. Cambiar la identidad de un cliente requiere pocas variables."
         }
       ]
     },
     "architecture": {
       "label": "Arquitectura",
-      "heading": "Componentes modulares.",
-      "description": "Algunos clientes imponen restricciones imprevistas. Un componente demasiado rígido obliga a hacer un fork; demasiado genérico, deja de ser útil. La respuesta se apoya en componentes fijos, divididos en variantes capaces de absorber estas especificidades.",
+      "heading": "Componentes modulares",
+      "description": "Algunos clientes imponen restricciones imprevistas. Un componente demasiado rígido fuerza un fork; demasiado genérico, ya no sirve. La solución se basa en componentes fijos con variantes capaces de absorber estas particularidades.",
       "layers": [
         {
           "title": "Valores brutos",
-          "description": "Cada valor bruto se define sin intención semántica: la base técnica está establecida, pero permanece desconectada del producto.",
+          "description": "Cada valor bruto se define sin intención semántica: la base técnica está lista, pero sigue desconectada del producto.",
           "label": "//capa 1"
         },
         {
           "title": "Roles semánticos",
-          "description": "Cada primitivo recibe un rol funcional. La identidad se aplica a este nivel, sin impactar la arquitectura de los componentes.",
+          "description": "Cada primitiva recibe un rol funcional. La identidad se aplica aquí, sin impactar la arquitectura de los componentes.",
           "label": "//capa 2"
         },
         {
           "title": "Componentes finales",
-          "description": "Cada componente consume únicamente estos tokens semánticos. La coherencia se mantiene total, sea cual sea el cliente.",
+          "description": "Cada componente consume solo estos tokens semánticos. La coherencia es total, sin importar la identidad del cliente.",
           "label": "//capa 3"
         }
       ]
     },
     "alignment": {
-      "label": "Alineamiento técnico",
-      "heading": "Diseñar para producción.",
-      "p1": "Los estados de los componentes siguen las pseudo-clases CSS: la estructura de un token como btn-primary-bg-default corresponde exactamente al código.",
-      "p2": "Al estar la especificación técnica integrada en Figma, el desarrollador implementa el mockup sin ninguna interpretación. Ningún componente se reescribe desde cero: la arquitectura es autónoma."
+      "label": "Alineación tech",
+      "heading": "Diseñar para prod",
+      "p1": "Los estados de componentes siguen pseudo-clases CSS: la estructura de un token como btn-primary-bg-default coincide exactamente con el código.",
+      "p2": "Al integrar la especificación técnica en Figma, el desarrollador implementa sin interpretación. Ningún componente se reescribe desde cero: la arquitectura es autónoma."
     },
     "identities": {
       "label": "Identidades",
       "heading": "Una estructura, varias identidades",
-      "p1": "La arquitectura de componentes y tokens es idéntica para todos. Para desplegar un nuevo cliente, basta con inyectar sus primitivos (colores, tipografías, bordes) mediante un archivo de configuración.",
-      "p2": "La identidad se propaga instantáneamente a toda la plataforma. En el código, el desarrollador aplica el tema en una línea, sin tocar los componentes."
+      "p1": "La arquitectura de componentes y tokens es idéntica para todos. Para desplegar un nuevo cliente, basta con inyectar sus primitivas (colores, tipografía, radios de borde) vía un archivo de configuración.",
+      "p2": "La identidad se propaga al instante por toda la plataforma. Del lado del código, el desarrollador aplica el tema en una sola línea, sin tocar los componentes."
     },
     "method": {
       "label": "Método",
-      "heading": "Construido solo.\nListo para el traspaso.",
-      "p1": "Trabajar solo exige un rigor absoluto en la documentación: nombrar, justificar y anotar cada decisión para agilizar la puesta en producción por el desarrollador que integrará la interfaz.",
-      "p2": "El sistema debe poder entenderse sin abrir Figma. Los componentes están estructurados por estado de uso y los tokens llevan un nombre semántico en lugar de un valor bruto.",
+      "heading": "Diseñado en solo,\nlisto para reanudar",
+      "p1": "Trabajar en solo exige un rigor absoluto en la documentación: nombrar, justificar y anotar cada decisión para agilizar la integración en producción.",
+      "p2": "El sistema debe entenderse sin abrir Figma. Los componentes se estructuran por estado de uso y los tokens emplean nombres semánticos en lugar de valores brutos.",
       "features": [
         {
           "title": "Un entregable autónomo",
-          "description": "El entregable no necesita ser explicado en una reunión. Las anotaciones integradas durante el diseño capturan la intención real, eliminando las correcciones posteriores."
+          "description": "El entregable no requiere explicaciones en reunión. Las anotaciones integradas capturan la intención real, eliminando correcciones posteriores."
         },
         {
-          "title": "Una nomenclatura basada en el código",
-          "description": "El design system y el código comparten las mismas convenciones de nomenclatura. El desarrollador encuentra sus referencias de inmediato, convirtiendo el handoff en una simple sincronización."
+          "title": "Nomenclatura alineada con el código",
+          "description": "El design system y la codebase comparten las mismas convenciones de nombre. El desarrollador se ubica al instante, convirtiendo el handoff en una simple sincronización."
         }
       ]
     },
     "parcours": {
-      "label": "Recorridos de usuario",
-      "heading": "Del creador al comprador.",
+      "label": "Flujos de usuario",
+      "heading": "Del creador al comprador",
       "items": [
         {
           "title": "Configurar la emisión de un activo",
-          "description": "Desde una pieza única hasta una colección completa, el creador configura sus activos digitales en pocos clics. Define el volumen, el precio y la rareza a través de un recorrido fluido que oculta toda la complejidad técnica de la blockchain."
+          "description": "De piezas únicas a colecciones completas, el creador configura sus activos digitales en pocos clics. Define el volumen, precio y rareza mediante un flujo ágil que oculta toda la complejidad de la blockchain."
         },
         {
-          "title": "Facilitar la compra hacia el wallet",
-          "description": "Un proceso de compra en tres pasos: ficha de producto, pago y transferencia segura. Cada interacción está diseñada para tranquilizar y eliminar la fricción relacionada con las transacciones digitales."
+          "title": "Fluidificar la compra al wallet",
+          "description": "Un flujo de compra en tres pasos: ficha de producto, pago y transferencia segura. Cada interacción está diseñada para dar confianza y eliminar la fricción de las transacciones digitales."
         }
       ]
     },
     "playground": {
       "label": "Playground",
       "heading": "El design system en acción",
-      "lead": "Selecciona una marca para ver cómo se reconfigura todo el sistema.",
+      "lead": "Selecciona una marca para ver todo el sistema reconfigurarse.",
       "cardBtn": "Comprar",
       "scrollLeft": "Desplazar a la izquierda",
       "scrollRight": "Desplazar a la derecha",
@@ -628,11 +628,11 @@
     }
   },
   "meta": {
-    "home": "Diseño de interfaces web y producto (fintech, SaaS, webs corporativas). Rigor design & front-end para archivos Figma listos para implementar y sin pérdida en producción.",
+    "home": "Diseño de interfaces web y producto (fintech, SaaS, webs corporativas). Rigor de diseño y front-end para archivos Figma listos para implementar, sin pérdida en producción.",
     "bloom": "Lead Product Designer en un marketplace Web3 white-label. Arquitectura modular, design system multi-cliente, entrega en producción.",
     "keepro": "Product Designer en un SaaS B2B de certificación blockchain. La prueba criptográfica hecha legible para equipos no técnicos.",
     "lecoffre": "Product Designer en una plataforma notarial B2B2C. Tres espacios distintos, cero seguimiento manual, anclaje blockchain integrado.",
-    "wenimmo": "Product Designer en un SaaS de distribución financiera. Una interfaz única diseñada para CGP y Middle Office con necesidades opuestas."
+    "wenimmo": "Product Designer en un SaaS de distribución financiera. Una interfaz única diseñada para asesores y Middle Office con necesidades opuestas."
   },
   "notFound": {
     "title": "Página no encontrada",

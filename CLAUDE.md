@@ -1,5 +1,10 @@
 @AGENTS.md
 
+## Tooling gotchas
+
+- **Never run `npm audit fix --force`** without reviewing the `package.json` diff first — in this repo it has downgraded `next` from `^16.2.9` to `^9.3.3` (a 7-major-version regression, pre-App-Router) instead of actually fixing vulnerabilities.
+- **`vercel env pull` only fetches the `development` environment by default.** If a var (e.g. `RESEND_API_KEY`) is only configured for Production/Preview on Vercel, it won't be pulled — use `vercel env add <VAR> development` or `vercel env pull --environment=preview`.
+
 # Design System — Portfolio Yohan Guyot
 
 > Source: Figma `oHYVpjn1wHgjILebrGibTw`, pages « 🧩 Design System » and « 🖥️ Screens ».
@@ -853,6 +858,18 @@ useEffect(() => {
 
 The browser fetches and caches all images immediately on mount, so every subsequent switch is instant from cache.
 
+### Font scoping — avoid global preload warnings
+
+If a font is only used by one component (e.g. a brand-showcase demo), load it via `next/font/google` inside that component's own file — not in the root `layout.tsx`. Apply the returned `.variable` class to that component's root element, not `<html>`. Loading fonts globally when they're only rendered on one page triggers "preloaded but not used" console warnings on every other route. Also: never leave an unused font weight in a `@font-face` rule or preload link — check `--font-weight-*` usage in `typography.module.css` before preloading a weight.
+
+### Mobile line-wrap testing — devtools emulation is not ground truth
+
+Chrome DevTools viewport emulation does **not** reliably reproduce real-device (Safari/WebKit) font rendering — the same text can wrap differently at an "identical" viewport width. Use devtools to explore candidate wordings quickly, but always confirm the final line-break result against a real screenshot from the actual device before considering a copy change done.
+
+### French typography — non-breaking space before `: ; ! ?`
+
+French copy needs a non-breaking space (U+00A0) before `:`, `;`, `!`, `?` to prevent the punctuation mark from wrapping alone onto the next line. Not needed in EN/ES.
+
 ### Internationalisation — ajouter une nouvelle langue
 
 Le système i18n repose sur 5 points d'entrée. Pour ajouter une locale (ex. `pt` pour le portugais brésilien) :
@@ -886,6 +903,18 @@ Le système i18n repose sur 5 points d'entrée. Pour ajouter une locale (ex. `pt
 5. **`src/proxy.ts`** — vérifier que la locale est incluse dans la liste de redirection initiale (si présente).
 
 > Le segment `[lang]` dans l'URL gère le routage automatiquement. Chaque page sous `src/app/[lang]/` est déjà locale-agnostique — aucune modification des pages elles-mêmes n'est nécessaire.
+
+### Apostrophe convention
+
+`fr.json` and `en.json` consistently use the curly apostrophe (`'`, U+2019) throughout the file — never the straight apostrophe (`'`). `es.json` doesn't need this (no elision in Spanish). Follow this style for any new text added.
+
+### Editing JSON dictionaries — indentation and invisible-character pitfall
+
+Nested arrays (`features`, `items`, `layers`, `stats`) don't always share the same indentation from one block to another within the same file. If `Edit` fails with "String to replace not found" on a string that looks visually correct, re-read the exact region with `Read` (precise offset) instead of guessing the indentation — the mismatch is often 2 extra/missing spaces, or an invisible Unicode character (non-breaking space, curly apostrophe) that looks identical on screen but doesn't match byte-for-byte.
+
+### Check consistency across languages, not just within each language
+
+After successive edits to `fr.json`/`en.json`/`es.json`, the 3 versions of the same text can drift apart in meaning even if each one stays grammatically correct on its own (e.g. a term translated differently per language, a verb tense that changes). Re-read the 3 values of a given key side by side, not just each file in isolation.
 
 ### Metadata localisée — `generateMetadata`
 

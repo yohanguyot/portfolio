@@ -6,10 +6,7 @@ import { useState, useRef, useLayoutEffect, useCallback } from 'react';
 let persistedThreshold = 0;
 
 export function useNavMobileBreakpoint(navRef: React.RefObject<HTMLElement | null>) {
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth <= 600 || (persistedThreshold > 0 && window.innerWidth < persistedThreshold);
-  });
+  const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
   const thresholdRef = useRef(persistedThreshold);
   const isMobileRef = useRef(isMobile);
