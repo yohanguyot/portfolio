@@ -31,7 +31,7 @@
     "heading": "Projets & réalisations",
     "cta": "Voir le projet",
     "featured": {
-      "description": "Moteur white-label pour marketplaces d’actifs numériques. Une architecture unique et scalable qui accélère le time-to-market, éprouvée en production par plus de sept clients sur des marchés radicalement différents."
+      "description": "Moteur en marque blanche pour marketplaces d’actifs numériques. Une architecture unique et scalable qui accélère le time-to-market, éprouvée en production par plus de sept clients sur des marchés radicalement différents."
     },
     "items": [
       {
@@ -48,7 +48,7 @@
   "tags": {
     "bloom": [
       "Design system",
-      "White-label"
+      "Marque blanche"
     ],
     "keepro": [
       "Certification",
@@ -476,7 +476,7 @@
   },
   "bloom": {
     "intro": {
-      "description": "Une marketplace Web3 en white-label à l’architecture modulaire. Pensée pour s’adapter à chaque client, l’interface se reconfigure instantanément sans toucher au code.",
+      "description": "Une marketplace Web3 en marque blanche à l’architecture modulaire. Pensée pour s’adapter à chaque client, l’interface se reconfigure instantanément sans toucher au code.",
       "meta": [
         {
           "label": "Période",
@@ -523,7 +523,7 @@
       "label": "Problème",
       "heading": "Le coût technique du sur-mesure",
       "p1": "Ce qui varie d’un client à l’autre se limite aux valeurs de surface : couleurs, typographies, arrondis ou espacements. Les comportements, la hiérarchie et l’accessibilité restent strictement inchangés.",
-      "p2": "Isoler ces deux couches permet de décliner des dizaines d’identités sans impacter la structure des composants. Plus qu’une optimisation visuelle, c’est le choix technique fondamental qui rend le white-label viable à l’échelle."
+      "p2": "Isoler ces deux couches permet de décliner des dizaines d’identités sans impacter la structure des composants. Plus qu’une optimisation visuelle, c’est le choix technique fondamental qui rend la marque blanche viable à l’échelle."
     },
     "solution": {
       "label": "Solution",
@@ -629,7 +629,7 @@
   },
   "meta": {
     "home": "Design d’interfaces web et produit (fintech, SaaS, vitrines). Une rigueur design & front-end pour des fichiers Figma exploitables et sans perte en prod.",
-    "bloom": "Lead Product Designer sur une marketplace Web3 white-label. Architecture modulaire, design system multi-clients, livraison production.",
+    "bloom": "Lead Product Designer sur une marketplace Web3 en marque blanche. Architecture modulaire, design system multi-clients, livraison production.",
     "keepro": "Product Designer sur un SaaS B2B de certification blockchain. La preuve cryptographique rendue lisible pour des équipes non techniques.",
     "lecoffre": "Product Designer sur une plateforme notariale B2B2C. Trois espaces distincts, zéro relance manuelle, ancrage blockchain intégré.",
     "wenimmo": "Product Designer sur un SaaS de distribution financière. Une interface unique conçue pour CGP et Middle Office aux besoins opposés."
