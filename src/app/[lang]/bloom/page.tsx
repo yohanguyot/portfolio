@@ -44,19 +44,21 @@ export default async function BloomPage({ params }: PageProps<"/[lang]/bloom">) 
   return (
     <>
       <Navigation />
-      <HeroBanner />
-      <ProjectIntro tags={dict.tags.bloom} dict={dict.bloom.intro} />
-      <ProjectContext dict={dict.bloom.context} />
-      <ProjectProblem dict={dict.bloom.problem} />
-      <ProjectSolution dict={dict.bloom.solution} />
-      <ProjectMethod dict={dict.bloom.method} />
-      <ProjectDecision dict={dict.bloom.decision} />
-      <ProjectArchitecture dict={dict.bloom.architecture} />
-      <ProjectAlignment dict={dict.bloom.alignment} />
-      <ProjectIdentities dict={dict.bloom.identities} />
-      <ProjectParcours dict={dict.bloom.parcours} />
-      <ProjectPlayground dict={dict.bloom.playground} />
-      <ContactSection noMarginTop />
+      <main>
+        <HeroBanner />
+        <ProjectIntro tags={dict.tags.bloom} dict={dict.bloom.intro} />
+        <ProjectContext dict={dict.bloom.context} />
+        <ProjectProblem dict={dict.bloom.problem} />
+        <ProjectSolution dict={dict.bloom.solution} />
+        <ProjectMethod dict={dict.bloom.method} />
+        <ProjectDecision dict={dict.bloom.decision} />
+        <ProjectArchitecture dict={dict.bloom.architecture} />
+        <ProjectAlignment dict={dict.bloom.alignment} />
+        <ProjectIdentities dict={dict.bloom.identities} />
+        <ProjectParcours dict={dict.bloom.parcours} />
+        <ProjectPlayground dict={dict.bloom.playground} />
+        <ContactSection noMarginTop />
+      </main>
       <Footer dict={dict.footer} />
     </>
   );

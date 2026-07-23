@@ -42,17 +42,19 @@ export default async function KeeproPage({ params }: PageProps<"/[lang]/keepro">
   return (
     <>
       <Navigation />
-      <HeroBanner />
-      <ProjectIntro tags={dict.tags.keepro} dict={dict.keepro.intro} />
-      <ProjectContext dict={dict.keepro.context} />
-      <ProjectProblem dict={dict.keepro.problem} />
-      <ProjectSolution dict={dict.keepro.solution} />
-      <ProjectDecisions dict={dict.keepro.decisions} />
-      <ProjectDashboard dict={dict.keepro.dashboard} />
-      <ProjectDeposits dict={dict.keepro.deposits} />
-      <ProjectParcours dict={dict.keepro.parcours} />
-      <ProjectImpact dict={dict.keepro.impact} />
-      <ContactSection noMarginTop />
+      <main>
+        <HeroBanner />
+        <ProjectIntro tags={dict.tags.keepro} dict={dict.keepro.intro} />
+        <ProjectContext dict={dict.keepro.context} />
+        <ProjectProblem dict={dict.keepro.problem} />
+        <ProjectSolution dict={dict.keepro.solution} />
+        <ProjectDecisions dict={dict.keepro.decisions} />
+        <ProjectDashboard dict={dict.keepro.dashboard} />
+        <ProjectDeposits dict={dict.keepro.deposits} />
+        <ProjectParcours dict={dict.keepro.parcours} />
+        <ProjectImpact dict={dict.keepro.impact} />
+        <ContactSection noMarginTop />
+      </main>
       <Footer dict={dict.footer} />
     </>
   );

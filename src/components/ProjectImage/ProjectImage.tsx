@@ -28,9 +28,10 @@ type Props = {
   activeScreenScale?: boolean;
   className?: string;
   eager?: boolean;
+  sizes?: string;
 };
 
-export default function ProjectImage({ project, active = false, noActiveEffect = false, activeScreenScale = false, className, eager = false }: Props) {
+export default function ProjectImage({ project, active = false, noActiveEffect = false, activeScreenScale = false, className, eager = false, sizes }: Props) {
   const assets = ASSETS[project];
 
   return (
@@ -45,7 +46,7 @@ export default function ProjectImage({ project, active = false, noActiveEffect =
       </div>
 
       <div className={`${styles.screen} ${noActiveEffect ? styles.screenFixed : ""} ${activeScreenScale ? styles.screenActive : ""}`}>
-        <Image src={assets.screen} alt="" width={800} height={500} loading={eager ? "eager" : "lazy"} className={styles.screenImg} aria-hidden />
+        <Image src={assets.screen} alt="" width={800} height={500} loading={eager ? "eager" : "lazy"} className={styles.screenImg} aria-hidden sizes={sizes} />
       </div>
 
       <div className={`${styles.logo} ${noActiveEffect ? styles.logoFixed : ""}`}>

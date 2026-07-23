@@ -41,16 +41,18 @@ export default async function WenimmoPage({ params }: PageProps<"/[lang]/wenimmo
   return (
     <>
       <Navigation />
-      <HeroBanner />
-      <ProjectIntro tags={dict.tags.wenimmo} dict={dict.wenimmo.intro} />
-      <ProjectContext dict={dict.wenimmo.context} />
-      <ProjectProblem dict={dict.wenimmo.problem} />
-      <ProjectSolution dict={dict.wenimmo.solution} />
-      <ProjectDecisions dict={dict.wenimmo.decisions} />
-      <ProjectCGP dict={dict.wenimmo.cgp} />
-      <ProjectMiddleOffice dict={dict.wenimmo.middleOffice} />
-      <ProjectImpact dict={dict.wenimmo.impact} />
-      <ContactSection noMarginTop />
+      <main>
+        <HeroBanner />
+        <ProjectIntro tags={dict.tags.wenimmo} dict={dict.wenimmo.intro} />
+        <ProjectContext dict={dict.wenimmo.context} />
+        <ProjectProblem dict={dict.wenimmo.problem} />
+        <ProjectSolution dict={dict.wenimmo.solution} />
+        <ProjectDecisions dict={dict.wenimmo.decisions} />
+        <ProjectCGP dict={dict.wenimmo.cgp} />
+        <ProjectMiddleOffice dict={dict.wenimmo.middleOffice} />
+        <ProjectImpact dict={dict.wenimmo.impact} />
+        <ContactSection noMarginTop />
+      </main>
       <Footer dict={dict.footer} />
     </>
   );

@@ -158,6 +158,7 @@ export default function ProjectsSection() {
                   project={FEATURED.slug}
                   eager
                   noActiveEffect
+                  sizes="(max-width: 1024px) 85vw, 560px"
                 />
               </div>
               <div className={styles.cardLargeContent}>
@@ -193,6 +194,7 @@ export default function ProjectsSection() {
                       project={proj.slug}
                       activeScreenScale
                       eager
+                      sizes="(max-width: 768px) 85vw, (max-width: 1200px) 30vw, 350px"
                     />
                   </div>
                   <div className={styles.cardContent}>

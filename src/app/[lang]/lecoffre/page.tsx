@@ -42,17 +42,19 @@ export default async function LeCoffrePage({ params }: PageProps<"/[lang]/lecoff
   return (
     <>
       <Navigation />
-      <HeroBanner />
-      <ProjectIntro tags={dict.tags.lecoffre} dict={dict.lecoffre.intro} />
-      <ProjectContext dict={dict.lecoffre.context} />
-      <ProjectProblem dict={dict.lecoffre.problem} />
-      <ProjectSolution dict={dict.lecoffre.solution} />
-      <ProjectDecisions dict={dict.lecoffre.decisions} />
-      <ProjectNotaire dict={dict.lecoffre.notaire} />
-      <ProjectClient dict={dict.lecoffre.client} />
-      <ProjectAdmin dict={dict.lecoffre.admin} />
-      <ProjectImpact dict={dict.lecoffre.impact} />
-      <ContactSection noMarginTop />
+      <main>
+        <HeroBanner />
+        <ProjectIntro tags={dict.tags.lecoffre} dict={dict.lecoffre.intro} />
+        <ProjectContext dict={dict.lecoffre.context} />
+        <ProjectProblem dict={dict.lecoffre.problem} />
+        <ProjectSolution dict={dict.lecoffre.solution} />
+        <ProjectDecisions dict={dict.lecoffre.decisions} />
+        <ProjectNotaire dict={dict.lecoffre.notaire} />
+        <ProjectClient dict={dict.lecoffre.client} />
+        <ProjectAdmin dict={dict.lecoffre.admin} />
+        <ProjectImpact dict={dict.lecoffre.impact} />
+        <ContactSection noMarginTop />
+      </main>
       <Footer dict={dict.footer} />
     </>
   );

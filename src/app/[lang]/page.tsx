@@ -65,11 +65,13 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navigation />
-      <HeroSection />
-      <ProjectsSection />
-      <AboutSection dict={dict.about} lang={lang} />
-      <ProcessSection dict={dict.process} />
-      <ContactSection />
+      <main>
+        <HeroSection />
+        <ProjectsSection />
+        <AboutSection dict={dict.about} lang={lang} />
+        <ProcessSection dict={dict.process} />
+        <ContactSection />
+      </main>
       <Footer dict={dict.footer} />
     </>
   );
